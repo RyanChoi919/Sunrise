@@ -12,6 +12,8 @@
 
     <string name="sample_title">샘플 타이틀</string>
     <string name="sample_content">사람들의 별 파란 책상을 아침이 무성할 같이 못 별 계십니다. 흙으로 내일 별을 불러 한 헤는 거외다. 이름자를 쉬이 풀이 써 새겨지는 그러나 않은 어머니, 까닭입니다. 가을로 다 잠, 버리었습니다. 그리고 것은 다 마디씩 딴은 있습니다. 했던 별을 이름과, 나는 내 이 시인의 위에도 계십니다. 것은 이름을 오는 사람들의 버리었습니다. 애기 시인의 새워 위에도 추억과 이런 듯합니다. 그러나 내일 묻힌 어머니 했던 이제 라이너 북간도에 까닭입니다.</string>
-    <string name="sample_challenge_name">도전과제 | 힘들 때 힘들다고 말하기</string>
+    <string name="sample_challenge">도전과제</string>
+    <string name="sample_challenge_name">힘들 때 힘들다고 말하기</string>
+    <string name="sample_challenge_name_with_title">도전과제 | 힘들 떄 힘들다고 말하기</string>
     <string name="CD_challenge_result">challenge result icon</string>
 </resources>
