@@ -5,7 +5,15 @@
 
     <style name="TextAppearance.Sunrise" />
 
+    <style name="TextAppearance.Sunrise.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/nanum_myeongjo_bold</item>
+    </style>
+
     <style name="TextAppearance.Sunrise.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="fontFamily">@font/nanum_myeongjo_bold</item>
+    </style>
+
+    <style name="TextAppearance.Sunrise.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
         <item name="fontFamily">@font/nanum_myeongjo_bold</item>
     </style>
 

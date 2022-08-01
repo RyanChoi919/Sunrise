@@ -1,3 +1,15 @@
 <resources>
+    <!-- default margin unit -->
+    <dimen name="margin1">4dp</dimen>
+    <dimen name="margin2">8dp</dimen>
+    <dimen name="margin3">12dp</dimen>
+    <dimen name="margin4">16dp</dimen>
+
+    <!-- margins for each views -->
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="screen_horizontal_margin">@dimen/margin4</dimen>
+    <dimen name="screen_vertical_margin">@dimen/margin4</dimen>
+
+    <!-- paddings for each views -->
+    <dimen name="recycler_view_horizontal_padding">@dimen/margin4</dimen>
 </resources>
