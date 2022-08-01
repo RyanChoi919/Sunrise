@@ -15,9 +15,11 @@
     <string name="sample_challenge">도전과제</string>
     <string name="sample_challenge_name">힘들 때 힘들다고 말하기</string>
     <string name="sample_challenge_name_with_title">도전과제 | 힘들 떄 힘들다고 말하기</string>
-    <string name="CD_challenge_result">challenge result icon</string>
     <string name="sample_home_title">오늘 하루,\n새로운 나를 발견하다.</string>
     <string name="frag_home_today_challenge">오늘의 도전과제</string>
     <string name="frag_Home_recent_entries">최근 기록</string>
+
+    <!-- Content Descriptions -->
+    <string name="CD_challenge_result">도전과제 결과 아이콘</string>
     <string name="CD_edit_challenge">도전과제 수정 아이콘</string>
 </resources>
