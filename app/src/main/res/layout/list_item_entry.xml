@@ -75,10 +75,10 @@
         android:layout_width="16dp"
         android:layout_height="16dp"
         android:layout_marginStart="8dp"
+        android:contentDescription="@string/CD_challenge_result"
         android:src="@drawable/ic_round_check_circle_24"
         app:layout_constraintBottom_toBottomOf="@id/list_item_entry_TV_challenge"
         app:layout_constraintLeft_toRightOf="@id/list_item_entry_TV_challenge"
-        app:layout_constraintTop_toTopOf="@id/list_item_entry_TV_challenge"
-        android:contentDescription="@string/CD_challenge_result"/>
+        app:layout_constraintTop_toTopOf="@id/list_item_entry_TV_challenge" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
