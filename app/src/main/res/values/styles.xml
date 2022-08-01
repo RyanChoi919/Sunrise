@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance" />
+
+    <style name="TextAppearance.Sunrise" />
+
+    <style name="TextAppearance.Sunrise.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="fontFamily">@font/nanum_myeongjo_bold</item>
+    </style>
+
+    <style name="TextAppearance.Sunrise.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">@font/nanum_myeongjo</item>
+    </style>
+
+    <style name="TextAppearance.Sunrise.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/nanum_myeongjo</item>
+    </style>
+
+    <style name="TextAppearance.Sunrise.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">@font/nanum_myeongjo</item>
+    </style>
+
+    <style name="TextAppearance.Sunrise.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="fontFamily">@font/nanum_myeongjo</item>
+    </style>
+</resources>
