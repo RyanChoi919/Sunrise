@@ -5,6 +5,10 @@
 
     <style name="TextAppearance.Sunrise" />
 
+    <style name="TextAppearance.Sunrise.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/nanum_myeongjo_bold</item>
+    </style>
+
     <style name="TextAppearance.Sunrise.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
         <item name="fontFamily">@font/nanum_myeongjo_bold</item>
     </style>
@@ -14,7 +18,7 @@
     </style>
 
     <style name="TextAppearance.Sunrise.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
-        <item name="fontFamily">@font/nanum_myeongjo_bold</item>
+        <item name="fontFamily">@font/nanum_myeongjo_extrabold</item>
     </style>
 
     <style name="TextAppearance.Sunrise.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
@@ -30,6 +34,10 @@
     </style>
 
     <style name="TextAppearance.Sunrise.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="fontFamily">@font/nanum_myeongjo</item>
+    </style>
+
+    <style name="TextAppearance.Sunrise.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
         <item name="fontFamily">@font/nanum_myeongjo</item>
     </style>
 </resources>
