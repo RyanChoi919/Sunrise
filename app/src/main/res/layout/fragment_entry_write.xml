@@ -6,22 +6,90 @@
     android:layout_height="match_parent"
     tools:context=".ui.entry.write.EntryWriteFragment">
 
-    <TextView
-        android:id="@+id/textview_second"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/button_second"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button_second"
-        android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/frag_entry_write_LL_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="32dp">
+
+            <TextView
+                style="@style/TextAppearance.Sunrise.LabelSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:text="@string/sample_entry_write_challenge_name_with_title"
+                android:textStyle="bold"
+                app:drawableEndCompat="@drawable/ic_round_highlight_off_16" />
+
+            <EditText
+                android:id="@+id/frag_entry_write_ET_title"
+                style="@style/TextAppearance.Sunrise.TitleMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+                android:layout_marginTop="8dp"
+                android:background="@null"
+                android:hint="@string/frag_entry_write_title_hint"
+                android:importantForAutofill="no"
+                android:inputType="text" />
+
+            <EditText
+                android:id="@+id/frag_entry_write_ET_content"
+                style="@style/TextAppearance.Sunrise.BodyMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+                android:layout_marginTop="8dp"
+                android:background="@null"
+                android:hint="@string/frag_entry_write_content_hint"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/previous"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_second" />
+        android:layout_margin="@dimen/screen_horizontal_margin"
+        android:background="@drawable/bg_write_entry_tools"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/ic_round_title_24"
+            android:buttonTint="@color/entry_write_tab_icon"
+            android:checked="true" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/ic_round_access_time_24"
+            android:buttonTint="@color/entry_write_tab_icon" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/ic_round_location_on_24"
+            android:buttonTint="@color/entry_write_tab_icon" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/ic_round_photo_24"
+            android:buttonTint="@color/entry_write_tab_icon" />
+
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,14 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.databinding.FragmentEntryWriteBinding
+import com.nodes.sunrise.ui.ViewModelFactory
+import com.nodes.sunrise.ui.challenge.select.ChallengeSelectViewModel
 
 class EntryWriteFragment : Fragment() {
 
     private var _binding: FragmentEntryWriteBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: EntryWriteViewModel by viewModels {
+        val repository = (requireActivity().application as BaseApplication).repository
+        ViewModelFactory(repository)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,10 +35,6 @@ class EntryWriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_EntryWriteFragment_to_HomeFragment)
-        }
     }
 
     override fun onDestroyView() {

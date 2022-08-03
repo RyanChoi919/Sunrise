@@ -36,4 +36,7 @@
     <string name="frag_challenge_check_try_again_tomorrow">내일 다시 도전해볼게요.</string>
     <string name="CD_challenge_done">도전 과제 성공 버튼</string>
     <string name="CD_challenge_fail">도전 과제 실패 버튼</string>
+    <string name="sample_entry_write_challenge_name_with_title">도전과제 / 힘들 때 힘들다고 말하기</string>
+    <string name="frag_entry_write_content_hint">도전과제와 함께 한 하루, 어땠나요?</string>
+    <string name="frag_entry_write_title_hint">제목</string>
 </resources>
