@@ -31,4 +31,9 @@
     <string name="frag_challenge_select_write_own_challenge"><u>직접 쓰기</u></string>
     <string name="CD_refresh_today_challenge">오늘의 도전과제 새로고침 버튼</string>
     <string name="frag_challenge_select_accept_challenge">도전하기</string>
+    <string name="frag_challenge_check_title">오늘의 도전 과제,\n성공했나요?</string>
+    <string name="frag_challenge_check_write_entry">오늘 하루 기록하기</string>
+    <string name="frag_challenge_check_try_again_tomorrow">내일 다시 도전해볼게요.</string>
+    <string name="CD_challenge_done">도전 과제 성공 버튼</string>
+    <string name="CD_challenge_fail">도전 과제 실패 버튼</string>
 </resources>

@@ -25,4 +25,9 @@
             android:id="@+id/action_EntryWriteFragment_to_HomeFragment"
             app:destination="@id/HomeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_challenge_select"
+        android:name="com.nodes.sunrise.ui.challenge.select.ChallengeSelectFragment"
+        android:label="fragment_challenge_select"
+        tools:layout="@layout/fragment_challenge_select" />
 </navigation>
