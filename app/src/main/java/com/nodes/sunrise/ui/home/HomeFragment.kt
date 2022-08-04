@@ -9,6 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
+import com.nodes.sunrise.components.adapters.list.EntryListAdapter
+import com.nodes.sunrise.components.helpers.RecyclerViewHelper
 import com.nodes.sunrise.databinding.FragmentHomeBinding
 import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
@@ -18,9 +20,15 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private val entryListAdapter = EntryListAdapter()
+
     private val viewModel: HomeViewModel by viewModels {
         val repository = (requireActivity().application as BaseApplication).repository
         ViewModelFactory(repository)
+    }
+
+    private val recyclerViewHelper: RecyclerViewHelper<HomeViewModel> by lazy {
+        RecyclerViewHelper(this, viewModel)
     }
 
     override fun onCreateView(
@@ -29,8 +37,14 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
     ): View {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
 
+        recyclerViewHelper.setRecyclerViewWithLiveData(
+            binding.fragHomeRVRecentEntries,
+            entryListAdapter,
+            viewModel.allEntries
+        )
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -12,4 +12,5 @@
 
     <!-- paddings for each views -->
     <dimen name="recycler_view_horizontal_padding">@dimen/margin4</dimen>
+    <dimen name="list_item_margin">4dp</dimen>
 </resources>

@@ -2,6 +2,7 @@ package com.nodes.sunrise.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.time.LocalDateTime
 
 @Entity
@@ -12,4 +13,4 @@ data class Entry(
     var title: String,
     var isTitleEnabled: Boolean,
     var content: String
-)
+) : Serializable

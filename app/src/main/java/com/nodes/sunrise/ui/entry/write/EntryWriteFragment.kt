@@ -4,19 +4,29 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
+import com.nodes.sunrise.components.helpers.AlertDialogHelper
 import com.nodes.sunrise.databinding.FragmentEntryWriteBinding
+import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.ui.ViewModelFactory
+import java.time.LocalDateTime
 
 class EntryWriteFragment : Fragment() {
 
+    companion object {
+        val KEY_ENTRY = this::class.java.simpleName + ".ENTRY"
+    }
+
     private var _binding: FragmentEntryWriteBinding? = null
     private val binding get() = _binding!!
+
+    private var isToCreateMode = true
 
     private val viewModel: EntryWriteViewModel by viewModels {
         val repository = (requireActivity().application as BaseApplication).repository
@@ -27,8 +37,20 @@ class EntryWriteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_entry_write, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        _binding = FragmentEntryWriteBinding.inflate(inflater, container, false)
+        if (arguments != null) {
+            viewModel.currentEntry = requireArguments().getSerializable(KEY_ENTRY) as Entry
+            isToCreateMode = false
+        } else {
+            viewModel.currentEntry = Entry(0, LocalDateTime.now(), "", true, "")
+            isToCreateMode = true
+        }
+
+        /* data binding 변수 설정 */
+        binding.viewModel = viewModel
 
         return binding.root
 
@@ -51,19 +73,33 @@ class EntryWriteFragment : Fragment() {
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menu.clear()
-                menuInflater.inflate(R.menu.frag_entry_write_menu_create, menu)
+
+                val menuRes = if (isToCreateMode) {
+                    R.menu.frag_entry_write_menu_create
+                } else {
+                    R.menu.frag_entry_write_menu_modify
+                }
+
+                menuInflater.inflate(menuRes, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.frag_entry_write_menu_save -> {
-                        with(binding) {
-                            val title = fragEntryWriteETTitle.text.toString()
-                            val content = fragEntryWriteETContent.text.toString()
-                            viewModel.write(title, content)
-                            findNavController().popBackStack()
-                            true
-                        }
+                        viewModel.saveEntry()
+                        findNavController().popBackStack()
+                        true
+                    }
+                    R.id.frag_entry_write_menu_modify -> {
+                        viewModel.modifyEntry()
+                        findNavController().popBackStack()
+                        true
+                    }
+                    R.id.frag_entry_write_menu_delete -> {
+                        AlertDialogHelper().showEntryDeleteConfirmDialog(
+                            parentFragment!!, viewModel, viewModel.currentEntry
+                        )
+                        true
                     }
                     else -> false
                 }

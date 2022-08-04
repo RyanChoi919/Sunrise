@@ -30,4 +30,8 @@
         android:name="com.nodes.sunrise.ui.challenge.select.ChallengeSelectFragment"
         android:label="fragment_challenge_select"
         tools:layout="@layout/fragment_challenge_select" />
+    <fragment
+        android:id="@+id/nav_entry_read"
+        android:name="com.nodes.sunrise.ui.entry.read.EntryReadFragment"
+        tools:layout="@layout/fragment_entry_read" />
 </navigation>
