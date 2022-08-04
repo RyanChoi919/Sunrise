@@ -1,15 +1,14 @@
 package com.nodes.sunrise.ui.entry.read
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.ui.ViewModelFactory
-import com.nodes.sunrise.ui.entry.write.EntryReadViewModel
 
 class EntryReadFragment : Fragment() {
 

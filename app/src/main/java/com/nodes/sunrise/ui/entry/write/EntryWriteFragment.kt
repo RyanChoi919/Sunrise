@@ -15,7 +15,7 @@ class EntryWriteFragment : Fragment() {
     private var _binding: FragmentEntryWriteBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: EntryReadViewModel by viewModels {
+    private val viewModel: EntryWriteViewModel by viewModels {
         val repository = (requireActivity().application as BaseApplication).repository
         ViewModelFactory(repository)
     }
