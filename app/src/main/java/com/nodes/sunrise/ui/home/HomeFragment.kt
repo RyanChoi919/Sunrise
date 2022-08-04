@@ -6,10 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
-import com.nodes.sunrise.R
 import com.nodes.sunrise.components.adapters.list.EntryListAdapter
+import com.nodes.sunrise.components.helpers.NavigationHelper
 import com.nodes.sunrise.components.helpers.RecyclerViewHelper
 import com.nodes.sunrise.databinding.FragmentHomeBinding
 import com.nodes.sunrise.ui.BaseFragment
@@ -62,7 +61,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v) {
             binding.fragHomeIVEditChallenge -> {
-                findNavController().navigate(R.id.nav_challenge_select)
+                NavigationHelper(this).navigateToEntryWriteFragmentToCreate()
             }
         }
     }
