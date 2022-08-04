@@ -39,4 +39,6 @@
     <string name="sample_entry_write_challenge_name_with_title">도전과제 / 힘들 때 힘들다고 말하기</string>
     <string name="frag_entry_write_content_hint">도전과제와 함께 한 하루, 어땠나요?</string>
     <string name="frag_entry_write_title_hint">제목</string>
+    <string name="sample_temp">24℃</string>
+    <string name="sample_location">서울특별시 중구</string>
 </resources>
