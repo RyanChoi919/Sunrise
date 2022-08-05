@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.nodes.sunrise.components.utils.DevUtil
 import com.nodes.sunrise.db.dao.ChallengeDao
 import com.nodes.sunrise.db.dao.EntryDao
 import com.nodes.sunrise.db.entity.Challenge
@@ -32,7 +33,9 @@ internal abstract class AppDatabase : RoomDatabase() {
             super.onCreate(db)
             INSTANCE?.let { appDatabase ->
                 scope.launch {
-                    // add devel
+                    DevUtil.createSampleChallenges(30).stream().forEach {
+                        appDatabase.challengeDao.insert(it)
+                    }
                 }
             }
         }
