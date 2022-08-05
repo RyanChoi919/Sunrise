@@ -53,5 +53,7 @@
     <string name="entry_delete_dialog_message">삭제된 기록은 복구할 수 없어요.</string>
     <string name="entry_delete_dialog_confirm_toast">기록이 삭제되었어요.</string>
     <string name="frag_entry_write_menu_edit">편집</string>
+    <string name="pref_key_challenge_id">KEY_CHALLENGE_ID</string>
+    <string name="pref_key_challenge_date">KEY_CHALLENGE_LOCAL_DATE</string>
 
 </resources>
