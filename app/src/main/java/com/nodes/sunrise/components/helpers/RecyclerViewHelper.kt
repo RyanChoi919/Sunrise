@@ -10,10 +10,13 @@ import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nodes.sunrise.R
+import com.nodes.sunrise.components.adapters.list.ChallengeListAdapter
 import com.nodes.sunrise.components.adapters.list.EntryListAdapter
 import com.nodes.sunrise.components.decorators.ListMarginDecorator
-import com.nodes.sunrise.components.listeners.OnEntryClickListener
-import com.nodes.sunrise.components.listeners.OnEntryLongClickListener
+import com.nodes.sunrise.components.listeners.OnEntityClickListener
+import com.nodes.sunrise.components.listeners.OnEntityLongClickListener
+import com.nodes.sunrise.components.utils.CenterSmoothScroller
+import com.nodes.sunrise.db.entity.Challenge
 import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.ui.BaseViewModel
 import kotlinx.coroutines.launch
@@ -31,19 +34,42 @@ class RecyclerViewHelper<T : BaseViewModel>(val fragment: Fragment, val viewMode
         }
     }
 
-    fun setRecyclerView(rv: RecyclerView, adapter: EntryListAdapter) {
+    fun setRecyclerViewWithLiveData(
+        rv: RecyclerView,
+        adapter: ChallengeListAdapter,
+        data: LiveData<List<Challenge>>,
+    ) {
+        setRecyclerView(rv, adapter)
+        data.observe(fragment.viewLifecycleOwner) {
+            adapter.submitList(it)
+            rv.post {
+                val smoothScroller = CenterSmoothScroller(rv.context)
+                smoothScroller.targetPosition = adapter.selectedPosition
+                rv.layoutManager!!.startSmoothScroll(smoothScroller)
+            }
+        }
+    }
+
+    private fun setRecyclerView(rv: RecyclerView, adapter: EntryListAdapter) {
         with(rv) {
             setRecyclerViewAttributes(rv)
-            adapter.onEntryClickListener = object : OnEntryClickListener {
-                override fun onClick(view: View, pos: Int, entry: Entry) {
-                    navigationHelper.navigateToEntryReadFragment(entry)
+            adapter.onClickListener = object : OnEntityClickListener<Entry> {
+                override fun onClick(view: View, pos: Int, entity: Entry) {
+                    navigationHelper.navigateToEntryReadFragment(entity)
                 }
             }
-            adapter.onEntryLongClickListener = object : OnEntryLongClickListener {
-                override fun onItemLongClick(view: View, pos: Int, entry: Entry) {
-                    showLongClickListDialog(entry)
+            adapter.onLongClickListener = object : OnEntityLongClickListener<Entry> {
+                override fun onItemLongClick(view: View, pos: Int, entity: Entry) {
+                    showLongClickListDialog(entity)
                 }
             }
+            this.adapter = adapter
+        }
+    }
+
+    private fun setRecyclerView(rv: RecyclerView, adapter: ChallengeListAdapter) {
+        with(rv) {
+            setRecyclerViewAttributes(rv)
             this.adapter = adapter
         }
     }

@@ -9,9 +9,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
+import com.nodes.sunrise.components.adapters.list.ChallengeListAdapter
+import com.nodes.sunrise.components.helpers.RecyclerViewHelper
 import com.nodes.sunrise.components.helpers.SharedPreferenceHelper
+import com.nodes.sunrise.components.listeners.OnEntityClickListener
 import com.nodes.sunrise.databinding.FragmentChallengeSelectBinding
 import com.nodes.sunrise.db.entity.Challenge
 import com.nodes.sunrise.ui.BaseFragment
@@ -27,10 +31,15 @@ class ChallengeSelectFragment : BaseFragment(), View.OnClickListener {
 
     private var _binding: FragmentChallengeSelectBinding? = null
     private val binding get() = _binding!!
+    private val challengeListAdapter = ChallengeListAdapter()
 
     private val viewModel: ChallengeSelectViewModel by viewModels {
         val repository = (requireActivity().application as BaseApplication).repository
         ViewModelFactory(repository)
+    }
+
+    private val recyclerViewHelper: RecyclerViewHelper<ChallengeSelectViewModel> by lazy {
+        RecyclerViewHelper(this, viewModel)
     }
 
     override fun onCreateView(
@@ -41,23 +50,23 @@ class ChallengeSelectFragment : BaseFragment(), View.OnClickListener {
             DataBindingUtil.inflate(inflater, R.layout.fragment_challenge_select, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
+        recyclerViewHelper.setRecyclerViewWithLiveData(
+            binding.fragChallengeSelectRVChallengeList,
+            challengeListAdapter,
+            viewModel.allChallenges,
+        )
 
         val challenge = requireArguments().getSerializable(KEY_CHALLENGE) as Challenge?
         if (challenge != null) {
-            viewModel.currentChallenge.set(challenge)
+            challengeListAdapter.selectedChallenge = challenge
         } else {
             val sharedPrefHelper = SharedPreferenceHelper(activity as Activity)
             val savedChallengeId = sharedPrefHelper.getSavedChallengeId()
             if (savedChallengeId != null) {
-                lifecycleScope.launch() {
-                    with(viewModel) {
-                        currentChallenge.set(
-                            repository.challengeDao.getEntityById(savedChallengeId).first()
-                        )
-                    }
+                lifecycleScope.launch {
+                    challengeListAdapter.selectedChallenge =
+                        viewModel.repository.challengeDao.getEntityById(savedChallengeId).first()
                 }
-            } else {
-                refreshChallenge()
             }
         }
 
@@ -71,14 +80,14 @@ class ChallengeSelectFragment : BaseFragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         setOnClickListener()
+        setRecyclerView()
     }
 
     override fun onClick(p0: View?) {
         when (p0) {
-            binding.fragChallengeSelectIBRefreshButton -> refreshChallenge()
             binding.fragChallengeSelectBTNAcceptChallenge -> {
                 val sharedPreferenceHelper = SharedPreferenceHelper(activity as Activity)
-                sharedPreferenceHelper.saveChallengeToSharedPref(viewModel.currentChallenge.get()!!)
+                sharedPreferenceHelper.saveChallengeToSharedPref(challengeListAdapter.selectedChallenge)
                 findNavController().popBackStack()
             }
         }
@@ -86,16 +95,22 @@ class ChallengeSelectFragment : BaseFragment(), View.OnClickListener {
 
     private fun setOnClickListener() {
         with(binding) {
-            fragChallengeSelectIBRefreshButton.setOnClickListener(this@ChallengeSelectFragment)
             fragChallengeSelectBTNAcceptChallenge.setOnClickListener(this@ChallengeSelectFragment)
         }
     }
 
-    private fun refreshChallenge() {
-        lifecycleScope.launch {
-            val allChallenges = viewModel.repository.allChallenges.first()
-            viewModel.currentChallenge.set(allChallenges[(allChallenges.indices).random()])
-        }
-    }
+    private fun setRecyclerView() {
+        with(binding.fragChallengeSelectRVChallengeList) {
+            // recyclerView 아이템 선택 시 blink 하는 것을 방지
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
+            // recyclerView 아이템 클릭 시 button 활성화
+            challengeListAdapter.onClickListener = object : OnEntityClickListener<Challenge> {
+                override fun onClick() {
+                    binding.fragChallengeSelectBTNAcceptChallenge.isEnabled = true
+                }
+            }
+        }
+
+    }
 }

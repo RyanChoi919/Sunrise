@@ -8,6 +8,7 @@ import java.time.LocalDate
 open class BaseViewModel(private val repository: AppRepository) : ViewModel() {
 
     val allEntries = repository.allEntries.asLiveData()
+    val allChallenges = repository.allChallenges.asLiveData()
 
     suspend fun <T> insert(t: T) {
         repository.insert(t)

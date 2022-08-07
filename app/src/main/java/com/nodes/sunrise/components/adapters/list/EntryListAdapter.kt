@@ -7,15 +7,15 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.comparators.EntryComparator
-import com.nodes.sunrise.components.listeners.OnEntryClickListener
-import com.nodes.sunrise.components.listeners.OnEntryLongClickListener
+import com.nodes.sunrise.components.listeners.OnEntityClickListener
+import com.nodes.sunrise.components.listeners.OnEntityLongClickListener
 import com.nodes.sunrise.databinding.ListItemEntryBinding
 import com.nodes.sunrise.db.entity.Entry
 
 class EntryListAdapter : ListAdapter<Entry, EntryListAdapter.EntryViewHolder>(EntryComparator()) {
 
-    lateinit var onEntryClickListener: OnEntryClickListener
-    lateinit var onEntryLongClickListener: OnEntryLongClickListener
+    lateinit var onClickListener: OnEntityClickListener<Entry>
+    lateinit var onLongClickListener: OnEntityLongClickListener<Entry>
 
     init {
         setHasStableIds(true) // notifyDatasetChanged 가 호출될 때 RV가 깜빡이는 것을 방지
@@ -28,8 +28,8 @@ class EntryListAdapter : ListAdapter<Entry, EntryListAdapter.EntryViewHolder>(En
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntryViewHolder {
         val viewHolder = EntryViewHolder.create(parent)
-        viewHolder.onClickListener = onEntryClickListener
-        viewHolder.onLongClickListener = onEntryLongClickListener
+        viewHolder.onClickListener = onClickListener
+        viewHolder.onLongClickListener = onLongClickListener
         return viewHolder
     }
 
@@ -40,8 +40,8 @@ class EntryListAdapter : ListAdapter<Entry, EntryListAdapter.EntryViewHolder>(En
 
     class EntryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private var _onClickListener: OnEntryClickListener? = null
-        var onClickListener: OnEntryClickListener
+        private var _onClickListener: OnEntityClickListener<Entry>? = null
+        var onClickListener: OnEntityClickListener<Entry>
             get() = _onClickListener!!
             set(value) {
                 _onClickListener = value
@@ -49,8 +49,8 @@ class EntryListAdapter : ListAdapter<Entry, EntryListAdapter.EntryViewHolder>(En
                     value.onClick(it, absoluteAdapterPosition, currentEntry)
                 }
             }
-        private var _onLongClickListener: OnEntryLongClickListener? = null
-        var onLongClickListener: OnEntryLongClickListener
+        private var _onLongClickListener: OnEntityLongClickListener<Entry>? = null
+        var onLongClickListener: OnEntityLongClickListener<Entry>
             get() = _onLongClickListener!!
             set(value) {
                 _onLongClickListener = value

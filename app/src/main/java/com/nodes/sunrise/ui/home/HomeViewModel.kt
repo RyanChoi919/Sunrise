@@ -7,5 +7,5 @@ import com.nodes.sunrise.db.entity.Challenge
 import com.nodes.sunrise.ui.BaseViewModel
 
 class HomeViewModel(val repository: AppRepository) : BaseViewModel(repository) {
-    val currentChallenge = ObservableField(Challenge(0, ""))
+    val currentChallenge = ObservableField<Challenge>()
 }

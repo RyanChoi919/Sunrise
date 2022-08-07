@@ -74,7 +74,9 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
             val savedDate = sharedPrefHelper.getSavedChallengeDate()!!
             if (savedDate == LocalDate.now()) {
                 // challenge가 저장된 날짜가 오늘인 경우
-                if (viewModel.currentChallenge.get()!!.id == savedChallengeId) {
+                if (viewModel.currentChallenge.get() != null &&
+                    viewModel.currentChallenge.get()!!.id == savedChallengeId
+                ) {
                     // viewModel에 저장된 challenge Id와 savedChallengeId가 동일한 경우 do nothing
                 } else {
                     // viewModel에 저장된 challenge Id와 savedChallengeId가 동일하지 않은 경우
