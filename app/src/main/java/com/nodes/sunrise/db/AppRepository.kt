@@ -2,6 +2,7 @@ package com.nodes.sunrise.db
 
 import androidx.annotation.WorkerThread
 import com.nodes.sunrise.db.dao.ChallengeDao
+import com.nodes.sunrise.db.dao.ChallengeGroupDao
 import com.nodes.sunrise.db.dao.EntryDao
 import com.nodes.sunrise.db.entity.Challenge
 import com.nodes.sunrise.db.entity.Entry
@@ -10,11 +11,13 @@ import kotlinx.coroutines.withContext
 
 class AppRepository(
     val entryDao: EntryDao,
-    val challengeDao: ChallengeDao
+    val challengeDao: ChallengeDao,
+    val challengeGroupDao: ChallengeGroupDao
 ) {
 
-    val allEntries = entryDao.getAllEntitiesOrderById()
-    val allChallenges = challengeDao.getAllEntitiesOrderById()
+    val allEntries = entryDao.getAllEntriesOrderById()
+    val allChallenges = challengeDao.getAllChallengesOrderById()
+    val allChallengeGroupsWithChallenges = challengeGroupDao.getChallengeGroupsWithChallenges()
 
     @WorkerThread
     suspend fun <T> insert(t: T) = withContext(Dispatchers.IO) {

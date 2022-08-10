@@ -15,6 +15,7 @@ class BaseApplication : Application() {
         AppRepository(
             database.entryDao,
             database.challengeDao,
+            database.challengeGroupDao
         )
     }
 }

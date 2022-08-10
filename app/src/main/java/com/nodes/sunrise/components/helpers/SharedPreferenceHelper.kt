@@ -26,7 +26,7 @@ class SharedPreferenceHelper(activity: Activity) {
 
     fun saveChallengeToSharedPref(challenge: Challenge) {
         with(sharedPref.edit()) {
-            putInt(challengeIdKey, challenge.id)
+            putInt(challengeIdKey, challenge.challengeId)
             putLong(challengeDateKey, LocalDate.now().toEpochDay())
             apply()
         }

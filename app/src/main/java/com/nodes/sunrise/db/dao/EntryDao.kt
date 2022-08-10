@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface EntryDao: BaseDao<Entry> {
     @Query("DELETE FROM Entry")
-    override fun deleteAll()
+    fun deleteAll()
 
     @Query("SELECT * FROM Entry ORDER BY id")
-    override fun getAllEntitiesOrderById(): Flow<List<Entry>>
+    fun getAllEntriesOrderById(): Flow<List<Entry>>
 
     @Query("SELECT * FROM Entry WHERE id = :id ORDER BY id")
-    override fun getEntityById(id: Int): Flow<Entry>
+    fun getEntryById(id: Int): Flow<Entry>
 }

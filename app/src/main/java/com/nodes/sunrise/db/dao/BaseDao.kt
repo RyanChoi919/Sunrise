@@ -15,10 +15,4 @@ interface BaseDao<T> {
 
     @Delete
     fun delete(t: T)
-
-    fun deleteAll()
-
-    fun getAllEntitiesOrderById(): Flow<List<T>>
-
-    fun getEntityById(id: Int): Flow<T>
 }

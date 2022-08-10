@@ -53,7 +53,7 @@ class ChallengeSelectFragment : BaseFragment(), View.OnClickListener {
         recyclerViewHelper.setRecyclerViewWithLiveData(
             binding.fragChallengeSelectRVChallengeList,
             challengeListAdapter,
-            viewModel.allChallenges,
+            viewModel.allChallengeGroupsWithChallenges,
         )
 
         val challenge = requireArguments().getSerializable(KEY_CHALLENGE) as Challenge?
@@ -65,7 +65,7 @@ class ChallengeSelectFragment : BaseFragment(), View.OnClickListener {
             if (savedChallengeId != null) {
                 lifecycleScope.launch {
                     challengeListAdapter.selectedChallenge =
-                        viewModel.repository.challengeDao.getEntityById(savedChallengeId).first()
+                        viewModel.repository.challengeDao.getChallengeById(savedChallengeId).first()
                 }
             }
         }

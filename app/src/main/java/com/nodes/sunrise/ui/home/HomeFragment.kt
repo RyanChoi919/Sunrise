@@ -75,14 +75,14 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
             if (savedDate == LocalDate.now()) {
                 // challenge가 저장된 날짜가 오늘인 경우
                 if (viewModel.currentChallenge.get() != null &&
-                    viewModel.currentChallenge.get()!!.id == savedChallengeId
+                    viewModel.currentChallenge.get()!!.challengeId == savedChallengeId
                 ) {
                     // viewModel에 저장된 challenge Id와 savedChallengeId가 동일한 경우 do nothing
                 } else {
                     // viewModel에 저장된 challenge Id와 savedChallengeId가 동일하지 않은 경우
                     lifecycleScope.launch() {
                         val currentChallenge =
-                            viewModel.repository.challengeDao.getEntityById(savedChallengeId)
+                            viewModel.repository.challengeDao.getChallengeById(savedChallengeId)
                                 .first()
                         viewModel.currentChallenge.set(currentChallenge)
                     }

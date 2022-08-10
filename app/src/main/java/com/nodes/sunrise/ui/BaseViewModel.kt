@@ -3,12 +3,12 @@ package com.nodes.sunrise.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.nodes.sunrise.db.AppRepository
-import java.time.LocalDate
 
 open class BaseViewModel(private val repository: AppRepository) : ViewModel() {
 
     val allEntries = repository.allEntries.asLiveData()
     val allChallenges = repository.allChallenges.asLiveData()
+    val allChallengeGroupsWithChallenges = repository.allChallengeGroupsWithChallenges.asLiveData()
 
     suspend fun <T> insert(t: T) {
         repository.insert(t)

@@ -16,8 +16,10 @@ import com.nodes.sunrise.components.decorators.ListMarginDecorator
 import com.nodes.sunrise.components.listeners.OnEntityClickListener
 import com.nodes.sunrise.components.listeners.OnEntityLongClickListener
 import com.nodes.sunrise.components.utils.CenterSmoothScroller
-import com.nodes.sunrise.db.entity.Challenge
+import com.nodes.sunrise.db.entity.ChallengeGroupWithChallenges
 import com.nodes.sunrise.db.entity.Entry
+import com.nodes.sunrise.enums.ChallengeViewType
+import com.nodes.sunrise.model.ChallengesWithGroup
 import com.nodes.sunrise.ui.BaseViewModel
 import kotlinx.coroutines.launch
 
@@ -37,15 +39,36 @@ class RecyclerViewHelper<T : BaseViewModel>(val fragment: Fragment, val viewMode
     fun setRecyclerViewWithLiveData(
         rv: RecyclerView,
         adapter: ChallengeListAdapter,
-        data: LiveData<List<Challenge>>,
+        data: LiveData<List<ChallengeGroupWithChallenges>>,
     ) {
         setRecyclerView(rv, adapter)
         data.observe(fragment.viewLifecycleOwner) {
-            adapter.submitList(it)
+            val list = ArrayList<ChallengesWithGroup>()
+
+            for (challengeGroup in it) {
+                list.add(
+                    ChallengesWithGroup(
+                        ChallengeViewType.GROUP,
+                        challengeGroup = challengeGroup.group
+                    )
+                )
+                for (challengeItem in challengeGroup.challenges) {
+                    list.add(
+                        ChallengesWithGroup(
+                            ChallengeViewType.ITEM,
+                            challenge = challengeItem
+                        )
+                    )
+                }
+            }
+
+            adapter.submitList(list)
             rv.post {
                 val smoothScroller = CenterSmoothScroller(rv.context)
                 smoothScroller.targetPosition = adapter.selectedPosition
-                rv.layoutManager!!.startSmoothScroll(smoothScroller)
+                if (smoothScroller.targetPosition > 0) {
+                    rv.layoutManager!!.startSmoothScroll(smoothScroller)
+                }
             }
         }
     }

@@ -15,6 +15,13 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp" />
+
         <TextView
             android:id="@+id/frag_home_TV_title"
             style="@style/TextAppearance.Sunrise.HeadlineSmall"
@@ -55,6 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="3"
             android:text='@{viewModel.currentChallenge != null ? viewModel.currentChallenge.name : "없음"}'
             app:layout_constraintLeft_toLeftOf="@id/frag_home_TV_subtitle_today_challenge"
             app:layout_constraintTop_toBottomOf="@id/frag_home_TV_subtitle_today_challenge"
@@ -91,6 +100,13 @@
             app:layout_constraintTop_toBottomOf="@id/frag_Home_TV_subtitle_recent_entries"
             tools:itemCount="3"
             tools:listitem="@layout/list_item_entry" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="left"
+            tools:layout_editor_absoluteX="351dp"
+            tools:layout_editor_absoluteY="181dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
