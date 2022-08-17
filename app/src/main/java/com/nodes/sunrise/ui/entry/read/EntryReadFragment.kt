@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.helpers.NavigationHelper
@@ -65,7 +66,7 @@ class EntryReadFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.frag_entry_write_menu_edit -> {
-                        NavigationHelper(parentFragment!!).navigateToEntryWriteFragmentToModify(
+                        NavigationHelper(findNavController()).navigateToEntryWriteFragmentToModify(
                             viewModel.currentEntry
                         )
                         true

@@ -6,13 +6,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.nodes.sunrise.R
-import com.nodes.sunrise.components.comparators.EntryComparator
+import com.nodes.sunrise.components.comparators.EntriesWithYearMonthComparator
 import com.nodes.sunrise.components.listeners.OnEntityClickListener
 import com.nodes.sunrise.components.listeners.OnEntityLongClickListener
+import com.nodes.sunrise.components.utils.DateUtil
 import com.nodes.sunrise.databinding.ListItemEntryBinding
+import com.nodes.sunrise.databinding.ListItemEntryGroupBinding
 import com.nodes.sunrise.db.entity.Entry
+import com.nodes.sunrise.enums.EntryViewType
+import com.nodes.sunrise.model.EntryAndYearMonth
 
-class EntryListAdapter : ListAdapter<Entry, EntryListAdapter.EntryViewHolder>(EntryComparator()) {
+class EntryListAdapter :
+    ListAdapter<EntryAndYearMonth, RecyclerView.ViewHolder>(
+        EntriesWithYearMonthComparator()
+    ) {
 
     lateinit var onClickListener: OnEntityClickListener<Entry>
     lateinit var onLongClickListener: OnEntityLongClickListener<Entry>
@@ -26,19 +33,55 @@ class EntryListAdapter : ListAdapter<Entry, EntryListAdapter.EntryViewHolder>(En
         return position.toLong()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntryViewHolder {
-        val viewHolder = EntryViewHolder.create(parent)
-        viewHolder.onClickListener = onClickListener
-        viewHolder.onLongClickListener = onLongClickListener
-        return viewHolder
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            EntryViewType.DAY.ordinal -> {
+                EntryDayViewHolder.create(parent).apply {
+                    this.onClickListener = this@EntryListAdapter.onClickListener
+                    this.onLongClickListener = this@EntryListAdapter.onLongClickListener
+                }
+            }
+            else -> {
+                EntryYearMonthViewHolder.create(parent)
+            }
+        }
     }
 
-    override fun onBindViewHolder(holder: EntryViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder.itemViewType) {
+            EntryViewType.DAY.ordinal -> {
+                with((holder as EntryDayViewHolder).binding) {
+                    val currentEntry = getItem(position).entry
+                    if (currentEntry != null) {
+                        holder.currentEntry = currentEntry
+
+                        listItemEntryTVDate.text = currentEntry.dateTime.dayOfMonth.toString()
+                        listItemEntryTVDayOfWeek.text = DateUtil.getLocalizedDayOfWeekString(
+                            root.context, currentEntry.dateTime.dayOfWeek)
+                        listItemEntryTVTitle.text = currentEntry.title
+                        listItemEntryTVContent.text = currentEntry.content
+                    }
+                }
+            }
+            else -> {
+                with((holder as EntryYearMonthViewHolder).binding) {
+                    val currentYearMonth = getItem(position).yearMonth
+                    if (currentYearMonth != null) {
+                        listItemEntryGroupTVMonth.text = DateUtil.getLocalizedMonthString(
+                            root.context, currentYearMonth)
+                        listItemEntryGroupTVYear.text = currentYearMonth.year.toString()
+                    }
+                }
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
         val current = getItem(position)
-        holder.bind(current)
+        return current.viewType.ordinal
     }
 
-    class EntryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class EntryDayViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private var _onClickListener: OnEntityClickListener<Entry>? = null
         var onClickListener: OnEntityClickListener<Entry>
@@ -46,7 +89,9 @@ class EntryListAdapter : ListAdapter<Entry, EntryListAdapter.EntryViewHolder>(En
             set(value) {
                 _onClickListener = value
                 binding.root.setOnClickListener {
-                    value.onClick(it, absoluteAdapterPosition, currentEntry)
+                    if (::currentEntry.isInitialized) {
+                        value.onClick(it, absoluteAdapterPosition, currentEntry)
+                    }
                 }
             }
         private var _onLongClickListener: OnEntityLongClickListener<Entry>? = null
@@ -55,26 +100,34 @@ class EntryListAdapter : ListAdapter<Entry, EntryListAdapter.EntryViewHolder>(En
             set(value) {
                 _onLongClickListener = value
                 binding.root.setOnLongClickListener {
-                    value.onItemLongClick(it, absoluteAdapterPosition, currentEntry)
+                    if (::currentEntry.isInitialized) {
+                        value.onItemLongClick(it, absoluteAdapterPosition, currentEntry)
+                    }
                     false
                 }
             }
-        private val binding = ListItemEntryBinding.bind(itemView)
-        private lateinit var currentEntry: Entry
-
-        fun bind(entry: Entry) {
-            currentEntry = entry
-            binding.listItemEntryTVTitle.text = currentEntry.title
-            binding.listItemEntryTVContent.text = currentEntry.content
-        }
+        val binding = ListItemEntryBinding.bind(itemView)
+        lateinit var currentEntry: Entry
 
         companion object {
-            fun create(parent: ViewGroup): EntryViewHolder {
+            fun create(parent: ViewGroup): EntryDayViewHolder {
                 val itemView = LayoutInflater.from(parent.context)
                     .inflate(R.layout.list_item_entry, parent, false)
-                return EntryViewHolder(itemView)
+                return EntryDayViewHolder(itemView)
             }
+        }
+    }
 
+    class EntryYearMonthViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        val binding = ListItemEntryGroupBinding.bind(itemView)
+
+        companion object {
+            fun create(parent: ViewGroup): EntryYearMonthViewHolder {
+                val itemView = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.list_item_entry_group, parent, false)
+                return EntryYearMonthViewHolder(itemView)
+            }
         }
     }
 }

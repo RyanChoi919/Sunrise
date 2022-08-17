@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.coroutineScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nodes.sunrise.R
@@ -15,24 +16,43 @@ import com.nodes.sunrise.components.adapters.list.EntryListAdapter
 import com.nodes.sunrise.components.decorators.ListMarginDecorator
 import com.nodes.sunrise.components.listeners.OnEntityClickListener
 import com.nodes.sunrise.components.listeners.OnEntityLongClickListener
-import com.nodes.sunrise.components.utils.CenterSmoothScroller
 import com.nodes.sunrise.db.entity.ChallengeGroupWithChallenges
 import com.nodes.sunrise.db.entity.Entry
-import com.nodes.sunrise.enums.ChallengeViewType
-import com.nodes.sunrise.model.ChallengesWithGroup
+import com.nodes.sunrise.enums.EntryViewType
+import com.nodes.sunrise.model.EntryAndYearMonth
 import com.nodes.sunrise.ui.BaseViewModel
 import kotlinx.coroutines.launch
+import java.time.YearMonth
 
 class RecyclerViewHelper<T : BaseViewModel>(val fragment: Fragment, val viewModel: T) {
 
-    val navigationHelper = NavigationHelper(fragment)
+    val navigationHelper = NavigationHelper(fragment.findNavController())
 
     fun setRecyclerViewWithLiveData(
         rv: RecyclerView, adapter: EntryListAdapter, data: LiveData<List<Entry>>
     ) {
         setRecyclerView(rv, adapter)
         data.observe(fragment.viewLifecycleOwner) {
-            adapter.submitList(it)
+            val map = HashMap<YearMonth, ArrayList<Entry>>()
+
+            for (entry in it) {
+                val currentYearMonth = YearMonth.from(entry.dateTime)
+                if (!map.contains(currentYearMonth)) {
+                    map[currentYearMonth] = ArrayList()
+                }
+                map[currentYearMonth]!!.add(entry)
+            }
+
+            val list = ArrayList<EntryAndYearMonth>()
+
+            for (item in map) {
+                list.add(EntryAndYearMonth(EntryViewType.YEAR_MONTH, yearMonth = item.key))
+                for (entry in item.value) {
+                    list.add(EntryAndYearMonth(EntryViewType.DAY, entry = entry))
+                }
+            }
+
+            adapter.submitList(list)
         }
     }
 
@@ -43,33 +63,33 @@ class RecyclerViewHelper<T : BaseViewModel>(val fragment: Fragment, val viewMode
     ) {
         setRecyclerView(rv, adapter)
         data.observe(fragment.viewLifecycleOwner) {
-            val list = ArrayList<ChallengesWithGroup>()
-
-            for (challengeGroup in it) {
-                list.add(
-                    ChallengesWithGroup(
-                        ChallengeViewType.GROUP,
-                        challengeGroup = challengeGroup.group
-                    )
-                )
-                for (challengeItem in challengeGroup.challenges) {
-                    list.add(
-                        ChallengesWithGroup(
-                            ChallengeViewType.ITEM,
-                            challenge = challengeItem
-                        )
-                    )
-                }
-            }
-
-            adapter.submitList(list)
-            rv.post {
-                val smoothScroller = CenterSmoothScroller(rv.context)
-                smoothScroller.targetPosition = adapter.selectedPosition
-                if (smoothScroller.targetPosition > 0) {
-                    rv.layoutManager!!.startSmoothScroll(smoothScroller)
-                }
-            }
+//            val list = ArrayList<ChallengeAndGroup>()
+//
+//            for (challengeGroup in it) {
+//                list.add(
+//                    ChallengeAndGroup(
+//                        ChallengeViewType.GROUP,
+//                        challengeGroup = challengeGroup.group
+//                    )
+//                )
+//                for (challengeItem in challengeGroup.challenges) {
+//                    list.add(
+//                        ChallengeAndGroup(
+//                            ChallengeViewType.ITEM,
+//                            challenge = challengeItem
+//                        )
+//                    )
+//                }
+//            }
+//
+//            adapter.submitList(list)
+//            rv.post {
+//                val smoothScroller = CenterSmoothScroller(rv.context)
+//                smoothScroller.targetPosition = adapter.selectedPosition
+//                if (smoothScroller.targetPosition > 0) {
+//                    rv.layoutManager!!.startSmoothScroll(smoothScroller)
+//                }
+//            }
         }
     }
 

@@ -5,37 +5,27 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.nodes.sunrise.ui.entry.write.EntryWriteViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.entry.write.EntryWriteFragment">
+        android:layout_height="match_parent">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <LinearLayout
-                android:id="@+id/frag_entry_write_LL_body"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="32dp">
-
-                <TextView
-                    style="@style/TextAppearance.Sunrise.LabelSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
-                    android:drawablePadding="4dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/sample_entry_write_challenge_name_with_title"
-                    android:textStyle="bold"
-                    app:drawableEndCompat="@drawable/ic_round_highlight_off_16" />
+                android:layout_marginTop="16dp"
+                tools:context=".ui.entry.write.EntryWriteFragment">
 
                 <EditText
                     android:id="@+id/frag_entry_write_ET_title"
@@ -46,55 +36,77 @@
                     android:layout_marginTop="8dp"
                     android:background="@null"
                     android:hint="@string/frag_entry_write_title_hint"
-                    android:text="@={viewModel.currentEntry.title}"
                     android:importantForAutofill="no"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:text="@={viewModel.currentEntry.title}"
+                    android:visibility="@{viewModel.currentEntry.isTitleEnabled ? View.VISIBLE : View.GONE }"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/frag_entry_write_ET_content"
                     style="@style/TextAppearance.Sunrise.BodyMedium"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:background="@null"
-                    android:text="@={viewModel.currentEntry.content}"
+                    android:gravity="top"
                     android:hint="@string/frag_entry_write_content_hint"
                     android:importantForAutofill="no"
-                    android:inputType="textMultiLine" />
+                    android:inputType="textMultiLine"
+                    android:text="@={viewModel.currentEntry.content}"
+                    app:layout_constraintBottom_toTopOf="@id/frag_entry_write_TV_text_count"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/frag_entry_write_ET_title" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/frag_entry_write_TV_text_count"
+                    style="@style/TextAppearance.Sunrise.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/screen_horizontal_margin"
+                    android:text="@{@string/frag_entry_write_text_count(viewModel.textCount)}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/frag_entry_write_ET_content"
+                    tools:text="100자" />
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
+        <!-- BottomSheet -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/screen_horizontal_margin"
-            android:background="@drawable/bg_write_entry_tools"
+            android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
             <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/frag_entry_write_MCB_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/ic_round_title_24"
                 android:buttonTint="@color/entry_write_tab_icon"
-                android:checked="true" />
+                android:checked="@={viewModel.currentEntry.titleEnabled}" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/frag_entry_write_MCB_entry_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/ic_round_access_time_24"
                 android:buttonTint="@color/entry_write_tab_icon" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/frag_entry_write_MCB_entry_place"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/ic_round_location_on_24"
                 android:buttonTint="@color/entry_write_tab_icon" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/frag_entry_write_MCB_entry_picture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/ic_round_photo_24"
@@ -102,6 +114,5 @@
 
         </LinearLayout>
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

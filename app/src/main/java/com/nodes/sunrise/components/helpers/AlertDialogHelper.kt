@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.R
+import com.nodes.sunrise.components.listeners.OnChallengeResultSetListener
 import com.nodes.sunrise.db.entity.Entry
+import com.nodes.sunrise.enums.ChallengeResult
 import com.nodes.sunrise.ui.BaseViewModel
 import kotlinx.coroutines.launch
 
@@ -37,6 +39,25 @@ class AlertDialogHelper {
             }
             .setNegativeButton(cancelText) { _, _ ->
                 // do nothing
+            }
+            .create().show()
+    }
+
+    fun showChangeChallengeResultDialog(
+        fragment: Fragment,
+        onChallengeResultSetListener: OnChallengeResultSetListener
+    ) {
+        AlertDialog.Builder(fragment.requireContext())
+            .setTitle(R.string.change_challenge_result_dialog_title)
+            .setItems(
+                R.array.change_challenge_result_dialog_items
+            ) { dialog, which ->
+                val newResult = when (which) {
+                    0 -> ChallengeResult.SUCCESS
+                    1 -> ChallengeResult.FAIL
+                    else -> ChallengeResult.POSTPONE
+                }
+                onChallengeResultSetListener.onSet(newResult)
             }
             .create().show()
     }

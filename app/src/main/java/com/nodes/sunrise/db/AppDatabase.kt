@@ -41,7 +41,8 @@ internal abstract class AppDatabase : RoomDatabase() {
             super.onCreate(db)
             INSTANCE?.let { appDatabase ->
                 scope.launch {
-                    val challengeList = CsvUtil(context).readAllFromCsv(AssetNames.CSV_CHALLENGE.fileName)
+                    val challengeList =
+                        CsvUtil(context).readAllFromCsv(AssetNames.CSV_CHALLENGE.fileName)
                     val challengeGroupList =
                         CsvUtil(context).readAllFromCsv(AssetNames.CSV_CHALLENGE_GROUP.fileName)
                     val challengeAndGroupCrossRefList =

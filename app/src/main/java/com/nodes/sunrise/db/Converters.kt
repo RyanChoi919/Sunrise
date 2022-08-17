@@ -1,7 +1,6 @@
 package com.nodes.sunrise.db
 
 import androidx.room.TypeConverter
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 

@@ -1,6 +1,8 @@
 package com.nodes.sunrise.ui.entry.write
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -17,7 +19,7 @@ import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.ui.ViewModelFactory
 import java.time.LocalDateTime
 
-class EntryWriteFragment : Fragment() {
+class EntryWriteFragment : Fragment(), View.OnClickListener {
 
     companion object {
         val KEY_ENTRY = this::class.java.simpleName + ".ENTRY"
@@ -41,20 +43,66 @@ class EntryWriteFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_entry_write, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        if (arguments != null) {
-            viewModel.currentEntry = requireArguments().getSerializable(KEY_ENTRY) as Entry
-            isToCreateMode = false
-        } else {
-            viewModel.currentEntry = Entry(0, LocalDateTime.now(), "", true, "")
-            isToCreateMode = true
+        setOnClickListeners()
+
+        /* arguments 확인 및 viewModel 데이터 초기화 */
+        if (savedInstanceState == null && arguments != null) {
+            val entry = requireArguments().getSerializable(KEY_ENTRY) as Entry?
+
+            if (entry != null) {
+                isToCreateMode = false
+                viewModel.currentEntry.set(requireArguments().getSerializable(KEY_ENTRY) as Entry)
+            } else {
+                isToCreateMode = true
+                val newEntry =
+                    Entry(0, LocalDateTime.now(), title = "", content = "", isTitleEnabled = true)
+                viewModel.currentEntry.set(newEntry)
+
+            }
         }
+
+        /* 콘텐츠 EditText의 글자 수를 카운트&표시하기 위한 TextWatcher 설정 */
+        binding.fragEntryWriteETContent.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                // do nothing
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                // do nothing
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                val textCountString = if (p0 != null && p0.toString() != "") {
+                    p0.toString().replace(" ", "").length.toString()
+                } else {
+                    "0"
+                }
+                viewModel.textCount.set(textCountString)
+            }
+        })
 
         /* data binding 변수 설정 */
         binding.viewModel = viewModel
 
         return binding.root
-
     }
+
+    private fun setOnClickListeners() {
+        val views = ArrayList<View>().apply {
+            with(binding) {
+                add(fragEntryWriteMCBEntryTime)
+            }
+        }
+
+        for (v in views) {
+            v.setOnClickListener(this@EntryWriteFragment)
+        }
+    }
+
+    override fun onClick(v: View?) {
+        // add codes
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -97,7 +145,7 @@ class EntryWriteFragment : Fragment() {
                     }
                     R.id.frag_entry_write_menu_delete -> {
                         AlertDialogHelper().showEntryDeleteConfirmDialog(
-                            parentFragment!!, viewModel, viewModel.currentEntry
+                            parentFragment!!, viewModel, viewModel.currentEntry.get()!!
                         )
                         true
                     }

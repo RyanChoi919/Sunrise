@@ -2,6 +2,7 @@ package com.nodes.sunrise.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.nodes.sunrise.enums.ChallengeResult
 import java.io.Serializable
 import java.time.LocalDateTime
 

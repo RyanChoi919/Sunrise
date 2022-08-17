@@ -36,7 +36,7 @@
     <string name="CD_challenge_done">도전 과제 성공 버튼</string>
     <string name="CD_challenge_fail">도전 과제 실패 버튼</string>
     <string name="sample_entry_write_challenge_name_with_title">도전과제 / 힘들 때 힘들다고 말하기</string>
-    <string name="frag_entry_write_content_hint">도전과제와 함께 한 하루, 어땠나요?</string>
+    <string name="frag_entry_write_content_hint">오늘 하루, 무슨 일이 있었나요?</string>
     <string name="frag_entry_write_title_hint">제목</string>
     <string name="sample_temp">24℃</string>
     <string name="sample_location">서울특별시 중구</string>
@@ -55,5 +55,19 @@
     <string name="pref_key_challenge_id">KEY_CHALLENGE_ID</string>
     <string name="pref_key_challenge_date">KEY_CHALLENGE_LOCAL_DATE</string>
     <string name="CD_challenge_category_button">도전 과제 카테고리 확장축소 버튼</string>
+    <string name="CD_challenge_postpone">도전과제 연기 버튼</string>
+    <string name="frag_challenge_check_done_button_label">@string/challenge_result_success</string>
+    <string name="frag_challenge_check_fail_button_label">@string/challenge_result_fail</string>
+    <string name="frag_challenge_check_postpone_button_label">@string/challenge_result_postpone</string>
+    <string name="frag_entry_write_challenge_name">도전과제 / %s</string>
+    <string name="frag_entry_write_text_count">%s자</string>
+
+    <string name="arg_show_fab">showFab</string>
+
+    <string name="change_challenge_result_dialog_title">도전 과제 결과 변경</string>
+
+    <string name="challenge_result_success">성공</string>
+    <string name="challenge_result_fail">실패</string>
+    <string name="challenge_result_postpone">연기</string>
 
 </resources>

@@ -12,10 +12,10 @@ import com.nodes.sunrise.databinding.ListItemChallengeBinding
 import com.nodes.sunrise.databinding.ListItemChallengeGroupBinding
 import com.nodes.sunrise.db.entity.Challenge
 import com.nodes.sunrise.enums.ChallengeViewType
-import com.nodes.sunrise.model.ChallengesWithGroup
+import com.nodes.sunrise.model.ChallengeAndGroup
 
 class ChallengeListAdapter :
-    ListAdapter<ChallengesWithGroup, RecyclerView.ViewHolder>(
+    ListAdapter<ChallengeAndGroup, RecyclerView.ViewHolder>(
         ChallengesWithGroupComparator()
     ) {
 
@@ -25,7 +25,7 @@ class ChallengeListAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            ChallengeViewType.GROUP.viewType -> {
+            ChallengeViewType.GROUP.ordinal -> {
                 val holder = ChallengeGroupViewHolder.create(parent)
                 holder
             }
@@ -41,7 +41,7 @@ class ChallengeListAdapter :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
-            ChallengeViewType.GROUP.viewType -> {
+            ChallengeViewType.GROUP.ordinal -> {
                 with((holder as ChallengeGroupViewHolder).binding) {
                     val currentGroup = getItem(position).challengeGroup!!
                     listItemChallengeCategoryTVName.text = currentGroup.name
@@ -60,8 +60,8 @@ class ChallengeListAdapter :
     }
 
     override fun onCurrentListChanged(
-        previousList: MutableList<ChallengesWithGroup>,
-        currentList: MutableList<ChallengesWithGroup>
+        previousList: MutableList<ChallengeAndGroup>,
+        currentList: MutableList<ChallengeAndGroup>
     ) {
         val pos: Int
         if (::selectedChallenge.isInitialized) {
@@ -77,7 +77,7 @@ class ChallengeListAdapter :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return currentList[position].viewType.viewType
+        return currentList[position].viewType.ordinal
     }
 
     private fun updateSelection(newPosition: Int) {

@@ -1,13 +1,12 @@
 package com.nodes.sunrise.components.comparators
 
-import com.nodes.sunrise.db.entity.ChallengeGroupWithChallenges
-import com.nodes.sunrise.model.ChallengesWithGroup
+import com.nodes.sunrise.model.ChallengeAndGroup
 
-class ChallengesWithGroupComparator : BaseComparator<ChallengesWithGroup>() {
+class ChallengesWithGroupComparator : BaseComparator<ChallengeAndGroup>() {
 
     override fun areContentsTheSame(
-        oldItem: ChallengesWithGroup,
-        newItem: ChallengesWithGroup
+        oldItem: ChallengeAndGroup,
+        newItem: ChallengeAndGroup
     ): Boolean {
         return oldItem == newItem
     }

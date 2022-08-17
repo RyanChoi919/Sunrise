@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.adapters.list.EntryListAdapter
@@ -21,7 +22,6 @@ import com.nodes.sunrise.ui.ViewModelFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.util.*
 
 class HomeFragment : BaseFragment(), View.OnClickListener {
 
@@ -101,26 +101,20 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when (v) {
-            binding.fragHomeIVEditChallenge -> {
-                NavigationHelper(this).navigateToChallengeSelectFragment(viewModel.currentChallenge.get())
-            }
-        }
+        // add codes
     }
 
     private fun setOnClickListeners() {
-        binding.fragHomeIVEditChallenge.setOnClickListener(this)
+//        binding.fragHomeIVEditChallenge.setOnClickListener(this)
     }
 
     private fun setTextClockFormat() {
-        var formatString =
+        val format12Hour =
             (SimpleDateFormat.getDateTimeInstance() as SimpleDateFormat).toLocalizedPattern()
-        when (resources.configuration.locales.get(0)) {
-            Locale.KOREA -> {
-                formatString = "yyyy년 M월 d일 a h:mm:ss"
-            }
-        }
+        val format24Hour =
+            (SimpleDateFormat.getDateTimeInstance() as SimpleDateFormat).toLocalizedPattern()
 
-        binding.fragHomeTC.format12Hour = formatString
+        binding.fragHomeTC.format12Hour = format12Hour
+        binding.fragHomeTC.format24Hour = format24Hour
     }
 }

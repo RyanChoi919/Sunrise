@@ -15,13 +15,6 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="16dp" />
-
         <TextView
             android:id="@+id/frag_home_TV_title"
             style="@style/TextAppearance.Sunrise.HeadlineSmall"
@@ -30,6 +23,7 @@
             android:layout_marginStart="@dimen/screen_horizontal_margin"
             android:layout_marginTop="@dimen/screen_vertical_margin"
             android:text="@string/sample_home_title"
+            android:textColor="?attr/colorOnBackground"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,75 +33,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:format12Hour=""
+            android:textColor="?attr/colorOnBackground"
             app:layout_constraintLeft_toLeftOf="@id/frag_home_TV_title"
             app:layout_constraintTop_toBottomOf="@id/frag_home_TV_title"
             tools:text="2022년 7월 27일 일요일 22:29" />
-
-        <!--  오늘의 도전과제  -->
-
-        <TextView
-            android:id="@+id/frag_home_TV_subtitle_today_challenge"
-            style="@style/TextAppearance.Sunrise.TitleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/frag_home_today_challenge"
-            android:textColor="?attr/colorOutline"
-            app:layout_constraintLeft_toLeftOf="@id/frag_home_TC"
-            app:layout_constraintTop_toBottomOf="@id/frag_home_TC" />
-
-        <TextView
-            android:id="@+id/frag_home_TV_today_challenge"
-            style="@style/TextAppearance.Sunrise.TitleMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ellipsize="end"
-            android:maxLines="3"
-            android:text='@{viewModel.currentChallenge != null ? viewModel.currentChallenge.name : "없음"}'
-            app:layout_constraintLeft_toLeftOf="@id/frag_home_TV_subtitle_today_challenge"
-            app:layout_constraintTop_toBottomOf="@id/frag_home_TV_subtitle_today_challenge"
-            tools:text="@string/sample_challenge_name" />
-
-        <ImageView
-            android:id="@+id/frag_home_IV_edit_challenge"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginStart="4dp"
-            android:contentDescription="@string/CD_edit_challenge"
-            android:src="@drawable/ic_round_edit_24"
-            app:layout_constraintBottom_toBottomOf="@id/frag_home_TV_today_challenge"
-            app:layout_constraintLeft_toRightOf="@id/frag_home_TV_today_challenge"
-            app:tint="?attr/colorOutline" />
-
-        <TextView
-            android:id="@+id/frag_Home_TV_subtitle_recent_entries"
-            style="@style/TextAppearance.Sunrise.TitleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/frag_home_recent_entries"
-            android:textColor="?attr/colorOutline"
-            app:layout_constraintLeft_toLeftOf="@id/frag_home_TV_today_challenge"
-            app:layout_constraintTop_toBottomOf="@id/frag_home_TV_today_challenge" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/frag_home_RV_recent_entries"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:paddingHorizontal="@dimen/recycler_view_horizontal_padding"
-            app:layout_constraintTop_toBottomOf="@id/frag_Home_TV_subtitle_recent_entries"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/frag_home_TC"
             tools:itemCount="3"
             tools:listitem="@layout/list_item_entry" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="left"
-            tools:layout_editor_absoluteX="351dp"
-            tools:layout_editor_absoluteY="181dp" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -8,5 +8,5 @@ import com.nodes.sunrise.ui.BaseViewModel
 
 class ChallengeSelectViewModel(val repository: AppRepository) : BaseViewModel(repository) {
     var currentChallenge: ObservableField<Challenge> = ObservableField(Challenge(0, ""))
-    lateinit var challengeGroupsWithChallenges : List<ChallengeGroupWithChallenges>
+    lateinit var challengeGroupsWithChallenges: List<ChallengeGroupWithChallenges>
 }
