@@ -10,8 +10,8 @@ interface EntryDao: BaseDao<Entry> {
     @Query("DELETE FROM Entry")
     fun deleteAll()
 
-    @Query("SELECT * FROM Entry ORDER BY id")
-    fun getAllEntriesOrderById(): Flow<List<Entry>>
+    @Query("SELECT * FROM Entry ORDER BY dateTime DESC")
+    fun getAllEntriesOrderByDateDesc(): Flow<List<Entry>>
 
     @Query("SELECT * FROM Entry WHERE id = :id ORDER BY id")
     fun getEntryById(id: Int): Flow<Entry>

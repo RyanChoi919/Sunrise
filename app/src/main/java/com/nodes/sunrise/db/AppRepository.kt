@@ -15,7 +15,7 @@ class AppRepository(
     val challengeGroupDao: ChallengeGroupDao
 ) {
 
-    val allEntries = entryDao.getAllEntriesOrderById()
+    val allEntries = entryDao.getAllEntriesOrderByDateDesc()
     val allChallenges = challengeDao.getAllChallengesOrderById()
     val allChallengeGroupsWithChallenges = challengeGroupDao.getChallengeGroupsWithChallenges()
 
