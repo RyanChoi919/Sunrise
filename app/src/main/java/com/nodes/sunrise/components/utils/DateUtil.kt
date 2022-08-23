@@ -26,7 +26,7 @@ class DateUtil() {
         }
 
         fun getLocalizedTimeString(time: LocalTime): String {
-            return time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
+            return time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
         }
 
         private fun getCurrentLocale(context: Context): Locale {
