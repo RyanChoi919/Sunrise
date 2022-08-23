@@ -36,7 +36,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.Sunrise.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Sunrise.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorControlNormal">@color/md_theme_light_onBackground</item>
+        <item name="android:textColorPrimary">@color/md_theme_light_onBackground</item>
+    </style>
 
     <style name="Theme.Sunrise.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

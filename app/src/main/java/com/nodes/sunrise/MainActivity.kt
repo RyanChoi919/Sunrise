@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         ViewModelFactory(repository)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,6 +38,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
 
         navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -46,7 +46,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         navController.addOnDestinationChangedListener { _, destination, arguments ->
             if (arguments != null) {
+                binding.toolbar.title = ""
                 binding.fab.isVisible = arguments.getBoolean(getString(R.string.arg_show_fab))
+            }
+            when(destination.id) {
+                R.id.nav_home -> {
+                    setTitleLarge("S U N R I S E")
+                }
             }
         }
 
@@ -96,6 +102,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun setOnClickListeners() {
         with(binding) {
             fab.setOnClickListener(this@MainActivity)
+        }
+    }
+
+    fun setTitleLarge(titleString: String?) {
+        binding.toolbarTitleLarge.visibility = View.VISIBLE
+        binding.toolbarTitleLarge.text = titleString
+
+        binding.toolbarTitleMedium.visibility = View.GONE
+        binding.toolbarSubtitle.visibility = View.GONE
+    }
+
+    fun setTitleSmallAndSubtitle(titleString: String, subtitleString: String?) {
+        binding.toolbarTitleMedium.visibility = View.VISIBLE
+        binding.toolbarTitleMedium.text = titleString
+
+        binding.toolbarTitleLarge.visibility = View.GONE
+
+        if (subtitleString == null) {
+            binding.toolbarSubtitle.visibility = View.GONE
+        } else {
+            binding.toolbarSubtitle.visibility = View.VISIBLE
+            binding.toolbarSubtitle.text = subtitleString
         }
     }
 }

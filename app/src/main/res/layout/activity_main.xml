@@ -9,14 +9,52 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/Theme.Sunrise.AppBarOverlay">
+        android:background="@null"
+        android:theme="@style/Theme.Sunrise.AppBarOverlay"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.Sunrise.PopupOverlay" />
+            app:popupTheme="@style/Theme.Sunrise.PopupOverlay">
+
+            <LinearLayout
+                android:id="@+id/act_main_LL_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/toolbar_title_large"
+                    style="@style/TextAppearance.Sunrise.AppBarTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/md_theme_light_onBackground"
+                    tools:text="toolbar" />
+
+                <TextView
+                    android:id="@+id/toolbar_title_medium"
+                    style="@style/TextAppearance.Sunrise.TitleMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/md_theme_light_onBackground"
+                    tools:text="toolbar" />
+
+                <TextView
+                    android:id="@+id/toolbar_subtitle"
+                    style="@style/TextAppearance.Sunrise.LabelMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="@color/md_theme_light_onBackground"
+                    tools:text="toolbar" />
+
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -29,7 +67,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_menu_edit"
-        android:contentDescription="@string/CD_fab"/>
+        android:contentDescription="@string/CD_fab"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

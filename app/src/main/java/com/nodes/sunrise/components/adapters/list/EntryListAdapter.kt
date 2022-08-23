@@ -57,7 +57,10 @@ class EntryListAdapter :
 
                         listItemEntryTVDate.text = currentEntry.dateTime.dayOfMonth.toString()
                         listItemEntryTVDayOfWeek.text = DateUtil.getLocalizedDayOfWeekString(
-                            root.context, currentEntry.dateTime.dayOfWeek)
+                            root.context, currentEntry.dateTime.dayOfWeek
+                        )
+                        listItemEntryTVTitle.visibility =
+                            if (currentEntry.isTitleEnabled) View.VISIBLE else View.GONE
                         listItemEntryTVTitle.text = currentEntry.title
                         listItemEntryTVContent.text = currentEntry.content
                     }

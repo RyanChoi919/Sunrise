@@ -1,9 +1,11 @@
 package com.nodes.sunrise.ui.entry.write
 
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
@@ -12,14 +14,17 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
+import com.nodes.sunrise.MainActivity
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.helpers.AlertDialogHelper
+import com.nodes.sunrise.components.utils.DateUtil
 import com.nodes.sunrise.databinding.FragmentEntryWriteBinding
 import com.nodes.sunrise.db.entity.Entry
+import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
 import java.time.LocalDateTime
 
-class EntryWriteFragment : Fragment(), View.OnClickListener {
+class EntryWriteFragment : BaseFragment(), View.OnClickListener {
 
     companion object {
         val KEY_ENTRY = this::class.java.simpleName + ".ENTRY"
@@ -57,8 +62,8 @@ class EntryWriteFragment : Fragment(), View.OnClickListener {
                 val newEntry =
                     Entry(0, LocalDateTime.now(), title = "", content = "", isTitleEnabled = true)
                 viewModel.currentEntry.set(newEntry)
-
             }
+            setToolbarWithDateTime(viewModel.currentEntry.get()!!.dateTime)
         }
 
         /* 콘텐츠 EditText의 글자 수를 카운트&표시하기 위한 TextWatcher 설정 */
@@ -91,6 +96,7 @@ class EntryWriteFragment : Fragment(), View.OnClickListener {
         val views = ArrayList<View>().apply {
             with(binding) {
                 add(fragEntryWriteMCBEntryTime)
+                add(fragEntryWriteMCBTitle)
             }
         }
 
@@ -100,7 +106,35 @@ class EntryWriteFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        // add codes
+        with(binding) {
+            when (v) {
+                fragEntryWriteMCBEntryTime -> {
+                    val currentEntry = viewModel!!.currentEntry.get()!!
+                    TimePickerDialog(context, { _, h, m ->
+                        val newDateTime =
+                            LocalDateTime.from(currentEntry.dateTime).withHour(h).withMinute(m)
+                        currentEntry.dateTime = newDateTime
+                        viewModel!!.currentEntry.set(currentEntry)
+                    }, currentEntry.dateTime.hour, currentEntry.dateTime.minute, false).show()
+                }
+                fragEntryWriteMCBTitle -> {
+                    val toastMessage: String
+                    val currentEntry = viewModel!!.currentEntry.get()!!
+                    currentEntry.isTitleEnabled = !currentEntry.isTitleEnabled
+
+                    if (currentEntry.isTitleEnabled) {
+                        fragEntryWriteETTitle.visibility = View.GONE
+                        toastMessage = getString(R.string.toast_message_title_disabled)
+                    } else {
+                        fragEntryWriteETTitle.visibility = View.VISIBLE
+                        toastMessage = getString(R.string.toast_message_title_enabled)
+                    }
+                    Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
+
+                    viewModel!!.currentEntry.set(currentEntry)
+                }
+            }
+        }
     }
 
 

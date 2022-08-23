@@ -5,6 +5,10 @@
 
     <style name="TextAppearance.Sunrise" />
 
+    <style name="TextAppearance.Sunrise.AppBarTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/nanum_gothic_bold</item>
+    </style>
+
     <style name="TextAppearance.Sunrise.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
         <item name="fontFamily">@font/nanum_myeongjo_bold</item>
     </style>

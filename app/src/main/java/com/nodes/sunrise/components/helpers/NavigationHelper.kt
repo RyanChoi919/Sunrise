@@ -6,7 +6,6 @@ import androidx.navigation.NavController
 import com.nodes.sunrise.R
 import com.nodes.sunrise.db.entity.Challenge
 import com.nodes.sunrise.db.entity.Entry
-import com.nodes.sunrise.enums.ChallengeResult
 import com.nodes.sunrise.ui.challenge.check.ChallengeCheckFragment
 import com.nodes.sunrise.ui.challenge.select.ChallengeSelectFragment
 import com.nodes.sunrise.ui.entry.read.EntryReadFragment
@@ -20,12 +19,12 @@ open class NavigationHelper(val navController: NavController) {
     }
 
     fun navigateToEntryWriteFragmentToCreate() {
-        navController.navigate(R.id.EntryWriteFragment)
+        navController.navigate(R.id.nav_entry_write)
     }
 
     fun navigateToEntryWriteFragmentToModify(entry: Entry) {
         val bundle = bundleOf(EntryWriteFragment.KEY_ENTRY to entry)
-        navController.navigate(R.id.EntryWriteFragment, bundle)
+        navController.navigate(R.id.nav_entry_write, bundle)
     }
 
     fun navigateToChallengeSelectFragment() {

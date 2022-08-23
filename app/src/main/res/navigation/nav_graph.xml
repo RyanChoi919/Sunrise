@@ -3,36 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/HomeFragment">
+    app:startDestination="@id/nav_home">
 
     <fragment
-        android:id="@+id/HomeFragment"
+        android:id="@+id/nav_home"
         android:name="com.nodes.sunrise.ui.home.HomeFragment"
-        android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_home">
         <argument
             android:name="@string/arg_show_fab"
             android:defaultValue="true" />
         <action
             android:id="@+id/action_HomeFragment_to_EntryWriteFragment"
-            app:destination="@id/EntryWriteFragment" />
+            app:destination="@id/nav_entry_write" />
     </fragment>
     <fragment
-        android:id="@+id/EntryWriteFragment"
+        android:id="@+id/nav_entry_write"
         android:name="com.nodes.sunrise.ui.entry.write.EntryWriteFragment"
-        android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_entry_write">
         <argument
             android:name="@string/arg_show_fab"
             android:defaultValue="false" />
         <action
             android:id="@+id/action_EntryWriteFragment_to_HomeFragment"
-            app:destination="@id/HomeFragment" />
+            app:destination="@id/nav_home" />
     </fragment>
     <fragment
         android:id="@+id/nav_challenge_select"
         android:name="com.nodes.sunrise.ui.challenge.select.ChallengeSelectFragment"
-        android:label="fragment_challenge_select"
         tools:layout="@layout/fragment_challenge_select">
         <argument
             android:name="@string/arg_show_fab"
@@ -49,7 +46,6 @@
     <fragment
         android:id="@+id/nav_challenge_check"
         android:name="com.nodes.sunrise.ui.challenge.check.ChallengeCheckFragment"
-        android:label="fragment_challenge_check"
         tools:layout="@layout/fragment_challenge_check">
         <argument
             android:name="@string/arg_show_fab"

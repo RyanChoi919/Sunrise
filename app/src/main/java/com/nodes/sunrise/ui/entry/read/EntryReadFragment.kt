@@ -10,13 +10,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
+import com.nodes.sunrise.MainActivity
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.helpers.NavigationHelper
+import com.nodes.sunrise.components.utils.DateUtil
 import com.nodes.sunrise.databinding.FragmentEntryReadBinding
 import com.nodes.sunrise.db.entity.Entry
+import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
 
-class EntryReadFragment : Fragment() {
+class EntryReadFragment : BaseFragment() {
 
     companion object {
         val KEY_ENTRY = this::class.java.simpleName + ".ENTRY"
@@ -41,6 +44,7 @@ class EntryReadFragment : Fragment() {
         /* bundle 에서 Entry 받아와서 viewModel 내 Entry 초기화 */
         viewModel.currentEntry =
             requireArguments().getSerializable(KEY_ENTRY) as Entry
+        setToolbarWithDateTime(viewModel.currentEntry.dateTime)
 
         /* data binding 변수 설정 */
         binding.viewModel = viewModel

@@ -35,7 +35,7 @@ class AlertDialogHelper {
                     viewModel.delete(entry)
                     Toast.makeText(fragment.context, confirmToastMessage, Toast.LENGTH_SHORT).show()
                 }
-                fragment.findNavController().navigate(R.id.HomeFragment)
+                fragment.findNavController().navigate(R.id.nav_home)
             }
             .setNegativeButton(cancelText) { _, _ ->
                 // do nothing

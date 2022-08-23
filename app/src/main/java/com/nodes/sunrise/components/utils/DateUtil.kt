@@ -2,7 +2,11 @@ package com.nodes.sunrise.components.utils
 
 import android.content.Context
 import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.time.format.TextStyle
 import java.util.*
 
@@ -15,6 +19,14 @@ class DateUtil() {
 
         fun getLocalizedMonthString(context: Context, yearMonth: YearMonth): String {
             return yearMonth.month.getDisplayName(TextStyle.SHORT, getCurrentLocale(context))
+        }
+
+        fun getLocalizedMonthAndDayOfMonthString(date: LocalDate): String {
+            return date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
+        }
+
+        fun getLocalizedTimeString(time: LocalTime): String {
+            return time.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
         }
 
         private fun getCurrentLocale(context: Context): Locale {

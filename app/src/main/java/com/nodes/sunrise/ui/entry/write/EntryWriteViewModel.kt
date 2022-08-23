@@ -11,14 +11,12 @@ import java.time.LocalDateTime
 class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(repository) {
 
     var textCount = ObservableField("0")
-    var isTitleEnabled = ObservableField(true)
     var currentEntry = ObservableField(Entry(0, LocalDateTime.now(), "", true, ""))
 
     fun saveEntry() {
         viewModelScope.launch {
-            if (isTitleEnabled.get()!!) {
+            if (currentEntry.get()!!.isTitleEnabled) {
                 currentEntry.get()!!.title = ""
-
             }
             insert(currentEntry.get()!!)
         }

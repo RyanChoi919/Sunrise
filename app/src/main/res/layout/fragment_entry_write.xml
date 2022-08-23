@@ -39,7 +39,6 @@
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:text="@={viewModel.currentEntry.title}"
-                    android:visibility="@{viewModel.currentEntry.isTitleEnabled ? View.VISIBLE : View.GONE }"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
