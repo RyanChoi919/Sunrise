@@ -1,5 +1,6 @@
 package com.nodes.sunrise.ui.entry.write
 
+import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.Editable
@@ -9,15 +10,12 @@ import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
-import com.nodes.sunrise.MainActivity
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.helpers.AlertDialogHelper
-import com.nodes.sunrise.components.utils.DateUtil
 import com.nodes.sunrise.databinding.FragmentEntryWriteBinding
 import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.ui.BaseFragment
@@ -95,6 +93,7 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
     private fun setOnClickListeners() {
         val views = ArrayList<View>().apply {
             with(binding) {
+                add(fragEntryWriteMCBEntryDate)
                 add(fragEntryWriteMCBEntryTime)
                 add(fragEntryWriteMCBTitle)
             }
@@ -108,14 +107,34 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         with(binding) {
             when (v) {
+                fragEntryWriteMCBEntryDate -> {
+                    val currentEntry = viewModel!!.currentEntry.get()!!
+                    DatePickerDialog(
+                        requireContext(), { _, y, m, d ->
+                            val newDateTime =
+                                LocalDateTime.from(currentEntry.dateTime).withYear(y).withMonth(m)
+                                    .withDayOfMonth(d)
+                            currentEntry.dateTime = newDateTime
+                            setToolbarWithDateTime(newDateTime)
+                            viewModel!!.currentEntry.set(currentEntry)
+                        },
+                        currentEntry.dateTime.year,
+                        currentEntry.dateTime.monthValue,
+                        currentEntry.dateTime.dayOfMonth
+                    ).show()
+                    fragEntryWriteMCBEntryDate.isChecked = true
+                }
                 fragEntryWriteMCBEntryTime -> {
                     val currentEntry = viewModel!!.currentEntry.get()!!
                     TimePickerDialog(context, { _, h, m ->
                         val newDateTime =
                             LocalDateTime.from(currentEntry.dateTime).withHour(h).withMinute(m)
                         currentEntry.dateTime = newDateTime
+                        setToolbarWithDateTime(newDateTime)
                         viewModel!!.currentEntry.set(currentEntry)
                     }, currentEntry.dateTime.hour, currentEntry.dateTime.minute, false).show()
+                    fragEntryWriteMCBEntryTime.isChecked = true
+                    setToolbarWithDateTime(currentEntry.dateTime)
                 }
                 fragEntryWriteMCBTitle -> {
                     val toastMessage: String

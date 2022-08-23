@@ -90,11 +90,20 @@
                 android:checked="@={viewModel.currentEntry.titleEnabled}" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/frag_entry_write_MCB_entry_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/ic_round_calendar_today_24"
+                android:buttonTint="@color/entry_write_tab_icon"
+                android:checked="true" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/frag_entry_write_MCB_entry_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/ic_round_access_time_24"
-                android:buttonTint="@color/entry_write_tab_icon" />
+                android:buttonTint="@color/entry_write_tab_icon"
+                android:checked="true" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/frag_entry_write_MCB_entry_place"
