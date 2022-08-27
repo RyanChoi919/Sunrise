@@ -54,6 +54,7 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
 
     private val listener = LocationListener {
         viewModel.updateEntryLocation(it)
+        binding.fragEntryWriteMCBEntryPlace.isChecked = true
         Toast.makeText(
             requireContext(),
             getAddressFromLocation(it).getAddressLine(0),
@@ -84,6 +85,7 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                 val newEntry = EntryFactory.create()
                 viewModel.currentEntry.set(newEntry)
             }
+            updateCurrentLocation()
             setToolbarWithDateTime(viewModel.currentEntry.get()!!.dateTime)
         }
 
@@ -177,7 +179,13 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                     viewModel!!.currentEntry.set(currentEntry)
                 }
                 fragEntryWriteMCBEntryPlace -> {
-                    updateCurrentLocation()
+                    if (!fragEntryWriteMCBEntryPlace.isChecked) {
+                        viewModel!!.removeEntryLocation()
+                        fragEntryWriteMCBEntryPlace.isChecked = false
+                    } else {
+                        updateCurrentLocation()
+                        fragEntryWriteMCBEntryPlace.isChecked = true
+                    }
                 }
             }
         }

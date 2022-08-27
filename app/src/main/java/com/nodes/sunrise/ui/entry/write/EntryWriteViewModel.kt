@@ -1,6 +1,7 @@
 package com.nodes.sunrise.ui.entry.write
 
 import android.location.Location
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
 import com.nodes.sunrise.db.AppRepository
@@ -38,6 +39,18 @@ class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(reposit
         }
 
         currentEntry.set(entry)
+
+        Log.d(TAG, "updateEntryLocation: latitude = ${entry.latitude}, longitude = ${entry.longitude}")
     }
 
+    fun removeEntryLocation() {
+        val entry = currentEntry.get()!!.apply {
+            latitude = null
+            longitude = null
+        }
+
+        currentEntry.set(entry)
+
+        Log.d(TAG, "removeEntryLocation: latitude = ${entry.latitude}, longitude = ${entry.longitude}")
+    }
 }
