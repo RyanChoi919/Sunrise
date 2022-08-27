@@ -19,9 +19,14 @@ class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(reposit
 
     fun saveEntry() {
         viewModelScope.launch {
-            if (currentEntry.get()!!.isTitleEnabled) {
+            if (!currentEntry.get()!!.isTitleEnabled) {
                 currentEntry.get()!!.title = ""
             }
+
+            if (currentEntry.get()!!.title == "") {
+                currentEntry.get()!!.isTitleEnabled = false
+            }
+
             insert(currentEntry.get()!!)
         }
     }
