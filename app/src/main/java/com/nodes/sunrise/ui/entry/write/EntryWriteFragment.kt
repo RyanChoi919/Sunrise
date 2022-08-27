@@ -1,12 +1,18 @@
 package com.nodes.sunrise.ui.entry.write
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.*
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
@@ -16,11 +22,15 @@ import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.helpers.AlertDialogHelper
+import com.nodes.sunrise.components.listeners.OnPermissionRationaleResultListener
 import com.nodes.sunrise.databinding.FragmentEntryWriteBinding
 import com.nodes.sunrise.db.entity.Entry
+import com.nodes.sunrise.db.entity.EntryFactory
+import com.nodes.sunrise.enums.Permission
 import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
 import java.time.LocalDateTime
+import java.util.*
 
 class EntryWriteFragment : BaseFragment(), View.OnClickListener {
 
@@ -36,6 +46,20 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
     private val viewModel: EntryWriteViewModel by viewModels {
         val repository = (requireActivity().application as BaseApplication).repository
         ViewModelFactory(repository)
+    }
+
+    private val locationManager by lazy {
+        requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    }
+
+    private val listener = LocationListener {
+        viewModel.updateEntryLocation(it)
+        Toast.makeText(
+            requireContext(),
+            getAddressFromLocation(it).getAddressLine(0),
+            Toast.LENGTH_SHORT
+        ).show()
+        removeLocationUpdates()
     }
 
     override fun onCreateView(
@@ -57,8 +81,7 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                 viewModel.currentEntry.set(requireArguments().getSerializable(KEY_ENTRY) as Entry)
             } else {
                 isToCreateMode = true
-                val newEntry =
-                    Entry(0, LocalDateTime.now(), title = "", content = "", isTitleEnabled = true)
+                val newEntry = EntryFactory.create()
                 viewModel.currentEntry.set(newEntry)
             }
             setToolbarWithDateTime(viewModel.currentEntry.get()!!.dateTime)
@@ -96,6 +119,7 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                 add(fragEntryWriteMCBEntryDate)
                 add(fragEntryWriteMCBEntryTime)
                 add(fragEntryWriteMCBTitle)
+                add(fragEntryWriteMCBEntryPlace)
             }
         }
 
@@ -152,6 +176,9 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
 
                     viewModel!!.currentEntry.set(currentEntry)
                 }
+                fragEntryWriteMCBEntryPlace -> {
+                    updateCurrentLocation()
+                }
             }
         }
     }
@@ -206,5 +233,83 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun updateCurrentLocation() {
+
+        val hasFineLocationPermission = hasPermission(Permission.FINE_LOCATION.androidName)
+        val hasCoarseLocationPermission = hasPermission(Permission.COARSE_LOCATION.androidName)
+
+        if (hasFineLocationPermission && hasCoarseLocationPermission) {
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, 500, 0F, listener
+                )
+            } else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, 500, 0F, listener
+                )
+            } else {
+                Toast.makeText(requireContext(), "위치 정보를 일시적으로 확인할 수 없습니다.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+
+        } else {
+            requestLocationPermissions()
+        }
+    }
+
+    private fun hasPermission(androidPermission: String): Boolean {
+        val result = ActivityCompat.checkSelfPermission(
+            requireContext(), androidPermission
+        ) == PackageManager.PERMISSION_GRANTED
+        Log.d(TAG, "hasPermission: $androidPermission = $result")
+        return result
+    }
+
+    private fun requestLocationPermissions() {
+        if (shouldShowRequestPermissionRationale(Permission.COARSE_LOCATION.androidName) ||
+            shouldShowRequestPermissionRationale(Permission.FINE_LOCATION.androidName)
+        ) {
+            AlertDialogHelper().showLocationPermissionRationaleDialog(
+                requireContext(),
+                object : OnPermissionRationaleResultListener {
+                    override fun onResultSet(isPositive: Boolean) {
+                        when {
+                            isPositive -> {
+                                ActivityCompat.requestPermissions(
+                                    requireActivity(), arrayOf(
+                                        Permission.COARSE_LOCATION.androidName,
+                                        Permission.FINE_LOCATION.androidName
+                                    ), this::class.java.hashCode()
+                                )
+                            }
+                            else -> {
+                                // do nothing (permission not granted)
+                            }
+                        }
+                    }
+                })
+        } else {
+            ActivityCompat.requestPermissions(
+                requireActivity(), arrayOf(
+                    Permission.COARSE_LOCATION.androidName,
+                    Permission.FINE_LOCATION.androidName
+                ), this::class.java.hashCode()
+            )
+        }
+    }
+
+    private fun getAddressFromLocation(location: Location): Address {
+        return Geocoder(requireContext(), Locale.getDefault()).getFromLocation(
+            location.latitude,
+            location.longitude,
+            1
+        )[0]
+    }
+
+    private fun removeLocationUpdates() {
+        locationManager.removeUpdates(listener)
     }
 }

@@ -1,5 +1,6 @@
 package com.nodes.sunrise.components.helpers
 
+import android.content.Context
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -7,6 +8,7 @@ import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.listeners.OnChallengeResultSetListener
+import com.nodes.sunrise.components.listeners.OnPermissionRationaleResultListener
 import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.enums.ChallengeResult
 import com.nodes.sunrise.ui.BaseViewModel
@@ -60,5 +62,20 @@ class AlertDialogHelper {
                 onChallengeResultSetListener.onSet(newResult)
             }
             .create().show()
+    }
+
+    fun showLocationPermissionRationaleDialog(
+        context: Context,
+        listener: OnPermissionRationaleResultListener
+    ) {
+        AlertDialog.Builder(context)
+            .setTitle("권한 승인 필요")
+            .setMessage("위치 정보를 기록하려면 위치 권한 승인이 필요합니다.")
+            .setPositiveButton("확인") { _, _ ->
+                listener.onResultSet(true)
+            }
+            .setNegativeButton("거절") { _, _ ->
+                listener.onResultSet(false)
+            }.create().show()
     }
 }
