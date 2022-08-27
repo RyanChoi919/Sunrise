@@ -71,5 +71,6 @@
     <string name="challenge_result_postpone">연기</string>
     <string name="toast_message_title_enabled">제목 활성화</string>
     <string name="toast_message_title_disabled">제목 비활성화</string>
+    <string name="no_location_information">위치 정보 없음</string>
 
 </resources>

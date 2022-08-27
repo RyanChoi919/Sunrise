@@ -85,12 +85,11 @@ class EntryReadFragment : BaseFragment() {
             val latitude = viewModel.currentEntry.latitude
             val longitude = viewModel.currentEntry.longitude
 
-            if (latitude != null && longitude != null) {
-                visibility = View.VISIBLE
-                text = LocationUtil.getAddressFromLatLong(requireContext(), latitude, longitude)
+            text = if (latitude != null && longitude != null) {
+                LocationUtil.getAddressFromLatLong(requireContext(), latitude, longitude)
                     .getAddressLine(0)
             } else {
-                visibility = View.GONE
+                getString(R.string.no_location_information)
             }
         }
     }
