@@ -86,6 +86,7 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                 viewModel.currentEntry.set(newEntry)
                 updateCurrentLocation()
             }
+            checkTitleEnabled()
             setToolbarWithDateTime(viewModel.currentEntry.get()!!.dateTime)
         }
 
@@ -319,5 +320,18 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
 
     private fun removeLocationUpdates() {
         locationManager.removeUpdates(listener)
+    }
+
+    private fun checkTitleEnabled() {
+        with(binding) {
+            val entry = this@EntryWriteFragment.viewModel.currentEntry.get()!!
+            if (entry.isTitleEnabled) {
+                fragEntryWriteETTitle.visibility = View.VISIBLE
+                fragEntryWriteMCBTitle.isChecked = true
+            } else {
+                fragEntryWriteETTitle.visibility = View.GONE
+                fragEntryWriteMCBTitle.isChecked = false
+            }
+        }
     }
 }
