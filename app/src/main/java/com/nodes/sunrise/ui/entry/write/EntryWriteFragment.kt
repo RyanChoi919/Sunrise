@@ -5,7 +5,8 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.*
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -23,6 +24,7 @@ import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.helpers.AlertDialogHelper
 import com.nodes.sunrise.components.listeners.OnPermissionRationaleResultListener
+import com.nodes.sunrise.components.utils.LocationUtil
 import com.nodes.sunrise.databinding.FragmentEntryWriteBinding
 import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.db.entity.EntryFactory
@@ -30,7 +32,6 @@ import com.nodes.sunrise.enums.Permission
 import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
 import java.time.LocalDateTime
-import java.util.*
 
 class EntryWriteFragment : BaseFragment(), View.OnClickListener {
 
@@ -57,7 +58,7 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
         binding.fragEntryWriteMCBEntryPlace.isChecked = true
         Toast.makeText(
             requireContext(),
-            getAddressFromLocation(it).getAddressLine(0),
+            LocationUtil.getAddressFromLocation(requireContext(), it).getAddressLine(0),
             Toast.LENGTH_SHORT
         ).show()
         removeLocationUpdates()
@@ -139,7 +140,8 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                     DatePickerDialog(
                         requireContext(), { _, y, m, d ->
                             val newDateTime =
-                                LocalDateTime.from(currentEntry.dateTime).withYear(y).withMonth(m + 1)
+                                LocalDateTime.from(currentEntry.dateTime).withYear(y)
+                                    .withMonth(m + 1)
                                     .withDayOfMonth(d)
                             currentEntry.dateTime = newDateTime
                             setToolbarWithDateTime(newDateTime)
@@ -308,14 +310,6 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                 ), this::class.java.hashCode()
             )
         }
-    }
-
-    private fun getAddressFromLocation(location: Location): Address {
-        return Geocoder(requireContext(), Locale.getDefault()).getFromLocation(
-            location.latitude,
-            location.longitude,
-            1
-        )[0]
     }
 
     private fun removeLocationUpdates() {

@@ -5,15 +5,13 @@ import android.view.*
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
-import com.nodes.sunrise.MainActivity
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.helpers.NavigationHelper
-import com.nodes.sunrise.components.utils.DateUtil
+import com.nodes.sunrise.components.utils.LocationUtil
 import com.nodes.sunrise.databinding.FragmentEntryReadBinding
 import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.ui.BaseFragment
@@ -44,6 +42,7 @@ class EntryReadFragment : BaseFragment() {
         /* bundle 에서 Entry 받아와서 viewModel 내 Entry 초기화 */
         viewModel.currentEntry =
             requireArguments().getSerializable(KEY_ENTRY) as Entry
+        setLocationText()
         setToolbarWithDateTime(viewModel.currentEntry.dateTime)
 
         /* data binding 변수 설정 */
@@ -79,5 +78,20 @@ class EntryReadFragment : BaseFragment() {
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun setLocationText() {
+        with(binding.fragEntryReadTVLocation) {
+            val latitude = viewModel.currentEntry.latitude
+            val longitude = viewModel.currentEntry.longitude
+
+            if (latitude != null && longitude != null) {
+                visibility = View.VISIBLE
+                text = LocationUtil.getAddressFromLatLong(requireContext(), latitude, longitude)
+                    .getAddressLine(0)
+            } else {
+                visibility = View.GONE
+            }
+        }
     }
 }

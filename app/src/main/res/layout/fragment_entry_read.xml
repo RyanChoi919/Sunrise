@@ -22,7 +22,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:visibility="gone"
                 style="@style/TextAppearance.Sunrise.LabelSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -32,6 +31,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/sample_entry_write_challenge_name_with_title"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:drawableEndCompat="@drawable/ic_round_highlight_off_16" />
 
             <TextView
@@ -58,27 +58,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
                 android:layout_marginTop="16dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/frag_entry_read_TV_location"
                     style="@style/TextAppearance.Sunrise.LabelSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
-                    android:text="@string/sample_temp"
-                    app:drawableStartCompat="@drawable/ic_round_wb_sunny_24"
+                    android:text="@string/sample_location"
+                    app:drawableStartCompat="@drawable/ic_round_location_on_24"
                     app:drawableTint="?attr/colorOutline" />
 
                 <TextView
                     style="@style/TextAppearance.Sunrise.LabelSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
-                    android:text="@string/sample_location"
-                    app:drawableStartCompat="@drawable/ic_round_location_on_24"
+                    android:text="@string/sample_temp"
+                    app:drawableStartCompat="@drawable/ic_round_wb_sunny_24"
                     app:drawableTint="?attr/colorOutline" />
 
             </LinearLayout>
