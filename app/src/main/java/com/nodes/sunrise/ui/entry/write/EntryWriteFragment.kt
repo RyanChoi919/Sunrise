@@ -139,14 +139,14 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                     DatePickerDialog(
                         requireContext(), { _, y, m, d ->
                             val newDateTime =
-                                LocalDateTime.from(currentEntry.dateTime).withYear(y).withMonth(m)
+                                LocalDateTime.from(currentEntry.dateTime).withYear(y).withMonth(m + 1)
                                     .withDayOfMonth(d)
                             currentEntry.dateTime = newDateTime
                             setToolbarWithDateTime(newDateTime)
                             viewModel!!.currentEntry.set(currentEntry)
                         },
                         currentEntry.dateTime.year,
-                        currentEntry.dateTime.monthValue,
+                        currentEntry.dateTime.monthValue - 1, // DatePicker index는 0부터 시작
                         currentEntry.dateTime.dayOfMonth
                     ).show()
                     fragEntryWriteMCBEntryDate.isChecked = true
