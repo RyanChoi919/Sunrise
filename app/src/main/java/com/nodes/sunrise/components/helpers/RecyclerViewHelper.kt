@@ -16,6 +16,7 @@ import com.nodes.sunrise.components.adapters.list.EntryListAdapter
 import com.nodes.sunrise.components.decorators.ListMarginDecorator
 import com.nodes.sunrise.components.listeners.OnEntityClickListener
 import com.nodes.sunrise.components.listeners.OnEntityLongClickListener
+import com.nodes.sunrise.components.utils.AlertDialogUtil
 import com.nodes.sunrise.db.entity.ChallengeGroupWithChallenges
 import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.enums.EntryViewType
@@ -133,7 +134,7 @@ class RecyclerViewHelper<T : BaseViewModel>(val fragment: Fragment, val viewMode
             .setItems(itemList) { _, i ->
                 when (i) {
                     0 -> navigationHelper.navigateToEntryWriteFragmentToModify(entry)
-                    1 -> AlertDialogHelper().showEntryDeleteConfirmDialog(
+                    1 -> AlertDialogUtil.showEntryDeleteConfirmDialog(
                         fragment,
                         viewModel,
                         entry

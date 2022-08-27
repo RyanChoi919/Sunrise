@@ -9,13 +9,13 @@ import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.db.entity.EntryFactory
 import com.nodes.sunrise.ui.BaseViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import kotlin.math.log
 
 class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(repository) {
 
     var textCount = ObservableField("0")
     var currentEntry = ObservableField(EntryFactory.create())
+    lateinit var prevEntry: Entry
+    var isPrevEntrySet = false
 
     fun saveEntry() {
         viewModelScope.launch {
@@ -45,7 +45,15 @@ class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(reposit
 
         currentEntry.set(entry)
 
-        Log.d(TAG, "updateEntryLocation: latitude = ${entry.latitude}, longitude = ${entry.longitude}")
+        if (!isPrevEntrySet) {
+            prevEntry = entry.copy()
+            isPrevEntrySet = true
+        }
+
+        Log.d(
+            TAG,
+            "updateEntryLocation: latitude = ${entry.latitude}, longitude = ${entry.longitude}"
+        )
     }
 
     fun removeEntryLocation() {
@@ -56,6 +64,13 @@ class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(reposit
 
         currentEntry.set(entry)
 
-        Log.d(TAG, "removeEntryLocation: latitude = ${entry.latitude}, longitude = ${entry.longitude}")
+        Log.d(
+            TAG,
+            "removeEntryLocation: latitude = ${entry.latitude}, longitude = ${entry.longitude}"
+        )
+    }
+
+    fun isEntryModified(): Boolean {
+        return currentEntry.get()!! != prevEntry
     }
 }

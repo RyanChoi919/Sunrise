@@ -13,6 +13,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -22,12 +23,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
-import com.nodes.sunrise.components.helpers.AlertDialogHelper
 import com.nodes.sunrise.components.listeners.OnPermissionRationaleResultListener
+import com.nodes.sunrise.components.utils.AlertDialogUtil
 import com.nodes.sunrise.components.utils.LocationUtil
 import com.nodes.sunrise.databinding.FragmentEntryWriteBinding
 import com.nodes.sunrise.db.entity.Entry
-import com.nodes.sunrise.db.entity.EntryFactory
 import com.nodes.sunrise.enums.Permission
 import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
@@ -80,11 +80,11 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
 
             if (entry != null) {
                 isToCreateMode = false
-                viewModel.currentEntry.set(requireArguments().getSerializable(KEY_ENTRY) as Entry)
+                viewModel.currentEntry.set(entry.copy())
+                viewModel.prevEntry = entry.copy()
+                viewModel.isPrevEntrySet = true
             } else {
                 isToCreateMode = true
-                val newEntry = EntryFactory.create()
-                viewModel.currentEntry.set(newEntry)
                 updateCurrentLocation()
             }
             checkTitleEnabled()
@@ -201,6 +201,21 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
         createMenu()
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        /* handle on back pressed */
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (viewModel.isEntryModified()) {
+                    AlertDialogUtil.showEntryNotSavedAlertDialog(this@EntryWriteFragment)
+                } else {
+                    findNavController().popBackStack()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -235,7 +250,7 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                         true
                     }
                     R.id.frag_entry_write_menu_delete -> {
-                        AlertDialogHelper().showEntryDeleteConfirmDialog(
+                        AlertDialogUtil.showEntryDeleteConfirmDialog(
                             parentFragment!!, viewModel, viewModel.currentEntry.get()!!
                         )
                         true
@@ -283,7 +298,7 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
         if (shouldShowRequestPermissionRationale(Permission.COARSE_LOCATION.androidName) ||
             shouldShowRequestPermissionRationale(Permission.FINE_LOCATION.androidName)
         ) {
-            AlertDialogHelper().showLocationPermissionRationaleDialog(
+            AlertDialogUtil.showLocationPermissionRationaleDialog(
                 requireContext(),
                 object : OnPermissionRationaleResultListener {
                     override fun onResultSet(isPositive: Boolean) {

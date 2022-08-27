@@ -76,9 +76,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
+        onBackPressed()
+        return false
     }
 
     override fun onClick(p0: View?) {
