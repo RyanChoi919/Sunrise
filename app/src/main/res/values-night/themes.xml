@@ -27,6 +27,8 @@
         <item name="colorSurfaceInverse">@color/md_theme_dark_inverseSurface</item>
         <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverseOnSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
-
+        <!-- Default fontFamily-->
+        <item name="android:fontFamily">@font/nanum_myeongjo</item>
+        <item name="fontFamily">@font/nanum_myeongjo</item>
     </style>
 </resources>

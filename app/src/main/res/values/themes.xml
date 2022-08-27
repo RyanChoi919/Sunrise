@@ -29,6 +29,7 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
         <!-- Default fontFamily-->
         <item name="android:fontFamily">@font/nanum_myeongjo</item>
+        <item name="fontFamily">@font/nanum_myeongjo</item>
     </style>
 
     <style name="Theme.Sunrise.NoActionBar">
