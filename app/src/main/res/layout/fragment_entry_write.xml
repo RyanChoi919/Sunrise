@@ -47,7 +47,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:background="@null"
                     android:gravity="top"
                     android:hint="@string/frag_entry_write_content_hint"
