@@ -84,8 +84,8 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                 isToCreateMode = true
                 val newEntry = EntryFactory.create()
                 viewModel.currentEntry.set(newEntry)
+                updateCurrentLocation()
             }
-            updateCurrentLocation()
             setToolbarWithDateTime(viewModel.currentEntry.get()!!.dateTime)
         }
 
