@@ -1,5 +1,6 @@
 package com.nodes.sunrise.db.entity
 
+import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
@@ -14,7 +15,8 @@ data class Entry(
     var isTitleEnabled: Boolean,
     var content: String,
     var latitude: Double?,
-    var longitude: Double?
+    var longitude: Double?,
+    var photos: List<Uri> = emptyList()
 ) : Serializable
 
 class EntryFactory {

@@ -2,11 +2,8 @@ package com.nodes.sunrise.ui.entry.read
 
 import android.os.Bundle
 import android.view.*
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
@@ -17,7 +14,8 @@ import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
 
-class EntryReadFragment : BaseFragment() {
+
+class EntryReadFragment : BaseFragment(), View.OnClickListener {
 
     companion object {
         val KEY_ENTRY = this::class.java.simpleName + ".ENTRY"
@@ -39,11 +37,13 @@ class EntryReadFragment : BaseFragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_entry_read, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
+        setToolbarBinding(binding.fragEntryReadTB)
+
         /* bundle 에서 Entry 받아와서 viewModel 내 Entry 초기화 */
         viewModel.currentEntry =
             requireArguments().getSerializable(KEY_ENTRY) as Entry
         setLocationText()
-        setToolbarWithDateTime(viewModel.currentEntry.dateTime)
+        setToolbarTitleWithDateTime(viewModel.currentEntry.dateTime)
 
         /* data binding 변수 설정 */
         binding.viewModel = viewModel
@@ -54,30 +54,39 @@ class EntryReadFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        createMenu()
+        createMenu(binding.fragEntryReadTB.toolbar, R.menu.frag_entry_read_menu) { menuItem ->
+            when (menuItem.itemId) {
+                R.id.frag_entry_write_menu_edit -> {
+                    NavigationHelper(findNavController()).navigateToEntryWriteFragmentToModify(
+                        viewModel.currentEntry
+                    )
+                    true
+                }
+                else -> false
+            }
+        }
+        setOnClickListeners()
+        setPictureView()
     }
 
-    private fun createMenu() {
-        val menuHost: MenuHost = requireActivity()
-
-        menuHost.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menu.clear()
-                menuInflater.inflate(R.menu.frag_entry_read_menu, menu)
+    override fun onClick(p0: View?) {
+        when (p0!!.id) {
+            R.id.frag_entry_read_FL_picture -> {
+                NavigationHelper(findNavController()).navigateToPhotoFragment(viewModel.currentEntry.photos)
             }
+        }
+    }
 
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.frag_entry_write_menu_edit -> {
-                        NavigationHelper(findNavController()).navigateToEntryWriteFragmentToModify(
-                            viewModel.currentEntry
-                        )
-                        true
-                    }
-                    else -> false
-                }
+    private fun setOnClickListeners() {
+        val views = ArrayList<View>().apply {
+            with(binding) {
+                add(fragEntryReadFLPicture)
             }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        }
+
+        for (v in views) {
+            v.setOnClickListener(this@EntryReadFragment)
+        }
     }
 
     private fun setLocationText() {
@@ -90,6 +99,23 @@ class EntryReadFragment : BaseFragment() {
                     .getAddressLine(0)
             } else {
                 getString(R.string.no_location_information)
+            }
+        }
+    }
+
+    private fun setPictureView() {
+        with(binding) {
+            if (viewModel!!.currentEntry.photos.isNotEmpty()) {
+                fragEntryReadFLPicture.visibility = View.VISIBLE
+                fragEntryReadIVPicture.setImageURI(viewModel!!.currentEntry.photos[0])
+                fragEntryReadIVMultiplePhotosIcon.visibility =
+                    if (viewModel!!.currentEntry.photos.size > 1) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
+            } else {
+                fragEntryReadFLPicture.visibility = View.GONE
             }
         }
     }

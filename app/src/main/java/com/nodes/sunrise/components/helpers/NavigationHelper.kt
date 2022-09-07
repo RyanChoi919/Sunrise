@@ -1,5 +1,6 @@
 package com.nodes.sunrise.components.helpers
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
@@ -10,6 +11,7 @@ import com.nodes.sunrise.ui.challenge.check.ChallengeCheckFragment
 import com.nodes.sunrise.ui.challenge.select.ChallengeSelectFragment
 import com.nodes.sunrise.ui.entry.read.EntryReadFragment
 import com.nodes.sunrise.ui.entry.write.EntryWriteFragment
+import com.nodes.sunrise.ui.photo.PhotoFragment
 
 open class NavigationHelper(val navController: NavController) {
 
@@ -39,5 +41,10 @@ open class NavigationHelper(val navController: NavController) {
     fun navigateToChallengeCheckFragment(challenge: Challenge) {
         val bundle = bundleOf(ChallengeCheckFragment.KEY_CHALLENGE to challenge)
         navController.navigate(R.id.nav_challenge_check, bundle)
+    }
+
+    fun navigateToPhotoFragment(uris: List<Uri>) {
+        val bundle = bundleOf(PhotoFragment.KEY_PHOTO to uris)
+        navController.navigate(R.id.nav_photo, bundle)
     }
 }

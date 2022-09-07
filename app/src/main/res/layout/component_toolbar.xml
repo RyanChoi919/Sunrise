@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    app:layout_constraintTop_toTopOf="parent"
+    app:popupTheme="@style/Theme.Sunrise.PopupOverlay">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/toolbar_title_large"
+            style="@style/TextAppearance.Sunrise.AppBarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="?attr/colorOnBackground"
+            android:visibility="gone"
+            tools:text="title large" />
+
+        <TextView
+            android:id="@+id/toolbar_title_small"
+            style="@style/TextAppearance.Sunrise.TitleMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="?attr/colorOnBackground"
+            tools:text="title medium" />
+
+        <TextView
+            android:id="@+id/toolbar_subtitle"
+            style="@style/TextAppearance.Sunrise.LabelMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="?attr/colorOnBackground"
+            tools:text="subtitle" />
+
+    </LinearLayout>
+</androidx.appcompat.widget.Toolbar>

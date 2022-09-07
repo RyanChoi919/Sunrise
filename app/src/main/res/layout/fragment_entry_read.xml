@@ -10,81 +10,115 @@
             type="com.nodes.sunrise.ui.entry.read.EntryReadViewModel" />
     </data>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".ui.entry.read.EntryReadFragment">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <include
+            android:id="@+id/frag_entry_read_TB"
+            layout="@layout/component_toolbar" />
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/TextAppearance.Sunrise.LabelSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
-                android:layout_marginTop="16dp"
-                android:drawablePadding="4dp"
-                android:gravity="center_vertical"
-                android:text="@string/sample_entry_write_challenge_name_with_title"
-                android:textStyle="bold"
-                android:visibility="gone"
-                app:drawableEndCompat="@drawable/ic_round_highlight_off_16" />
-
-            <TextView
-                android:id="@+id/frag_entry_read_TV_title"
-                style="@style/TextAppearance.Sunrise.TitleMedium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
-                android:layout_marginTop="8dp"
-                android:text="@{viewModel.currentEntry.title}"
-                tools:text="@string/sample_title" />
-
-            <TextView
-                style="@style/TextAppearance.Sunrise.BodyMedium"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
-                android:layout_marginTop="8dp"
-                android:text="@{viewModel.currentEntry.content}"
-                tools:text="@string/sample_content" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".ui.entry.read.EntryReadFragment">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
-                android:layout_marginTop="16dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/frag_entry_read_TV_location"
-                    style="@style/TextAppearance.Sunrise.LabelSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="4dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/sample_location"
-                    app:drawableStartCompat="@drawable/ic_round_location_on_24"
-                    app:drawableTint="?attr/colorOutline" />
+                <FrameLayout
+                    android:id="@+id/frag_entry_read_FL_picture"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/frag_entry_read_IV_picture"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxHeight="512dp"
+                        android:scaleType="centerCrop" />
+
+                    <ImageView
+                        android:id="@+id/frag_entry_read_IV_multiple_photos_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:layout_margin="16dp"
+                        android:alpha="0.5"
+                        android:src="@drawable/ic_round_photo_library_24"
+                        app:tint="@android:color/white" />
+
+                </FrameLayout>
 
                 <TextView
                     style="@style/TextAppearance.Sunrise.LabelSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+                    android:layout_marginTop="16dp"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
-                    android:text="@string/sample_temp"
-                    app:drawableStartCompat="@drawable/ic_round_wb_sunny_24"
-                    app:drawableTint="?attr/colorOutline" />
+                    android:text="@string/sample_entry_write_challenge_name_with_title"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:drawableEndCompat="@drawable/ic_round_highlight_off_16" />
+
+                <TextView
+                    android:id="@+id/frag_entry_read_TV_title"
+                    style="@style/TextAppearance.Sunrise.TitleMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+                    android:layout_marginTop="8dp"
+                    android:text="@{viewModel.currentEntry.title}"
+                    tools:text="@string/sample_title" />
+
+                <TextView
+                    style="@style/TextAppearance.Sunrise.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+                    android:layout_marginTop="8dp"
+                    android:text="@{viewModel.currentEntry.content}"
+                    tools:text="@string/sample_content" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/frag_entry_read_TV_location"
+                        style="@style/TextAppearance.Sunrise.LabelSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="4dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/sample_location"
+                        app:drawableStartCompat="@drawable/ic_round_location_on_24"
+                        app:drawableTint="?attr/colorOutline" />
+
+                    <TextView
+                        style="@style/TextAppearance.Sunrise.LabelSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:drawablePadding="4dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/sample_temp"
+                        app:drawableStartCompat="@drawable/ic_round_wb_sunny_24"
+                        app:drawableTint="?attr/colorOutline" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
-
-    </ScrollView>
+        </ScrollView>
+    </LinearLayout>
 </layout>

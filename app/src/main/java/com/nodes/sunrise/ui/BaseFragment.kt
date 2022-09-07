@@ -1,29 +1,56 @@
 package com.nodes.sunrise.ui
 
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import com.nodes.sunrise.MainActivity
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import com.nodes.sunrise.components.utils.DateUtil
+import com.nodes.sunrise.databinding.ComponentToolbarBinding
 import java.time.LocalDateTime
 
 abstract class BaseFragment : Fragment() {
     val TAG = "LOG_TAG:" + this::class.java.simpleName
 
-    val mainAct by lazy {
-        activity as MainActivity
+    private lateinit var toolbarBinding: ComponentToolbarBinding
+    private lateinit var toolbar: Toolbar
+
+    fun setToolbarBinding(toolbarBinding: ComponentToolbarBinding) {
+        this.toolbarBinding = toolbarBinding
+        setToolbar(toolbarBinding.toolbar)
     }
 
-    fun setToolbarTitleLarge(titleString: String) {
-        mainAct.setTitleLarge(titleString)
+    fun setToolbar(toolbar: Toolbar) {
+        this.toolbar = toolbar
     }
 
-    fun setToolbarTitleSmallWithSubtitle(titleString: String, subtitleString: String?) {
-        mainAct.setTitleSmallAndSubtitle(titleString, subtitleString)
-    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    fun setToolbarWithDateTime(dateTime: LocalDateTime) {
-        setToolbarTitleSmallWithSubtitle(
-            DateUtil.getLocalizedMonthAndDayOfMonthString(dateTime.toLocalDate()),
-            DateUtil.getLocalizedTimeString(dateTime.toLocalTime())
+        val appBarConfiguration = AppBarConfiguration(findNavController().graph)
+        val navController = NavHostFragment.findNavController(this)
+
+        NavigationUI.setupWithNavController(
+            toolbar, navController, appBarConfiguration
         )
+    }
+
+    fun setToolbarTitleWithDateTime(dateTime: LocalDateTime) {
+        toolbarBinding.toolbarTitleSmall.text =
+            DateUtil.getLocalizedMonthAndDayOfMonthString(dateTime.toLocalDate())
+        toolbarBinding.toolbarSubtitle.text =
+            DateUtil.getLocalizedTimeString(dateTime.toLocalTime())
+    }
+
+    fun createMenu(
+        toolbar: Toolbar,
+        menuRes: Int,
+        onMenuItemClickListener: Toolbar.OnMenuItemClickListener
+    ) {
+        toolbar.inflateMenu(menuRes)
+        toolbar.setOnMenuItemClickListener(onMenuItemClickListener)
     }
 }

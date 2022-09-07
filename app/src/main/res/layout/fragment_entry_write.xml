@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.entry.write.EntryWriteFragment">
 
     <data>
 
@@ -12,19 +13,29 @@
             type="com.nodes.sunrise.ui.entry.write.EntryWriteViewModel" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true">
+        <include
+            android:id="@+id/frag_entry_write_TB"
+            layout="@layout/component_toolbar"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toTopOf="@id/frag_entry_write_RV_pictures"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/frag_entry_write_TB"
+            app:layout_constraintVertical_bias="0">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:context=".ui.entry.write.EntryWriteFragment">
+                android:orientation="vertical">
 
                 <EditText
                     android:id="@+id/frag_entry_write_ET_title"
@@ -37,15 +48,13 @@
                     android:hint="@string/frag_entry_write_title_hint"
                     android:importantForAutofill="no"
                     android:inputType="text"
-                    android:text="@={viewModel.currentEntry.title}"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:text="@={viewModel.currentEntry.title}" />
 
                 <EditText
                     android:id="@+id/frag_entry_write_ET_content"
                     style="@style/TextAppearance.Sunrise.BodyMedium"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
                     android:layout_marginTop="8dp"
                     android:background="@null"
@@ -53,33 +62,32 @@
                     android:hint="@string/frag_entry_write_content_hint"
                     android:importantForAutofill="no"
                     android:inputType="textMultiLine"
-                    android:text="@={viewModel.currentEntry.content}"
-                    app:layout_constraintBottom_toTopOf="@id/frag_entry_write_TV_text_count"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/frag_entry_write_ET_title" />
+                    android:text="@={viewModel.currentEntry.content}" />
 
-                <TextView
-                    android:id="@+id/frag_entry_write_TV_text_count"
-                    style="@style/TextAppearance.Sunrise.BodySmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/screen_horizontal_margin"
-                    android:text="@{@string/frag_entry_write_text_count(viewModel.textCount)}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/frag_entry_write_ET_content"
-                    tools:text="100자" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
         </ScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/frag_entry_write_RV_pictures"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/screen_horizontal_margin"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/frag_entry_write_LL_bottom_sheet"
+            tools:itemCount="3"
+            tools:listitem="@layout/list_item_photo_preview" />
 
         <!-- BottomSheet -->
         <LinearLayout
+            android:id="@+id/frag_entry_write_LL_bottom_sheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
             android:orientation="horizontal"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/frag_entry_write_MCB_title"
@@ -121,5 +129,16 @@
 
         </LinearLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <TextView
+            android:id="@+id/frag_entry_write_TV_text_count"
+            style="@style/TextAppearance.Sunrise.BodySmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/screen_horizontal_margin"
+            android:text="@{@string/frag_entry_write_text_count(viewModel.textCount)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="100자" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

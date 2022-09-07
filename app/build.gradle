@@ -81,4 +81,14 @@ dependencies {
 
     // Handling CSV files
     implementation 'com.opencsv:opencsv:5.6'
+
+    // Gson
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+    // Image related
+    implementation 'io.github.ParkSangGwon:tedimagepicker:1.2.8'
+    implementation 'com.github.bumptech.glide:glide:4.13.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    implementation "ru.tinkoff.scrollingpagerindicator:scrollingpagerindicator:1.2.3"
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 }

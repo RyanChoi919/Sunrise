@@ -15,14 +15,13 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
+import com.nodes.sunrise.components.adapters.list.PhotoPreviewListAdapter
+import com.nodes.sunrise.components.helpers.RecyclerViewHelper
 import com.nodes.sunrise.components.listeners.OnPermissionRationaleResultListener
 import com.nodes.sunrise.components.utils.AlertDialogUtil
 import com.nodes.sunrise.components.utils.LocationUtil
@@ -31,9 +30,10 @@ import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.enums.Permission
 import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
+import gun0912.tedimagepicker.builder.TedImagePicker
 import java.time.LocalDateTime
 
-class EntryWriteFragment : BaseFragment(), View.OnClickListener {
+class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
 
     companion object {
         val KEY_ENTRY = this::class.java.simpleName + ".ENTRY"
@@ -51,6 +51,12 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
 
     private val locationManager by lazy {
         requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    }
+
+    private val adapter = PhotoPreviewListAdapter()
+
+    private val recyclerViewHelper: RecyclerViewHelper<EntryWriteViewModel> by lazy {
+        RecyclerViewHelper(this, viewModel)
     }
 
     private val listener = LocationListener {
@@ -72,6 +78,8 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
             DataBindingUtil.inflate(inflater, R.layout.fragment_entry_write, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
+        setToolbarBinding(binding.fragEntryWriteTB)
+
         setOnClickListeners()
 
         /* arguments 확인 및 viewModel 데이터 초기화 */
@@ -88,7 +96,7 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                 updateCurrentLocation()
             }
             checkTitleEnabled()
-            setToolbarWithDateTime(viewModel.currentEntry.get()!!.dateTime)
+            setToolbarTitleWithDateTime(viewModel.currentEntry.get()!!.dateTime)
         }
 
         /* 콘텐츠 EditText의 글자 수를 카운트&표시하기 위한 TextWatcher 설정 */
@@ -111,6 +119,12 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
             }
         })
 
+        recyclerViewHelper.setRecyclerViewWithPictureUri(
+            binding.fragEntryWriteRVPictures, adapter, emptyList()
+        )
+
+        adapter.submitList(viewModel.currentEntry.get()!!.photos)
+
         /* data binding 변수 설정 */
         binding.viewModel = viewModel
 
@@ -124,6 +138,7 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                 add(fragEntryWriteMCBEntryTime)
                 add(fragEntryWriteMCBTitle)
                 add(fragEntryWriteMCBEntryPlace)
+                add(fragEntryWriteMCBEntryPicture)
             }
         }
 
@@ -144,7 +159,7 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                                     .withMonth(m + 1)
                                     .withDayOfMonth(d)
                             currentEntry.dateTime = newDateTime
-                            setToolbarWithDateTime(newDateTime)
+                            setToolbarTitleWithDateTime(newDateTime)
                             viewModel!!.currentEntry.set(currentEntry)
                         },
                         currentEntry.dateTime.year,
@@ -159,11 +174,11 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                         val newDateTime =
                             LocalDateTime.from(currentEntry.dateTime).withHour(h).withMinute(m)
                         currentEntry.dateTime = newDateTime
-                        setToolbarWithDateTime(newDateTime)
+                        setToolbarTitleWithDateTime(newDateTime)
                         viewModel!!.currentEntry.set(currentEntry)
                     }, currentEntry.dateTime.hour, currentEntry.dateTime.minute, false).show()
                     fragEntryWriteMCBEntryTime.isChecked = true
-                    setToolbarWithDateTime(currentEntry.dateTime)
+                    setToolbarTitleWithDateTime(currentEntry.dateTime)
                 }
                 fragEntryWriteMCBTitle -> {
                     val toastMessage: String
@@ -190,6 +205,21 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
                         fragEntryWriteMCBEntryPlace.isChecked = true
                     }
                 }
+                fragEntryWriteMCBEntryPicture -> {
+                    TedImagePicker.with(requireContext())
+                        .selectedUri(adapter.currentList)
+                        .startMultiImage { uriList ->
+                            if (uriList.isEmpty()) {
+                                fragEntryWriteRVPictures.visibility = View.GONE
+                            } else {
+                                fragEntryWriteRVPictures.visibility = View.VISIBLE
+                            }
+                            adapter.submitList(uriList)
+                            val currentEntry = viewModel!!.currentEntry.get()!!
+                            currentEntry.photos = uriList
+                            viewModel!!.currentEntry.set(currentEntry)
+                        }
+                }
             }
         }
     }
@@ -198,7 +228,33 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        createMenu()
+        val menuRes = if (isToCreateMode) {
+            R.menu.frag_entry_write_menu_create
+        } else {
+            R.menu.frag_entry_write_menu_modify
+        }
+
+        createMenu(binding.fragEntryWriteTB.toolbar, menuRes) { menuItem ->
+            when (menuItem.itemId) {
+                R.id.frag_entry_write_menu_save -> {
+                    viewModel.saveEntry()
+                    findNavController().popBackStack()
+                    true
+                }
+                R.id.frag_entry_write_menu_modify -> {
+                    viewModel.modifyEntry()
+                    findNavController().popBackStack()
+                    true
+                }
+                R.id.frag_entry_write_menu_delete -> {
+                    AlertDialogUtil.showEntryDeleteConfirmDialog(
+                        this@EntryWriteFragment, viewModel, viewModel.currentEntry.get()!!
+                    )
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -219,46 +275,6 @@ class EntryWriteFragment : BaseFragment(), View.OnClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun createMenu() {
-        val menuHost: MenuHost = requireActivity()
-
-        menuHost.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menu.clear()
-
-                val menuRes = if (isToCreateMode) {
-                    R.menu.frag_entry_write_menu_create
-                } else {
-                    R.menu.frag_entry_write_menu_modify
-                }
-
-                menuInflater.inflate(menuRes, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.frag_entry_write_menu_save -> {
-                        viewModel.saveEntry()
-                        findNavController().popBackStack()
-                        true
-                    }
-                    R.id.frag_entry_write_menu_modify -> {
-                        viewModel.modifyEntry()
-                        findNavController().popBackStack()
-                        true
-                    }
-                    R.id.frag_entry_write_menu_delete -> {
-                        AlertDialogUtil.showEntryDeleteConfirmDialog(
-                            parentFragment!!, viewModel, viewModel.currentEntry.get()!!
-                        )
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     @SuppressLint("MissingPermission")

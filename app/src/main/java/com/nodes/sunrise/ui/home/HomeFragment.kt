@@ -9,11 +9,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.adapters.list.EntryListAdapter
-import com.nodes.sunrise.components.helpers.NavigationHelper
 import com.nodes.sunrise.components.helpers.RecyclerViewHelper
 import com.nodes.sunrise.components.helpers.SharedPreferenceHelper
 import com.nodes.sunrise.databinding.FragmentHomeBinding
@@ -46,6 +44,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
         _binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+
+        setToolbarBinding(binding.fragHomeTB)
 
         recyclerViewHelper.setRecyclerViewWithLiveData(
             binding.fragHomeRVRecentEntries,

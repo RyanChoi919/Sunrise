@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -18,12 +19,11 @@ import com.nodes.sunrise.components.helpers.SharedPreferenceHelper
 import com.nodes.sunrise.components.listeners.OnEntityClickListener
 import com.nodes.sunrise.databinding.FragmentChallengeSelectBinding
 import com.nodes.sunrise.db.entity.Challenge
-import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class ChallengeSelectFragment : BaseFragment(), View.OnClickListener {
+class ChallengeSelectFragment : Fragment(), View.OnClickListener {
 
     companion object {
         val KEY_CHALLENGE = this::class.java.simpleName + ".CHALLENGE"

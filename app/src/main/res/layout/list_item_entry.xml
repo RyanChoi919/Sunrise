@@ -39,7 +39,7 @@
         android:layout_marginStart="16dp"
         android:orientation="vertical"
         app:layout_constraintLeft_toRightOf="@id/list_item_entry_LL_date"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/list_item_entry_FL_photo"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -93,6 +93,33 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/list_item_entry_FL_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/list_item_entry_IV_photo"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/list_item_entry_IV_multiple_photos_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="4dp"
+            android:alpha="0.5"
+            android:src="@drawable/ic_round_photo_library_16"
+            app:tint="@android:color/white" />
+
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

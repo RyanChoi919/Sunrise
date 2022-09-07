@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.comparators.EntriesWithYearMonthComparator
 import com.nodes.sunrise.components.listeners.OnEntityClickListener
@@ -63,6 +64,20 @@ class EntryListAdapter :
                             if (currentEntry.isTitleEnabled) View.VISIBLE else View.GONE
                         listItemEntryTVTitle.text = currentEntry.title
                         listItemEntryTVContent.text = currentEntry.content
+                        if (currentEntry.photos.isNotEmpty()) {
+                            listItemEntryFLPhoto.visibility = View.VISIBLE
+                            Glide.with(holder.binding.root)
+                                .load(currentEntry.photos[0])
+                                .into(listItemEntryIVPhoto)
+                            listItemEntryIVMultiplePhotosIcon.visibility =
+                                if (currentEntry.photos.size > 1) {
+                                    View.VISIBLE
+                                } else {
+                                    View.GONE
+                                }
+                        } else {
+                            listItemEntryFLPhoto.visibility = View.GONE
+                        }
                     }
                 }
             }
@@ -71,7 +86,8 @@ class EntryListAdapter :
                     val currentYearMonth = getItem(position).yearMonth
                     if (currentYearMonth != null) {
                         listItemEntryGroupTVMonth.text = DateUtil.getLocalizedMonthString(
-                            root.context, currentYearMonth)
+                            root.context, currentYearMonth
+                        )
                         listItemEntryGroupTVYear.text = currentYearMonth.year.toString()
                     }
                 }

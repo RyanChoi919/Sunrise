@@ -1,6 +1,7 @@
 package com.nodes.sunrise.components.helpers
 
 
+import android.net.Uri
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.adapters.list.ChallengeListAdapter
 import com.nodes.sunrise.components.adapters.list.EntryListAdapter
+import com.nodes.sunrise.components.adapters.list.PhotoPreviewListAdapter
 import com.nodes.sunrise.components.decorators.ListMarginDecorator
 import com.nodes.sunrise.components.listeners.OnEntityClickListener
 import com.nodes.sunrise.components.listeners.OnEntityLongClickListener
@@ -20,6 +22,7 @@ import com.nodes.sunrise.components.utils.AlertDialogUtil
 import com.nodes.sunrise.db.entity.ChallengeGroupWithChallenges
 import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.enums.EntryViewType
+import com.nodes.sunrise.enums.ListOrientation
 import com.nodes.sunrise.model.EntryAndYearMonth
 import com.nodes.sunrise.ui.BaseViewModel
 import kotlinx.coroutines.launch
@@ -94,9 +97,18 @@ class RecyclerViewHelper<T : BaseViewModel>(val fragment: Fragment, val viewMode
         }
     }
 
+    fun setRecyclerViewWithPictureUri(
+        rv: RecyclerView,
+        adapter: PhotoPreviewListAdapter,
+        data: List<Uri>,
+    ) {
+        setRecyclerView(rv, adapter)
+        adapter.submitList(data)
+    }
+
     private fun setRecyclerView(rv: RecyclerView, adapter: EntryListAdapter) {
         with(rv) {
-            setRecyclerViewAttributes(rv)
+            setRecyclerViewAttributes(rv, ListOrientation.VERTICAL)
             adapter.onClickListener = object : OnEntityClickListener<Entry> {
                 override fun onClick(view: View, pos: Int, entity: Entry) {
                     navigationHelper.navigateToEntryReadFragment(entity)
@@ -113,16 +125,23 @@ class RecyclerViewHelper<T : BaseViewModel>(val fragment: Fragment, val viewMode
 
     private fun setRecyclerView(rv: RecyclerView, adapter: ChallengeListAdapter) {
         with(rv) {
-            setRecyclerViewAttributes(rv)
+            setRecyclerViewAttributes(rv, ListOrientation.VERTICAL)
             this.adapter = adapter
         }
     }
 
-    private fun setRecyclerViewAttributes(rv: RecyclerView) {
+    private fun setRecyclerView(rv: RecyclerView, adapter: PhotoPreviewListAdapter) {
         with(rv) {
-            layoutManager = LinearLayoutManager(context)
+            setRecyclerViewAttributes(rv, ListOrientation.HORIZONTAL)
+            this.adapter = adapter
+        }
+    }
+
+    private fun setRecyclerViewAttributes(rv: RecyclerView, orientation: ListOrientation) {
+        with(rv) {
+            layoutManager = LinearLayoutManager(context, orientation.linearLayoutMangerInt, false)
             isNestedScrollingEnabled = false
-            addItemDecoration(ListMarginDecorator(resources))
+            addItemDecoration(ListMarginDecorator(resources, orientation))
         }
     }
 
