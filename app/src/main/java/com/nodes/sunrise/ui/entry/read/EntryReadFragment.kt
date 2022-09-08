@@ -1,9 +1,12 @@
 package com.nodes.sunrise.ui.entry.read
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
@@ -13,6 +16,7 @@ import com.nodes.sunrise.databinding.FragmentEntryReadBinding
 import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
+import kotlinx.coroutines.launch
 
 
 class EntryReadFragment : BaseFragment(), View.OnClickListener {
@@ -94,11 +98,13 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
             val latitude = viewModel.currentEntry.latitude
             val longitude = viewModel.currentEntry.longitude
 
-            text = if (latitude != null && longitude != null) {
-                LocationUtil.getAddressFromLatLong(requireContext(), latitude, longitude)
-                    .getAddressLine(0)
+            if (latitude != null && longitude != null) {
+                lifecycleScope.launch {
+                    text = LocationUtil.getAddressFromLatLong(requireContext(), latitude, longitude)
+                        .getAddressLine(0)
+                }
             } else {
-                getString(R.string.no_location_information)
+                text = getString(R.string.no_location_information)
             }
         }
     }

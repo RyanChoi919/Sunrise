@@ -5,6 +5,7 @@ plugins {
 }
 
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.android.application'
 
 android {
     compileSdk 32
@@ -91,4 +92,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation "ru.tinkoff.scrollingpagerindicator:scrollingpagerindicator:1.2.3"
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
+    // location
+    implementation 'com.google.android.gms:play-services-location:20.0.0'
 }

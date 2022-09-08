@@ -11,13 +11,20 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationToken
+import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.adapters.list.PhotoPreviewListAdapter
@@ -52,22 +59,14 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
     private val locationManager by lazy {
         requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
+    private val fusedLocationClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireActivity())
+    }
 
     private val adapter = PhotoPreviewListAdapter()
 
     private val recyclerViewHelper: RecyclerViewHelper<EntryWriteViewModel> by lazy {
         RecyclerViewHelper(this, viewModel)
-    }
-
-    private val listener = LocationListener {
-        viewModel.updateEntryLocation(it)
-        binding.fragEntryWriteMCBEntryPlace.isChecked = true
-        Toast.makeText(
-            requireContext(),
-            LocationUtil.getAddressFromLocation(requireContext(), it).getAddressLine(0),
-            Toast.LENGTH_SHORT
-        ).show()
-        removeLocationUpdates()
     }
 
     override fun onCreateView(
@@ -284,19 +283,19 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
         val hasCoarseLocationPermission = hasPermission(Permission.COARSE_LOCATION.androidName)
 
         if (hasFineLocationPermission && hasCoarseLocationPermission) {
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, 500, 0F, listener
-                )
-            } else if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, 500, 0F, listener
-                )
-            } else {
-                Toast.makeText(requireContext(), "위치 정보를 일시적으로 확인할 수 없습니다.", Toast.LENGTH_SHORT)
-                    .show()
-            }
+            fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, object :
+                CancellationToken() {
+                override fun onCanceledRequested(p0: OnTokenCanceledListener): CancellationToken {
+                    return CancellationTokenSource().token
+                }
 
+                override fun isCancellationRequested(): Boolean {
+                    return false
+                }
+            }).addOnSuccessListener {
+                Log.d(TAG, "updateCurrentLocation: getCurrentLocation = $it")
+                viewModel.updateEntryLocation(it)
+            }
         } else {
             requestLocationPermissions()
         }
@@ -341,10 +340,6 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
                 ), this::class.java.hashCode()
             )
         }
-    }
-
-    private fun removeLocationUpdates() {
-        locationManager.removeUpdates(listener)
     }
 
     private fun checkTitleEnabled() {
