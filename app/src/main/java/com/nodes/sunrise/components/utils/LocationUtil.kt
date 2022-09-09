@@ -8,18 +8,14 @@ import java.util.*
 
 class LocationUtil {
     companion object {
-        fun getAddressFromLocation(context: Context, location: Location): Address {
-            return Geocoder(context, Locale.getDefault()).getFromLocation(
-                location.latitude,
-                location.longitude,
-                1
-            )[0]
-        }
-
         fun getAddressFromLatLong(context: Context, latitude: Double, longitude: Double): Address {
             return Geocoder(context, Locale.getDefault()).getFromLocation(
                 latitude, longitude, 1
             )[0]
+        }
+
+        fun getAddressFromLocation(context: Context, location: Location): Address {
+            return getAddressFromLatLong(context, location.latitude, location.longitude)
         }
     }
 }
