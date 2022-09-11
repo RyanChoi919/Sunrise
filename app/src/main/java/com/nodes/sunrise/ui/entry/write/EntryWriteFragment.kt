@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.content.pm.PackageManager
-import android.location.LocationListener
-import android.location.LocationManager
+import android.location.Location
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -24,14 +21,15 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.adapters.list.PhotoPreviewListAdapter
 import com.nodes.sunrise.components.helpers.RecyclerViewHelper
-import com.nodes.sunrise.components.listeners.OnPermissionRationaleResultListener
 import com.nodes.sunrise.components.utils.AlertDialogUtil
 import com.nodes.sunrise.components.utils.LocationUtil
+import com.nodes.sunrise.components.utils.PermissionUtil
 import com.nodes.sunrise.databinding.FragmentEntryWriteBinding
 import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.enums.Permission
@@ -56,17 +54,14 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
         ViewModelFactory(repository)
     }
 
-    private val locationManager by lazy {
-        requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    }
-    private val fusedLocationClient by lazy {
-        LocationServices.getFusedLocationProviderClient(requireActivity())
-    }
-
     private val adapter = PhotoPreviewListAdapter()
 
     private val recyclerViewHelper: RecyclerViewHelper<EntryWriteViewModel> by lazy {
         RecyclerViewHelper(this, viewModel)
+    }
+
+    private val onSuccessListener = OnSuccessListener<Location> {
+        viewModel.updateEntryLocation(it)
     }
 
     override fun onCreateView(
@@ -92,7 +87,7 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
                 viewModel.isPrevEntrySet = true
             } else {
                 isToCreateMode = true
-                updateCurrentLocation()
+                LocationUtil.getCurrentLocation(requireActivity(), onSuccessListener)
             }
             checkTitleEnabled()
             setToolbarTitleWithDateTime(viewModel.currentEntry.get()!!.dateTime)
@@ -200,7 +195,7 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
                         viewModel!!.removeEntryLocation()
                         fragEntryWriteMCBEntryPlace.isChecked = false
                     } else {
-                        updateCurrentLocation()
+                        LocationUtil.getCurrentLocation(requireActivity(), onSuccessListener)
                         fragEntryWriteMCBEntryPlace.isChecked = true
                     }
                 }
@@ -222,7 +217,6 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
             }
         }
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -274,72 +268,6 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun updateCurrentLocation() {
-
-        val hasFineLocationPermission = hasPermission(Permission.FINE_LOCATION.androidName)
-        val hasCoarseLocationPermission = hasPermission(Permission.COARSE_LOCATION.androidName)
-
-        if (hasFineLocationPermission && hasCoarseLocationPermission) {
-            fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, object :
-                CancellationToken() {
-                override fun onCanceledRequested(p0: OnTokenCanceledListener): CancellationToken {
-                    return CancellationTokenSource().token
-                }
-
-                override fun isCancellationRequested(): Boolean {
-                    return false
-                }
-            }).addOnSuccessListener {
-                Log.d(TAG, "updateCurrentLocation: getCurrentLocation = $it")
-                viewModel.updateEntryLocation(it)
-            }
-        } else {
-            requestLocationPermissions()
-        }
-    }
-
-    private fun hasPermission(androidPermission: String): Boolean {
-        val result = ActivityCompat.checkSelfPermission(
-            requireContext(), androidPermission
-        ) == PackageManager.PERMISSION_GRANTED
-        Log.d(TAG, "hasPermission: $androidPermission = $result")
-        return result
-    }
-
-    private fun requestLocationPermissions() {
-        if (shouldShowRequestPermissionRationale(Permission.COARSE_LOCATION.androidName) ||
-            shouldShowRequestPermissionRationale(Permission.FINE_LOCATION.androidName)
-        ) {
-            AlertDialogUtil.showLocationPermissionRationaleDialog(
-                requireContext(),
-                object : OnPermissionRationaleResultListener {
-                    override fun onResultSet(isPositive: Boolean) {
-                        when {
-                            isPositive -> {
-                                ActivityCompat.requestPermissions(
-                                    requireActivity(), arrayOf(
-                                        Permission.COARSE_LOCATION.androidName,
-                                        Permission.FINE_LOCATION.androidName
-                                    ), this::class.java.hashCode()
-                                )
-                            }
-                            else -> {
-                                // do nothing (permission not granted)
-                            }
-                        }
-                    }
-                })
-        } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(), arrayOf(
-                    Permission.COARSE_LOCATION.androidName,
-                    Permission.FINE_LOCATION.androidName
-                ), this::class.java.hashCode()
-            )
-        }
     }
 
     private fun checkTitleEnabled() {
