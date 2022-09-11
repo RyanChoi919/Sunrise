@@ -1,6 +1,5 @@
 package com.nodes.sunrise.ui.entry.write
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
@@ -17,25 +16,23 @@ import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
-import com.google.android.gms.tasks.CancellationToken
-import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnSuccessListener
-import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.adapters.list.PhotoPreviewListAdapter
 import com.nodes.sunrise.components.helpers.RecyclerViewHelper
 import com.nodes.sunrise.components.utils.AlertDialogUtil
 import com.nodes.sunrise.components.utils.LocationUtil
-import com.nodes.sunrise.components.utils.PermissionUtil
+import com.nodes.sunrise.components.utils.WeatherUtil
 import com.nodes.sunrise.databinding.FragmentEntryWriteBinding
 import com.nodes.sunrise.db.entity.Entry
-import com.nodes.sunrise.enums.Permission
+import com.nodes.sunrise.model.weather.WeatherInfo
 import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
 import gun0912.tedimagepicker.builder.TedImagePicker
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.LocalDateTime
 
 class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
@@ -62,6 +59,7 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
 
     private val onSuccessListener = OnSuccessListener<Location> {
         viewModel.updateEntryLocation(it)
+        updateCurrentWeather()
     }
 
     override fun onCreateView(
@@ -279,6 +277,34 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
             } else {
                 fragEntryWriteETTitle.visibility = View.GONE
                 fragEntryWriteMCBTitle.isChecked = false
+            }
+        }
+    }
+
+    private fun updateCurrentWeather() {
+        val currentEntry = viewModel.currentEntry.get()!!
+        with(currentEntry) {
+            if (latitude != null && longitude != null) {
+                WeatherUtil.getCurrentWeather(
+                    latitude!!, longitude!!,
+                    object : Callback<WeatherInfo> {
+                        override fun onResponse(
+                            call: Call<WeatherInfo>,
+                            response: Response<WeatherInfo>
+                        ) {
+                            weatherInfo = response.body()
+                            Log.d(TAG, "onResponse: $weatherInfo")
+                        }
+
+                        override fun onFailure(call: Call<WeatherInfo>, t: Throwable) {
+                            Toast.makeText(
+                                requireContext(),
+                                "날씨 정보 확인에 실패했습니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            t.printStackTrace()
+                        }
+                    })
             }
         }
     }

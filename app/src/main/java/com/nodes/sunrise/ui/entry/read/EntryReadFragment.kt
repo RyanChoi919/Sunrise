@@ -1,6 +1,8 @@
 package com.nodes.sunrise.ui.entry.read
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,15 +10,22 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.helpers.NavigationHelper
 import com.nodes.sunrise.components.utils.LocationUtil
+import com.nodes.sunrise.components.utils.WeatherUtil
 import com.nodes.sunrise.databinding.FragmentEntryReadBinding
 import com.nodes.sunrise.db.entity.Entry
+import com.nodes.sunrise.enums.Unit
 import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class EntryReadFragment : BaseFragment(), View.OnClickListener {
@@ -71,6 +80,7 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
         }
         setOnClickListeners()
         setPictureView()
+        setWeatherInfo()
     }
 
     override fun onClick(p0: View?) {
@@ -122,6 +132,47 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
                     }
             } else {
                 fragEntryReadFLPicture.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun setWeatherInfo() {
+        val currentEntry = viewModel.currentEntry
+        with(binding.fragEntryReadTVWeatherInfo) {
+            if (currentEntry.weatherInfo != null) {
+
+                val iconUrl =
+                    "https://openweathermap.org/img/wn/${currentEntry.weatherInfo!!.weather[0].icon}@2x.png"
+                Log.d(TAG, "setWeatherInfo: iconUrl = $iconUrl")
+
+                Glide.with(requireContext())
+                    .load(iconUrl)
+                    .into(object : CustomTarget<Drawable>() {
+                        override fun onResourceReady(
+                            resource: Drawable,
+                            transition: Transition<in Drawable>?
+                        ) {
+                            text = WeatherUtil.fromKelvinToLocaleUnit(
+                                currentEntry.weatherInfo!!.main!!.temp,
+                                Locale.getDefault()
+                            )
+                            setCompoundDrawablesWithIntrinsicBounds(resource, null, null, null)
+                        }
+
+                        override fun onLoadCleared(placeholder: Drawable?) {
+                            text = "날씨 정보 없음"
+                            setCompoundDrawablesWithIntrinsicBounds(
+                                R.drawable.ic_round_cloud_off_24,
+                                0,
+                                0,
+                                0
+                            )
+                        }
+
+                    })
+            } else {
+                text = "날씨 정보 없음"
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_round_cloud_off_24, 0, 0, 0)
             }
         }
     }

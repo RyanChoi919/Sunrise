@@ -105,6 +105,7 @@
                         app:drawableTint="?attr/colorOutline" />
 
                     <TextView
+                        android:id="@+id/frag_entry_read_TV_weather_info"
                         style="@style/TextAppearance.Sunrise.LabelSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -112,7 +113,7 @@
                         android:drawablePadding="4dp"
                         android:gravity="center_vertical"
                         android:text="@string/sample_temp"
-                        app:drawableStartCompat="@drawable/ic_round_wb_sunny_24"
+                        app:drawableStartCompat="@drawable/ic_round_cloud_off_24"
                         app:drawableTint="?attr/colorOutline" />
 
                 </LinearLayout>

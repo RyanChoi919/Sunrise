@@ -3,6 +3,7 @@ package com.nodes.sunrise.db
 import android.net.Uri
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.nodes.sunrise.model.weather.WeatherInfo
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import kotlin.streams.toList
@@ -39,6 +40,24 @@ class Converters {
             null
         } else {
             Gson().toJson(list.stream().map { uri -> uri.toString() }.toList())
+        }
+    }
+
+    @TypeConverter
+    fun fromWeatherInfoToGson(weatherInfo: WeatherInfo?): String? {
+        return if (weatherInfo == null) {
+            null
+        } else {
+            Gson().toJson(weatherInfo)
+        }
+    }
+
+    @TypeConverter
+    fun fromGsonToWeatherInfo(value: String?): WeatherInfo? {
+        return if (value == null) {
+            null
+        } else {
+            Gson().fromJson(value, WeatherInfo::class.java)
         }
     }
 }
