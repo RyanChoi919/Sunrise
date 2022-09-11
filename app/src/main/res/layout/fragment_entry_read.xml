@@ -39,7 +39,7 @@
                         android:id="@+id/frag_entry_read_IV_picture"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxHeight="512dp"
+                        android:adjustViewBounds="true"
                         android:scaleType="fitCenter" />
 
                     <ImageView
