@@ -10,21 +10,21 @@ import java.time.LocalDateTime
 @Entity
 data class Entry(
     @PrimaryKey(autoGenerate = true)
-    var id: Int,
-    var dateTime: LocalDateTime,
-    var title: String,
-    var isTitleEnabled: Boolean,
-    var content: String,
-    var latitude: Double?,
-    var longitude: Double?,
-    var weatherInfo: WeatherInfo?,
+    var id: Int = 0,
+    var dateTime: LocalDateTime = LocalDateTime.now(),
+    var title: String = "",
+    var isTitleEnabled: Boolean = true,
+    var content: String = "",
+    var latitude: Double? = null,
+    var longitude: Double? = null,
+    var weatherInfo: WeatherInfo? = null,
     var photos: List<Uri> = emptyList()
 ) : Serializable
 
 class EntryFactory {
     companion object {
         fun create(): Entry {
-            return Entry(0, LocalDateTime.now(), "", true, "", null, null, null)
+            return Entry()
         }
     }
 }
