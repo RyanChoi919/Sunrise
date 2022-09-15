@@ -59,7 +59,7 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
 
     private val onSuccessListener = OnSuccessListener<Location> {
         viewModel.updateEntryLocation(it)
-        updateCurrentWeather()
+//        updateCurrentWeather()
     }
 
     override fun onCreateView(
@@ -281,31 +281,31 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
         }
     }
 
-    private fun updateCurrentWeather() {
-        val currentEntry = viewModel.currentEntry.get()!!
-        with(currentEntry) {
-            if (latitude != null && longitude != null) {
-                WeatherUtil.getCurrentWeather(
-                    latitude!!, longitude!!,
-                    object : Callback<WeatherInfo> {
-                        override fun onResponse(
-                            call: Call<WeatherInfo>,
-                            response: Response<WeatherInfo>
-                        ) {
-                            weatherInfo = response.body()
-                            Log.d(TAG, "onResponse: $weatherInfo")
-                        }
-
-                        override fun onFailure(call: Call<WeatherInfo>, t: Throwable) {
-                            Toast.makeText(
-                                requireContext(),
-                                "날씨 정보 확인에 실패했습니다.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            t.printStackTrace()
-                        }
-                    })
-            }
-        }
-    }
+//    private fun updateCurrentWeather() {
+//        val currentEntry = viewModel.currentEntry.get()!!
+//        with(currentEntry) {
+//            if (latitude != null && longitude != null) {
+//                WeatherUtil.getCurrentWeather(
+//                    latitude!!, longitude!!,
+//                    object : Callback<WeatherInfo> {
+//                        override fun onResponse(
+//                            call: Call<WeatherInfo>,
+//                            response: Response<WeatherInfo>
+//                        ) {
+//                            weatherInfo = response.body()
+//                            Log.d(TAG, "onResponse: $weatherInfo")
+//                        }
+//
+//                        override fun onFailure(call: Call<WeatherInfo>, t: Throwable) {
+//                            Toast.makeText(
+//                                requireContext(),
+//                                "날씨 정보 확인에 실패했습니다.",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                            t.printStackTrace()
+//                        }
+//                    })
+//            }
+//        }
+//    }
 }

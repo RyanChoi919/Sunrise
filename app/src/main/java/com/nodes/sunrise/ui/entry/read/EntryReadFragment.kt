@@ -80,7 +80,7 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
         }
         setOnClickListeners()
         setPictureView()
-        setWeatherInfo()
+//        setWeatherInfo()
     }
 
     override fun onClick(p0: View?) {
@@ -136,44 +136,44 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
         }
     }
 
-    private fun setWeatherInfo() {
-        val currentEntry = viewModel.currentEntry
-        with(binding.fragEntryReadTVWeatherInfo) {
-            if (currentEntry.weatherInfo != null) {
-
-                val iconUrl =
-                    "https://openweathermap.org/img/wn/${currentEntry.weatherInfo!!.weather[0].icon}@2x.png"
-                Log.d(TAG, "setWeatherInfo: iconUrl = $iconUrl")
-
-                Glide.with(requireContext())
-                    .load(iconUrl)
-                    .into(object : CustomTarget<Drawable>() {
-                        override fun onResourceReady(
-                            resource: Drawable,
-                            transition: Transition<in Drawable>?
-                        ) {
-                            text = WeatherUtil.fromKelvinToLocaleUnit(
-                                currentEntry.weatherInfo!!.main!!.temp,
-                                Locale.getDefault()
-                            )
-                            setCompoundDrawablesWithIntrinsicBounds(resource, null, null, null)
-                        }
-
-                        override fun onLoadCleared(placeholder: Drawable?) {
-                            text = "날씨 정보 없음"
-                            setCompoundDrawablesWithIntrinsicBounds(
-                                R.drawable.ic_round_cloud_off_24,
-                                0,
-                                0,
-                                0
-                            )
-                        }
-
-                    })
-            } else {
-                text = "날씨 정보 없음"
-                setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_round_cloud_off_24, 0, 0, 0)
-            }
-        }
-    }
+//    private fun setWeatherInfo() {
+//        val currentEntry = viewModel.currentEntry
+//        with(binding.fragEntryReadTVWeatherInfo) {
+//            if (currentEntry.weatherInfo != null) {
+//
+//                val iconUrl =
+//                    "https://openweathermap.org/img/wn/${currentEntry.weatherInfo!!.weather[0].icon}@2x.png"
+//                Log.d(TAG, "setWeatherInfo: iconUrl = $iconUrl")
+//
+//                Glide.with(requireContext())
+//                    .load(iconUrl)
+//                    .into(object : CustomTarget<Drawable>() {
+//                        override fun onResourceReady(
+//                            resource: Drawable,
+//                            transition: Transition<in Drawable>?
+//                        ) {
+//                            text = WeatherUtil.fromKelvinToLocaleUnit(
+//                                currentEntry.weatherInfo!!.main!!.temp,
+//                                Locale.getDefault()
+//                            )
+//                            setCompoundDrawablesWithIntrinsicBounds(resource, null, null, null)
+//                        }
+//
+//                        override fun onLoadCleared(placeholder: Drawable?) {
+//                            text = "날씨 정보 없음"
+//                            setCompoundDrawablesWithIntrinsicBounds(
+//                                R.drawable.ic_round_cloud_off_24,
+//                                0,
+//                                0,
+//                                0
+//                            )
+//                        }
+//
+//                    })
+//            } else {
+//                text = "날씨 정보 없음"
+//                setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_round_cloud_off_24, 0, 0, 0)
+//            }
+//        }
+//    }
 }
