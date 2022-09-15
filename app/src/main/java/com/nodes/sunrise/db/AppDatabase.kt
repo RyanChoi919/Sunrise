@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.nodes.sunrise.components.utils.CsvUtil
+import com.nodes.sunrise.components.utils.DevUtil
 import com.nodes.sunrise.db.dao.ChallengeAndGroupCrossRefDao
 import com.nodes.sunrise.db.dao.ChallengeDao
 import com.nodes.sunrise.db.dao.ChallengeGroupDao
@@ -61,6 +62,26 @@ internal abstract class AppDatabase : RoomDatabase() {
         }
     }
 
+    /* 앱 최초 실행 시 테스트 데이터베이스 초기화 콜백 클래스 */
+    private class AppDatabaseTestCallback(
+        private val scope: CoroutineScope,
+    ) : RoomDatabase.Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            INSTANCE?.let { appDatabase ->
+                scope.launch {
+                    val testEntries = DevUtil.createSampleEntries()
+
+                    with(appDatabase) {
+                        for (entry in testEntries) {
+                            entryDao.insert(entry)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     companion object {
 
         @Volatile
@@ -77,6 +98,7 @@ internal abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java.simpleName
                 )
                     .addCallback(AppDatabaseCallback(scope, context))
+                    .addCallback(AppDatabaseTestCallback(scope))
                     .build()
                 INSTANCE = instance
                 instance
