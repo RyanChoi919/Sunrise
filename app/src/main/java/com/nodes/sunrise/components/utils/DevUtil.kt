@@ -26,7 +26,8 @@ class DevUtil {
                         "\n" +
                         "보배를 않는 수 인생에 부패뿐이다. 생생하며, 피고 인간이 않는 원질이 실로 것이다. 같이, 얼음에 같은 것이다. 풍부하게 옷을 하는 얼음 관현악이며, 위하여 찾아다녀도, 영원히 것이다. 예가 날카로우나 가지에 무엇을 오직 목숨이 얼음에 실로 있다."
 
-            with(result) {
+            // 대표 샘플 엔트리 생성
+            val samples = ArrayList<Entry>().apply {
                 add(Entry(title = "사진 없는 엔트리"))
                 add(Entry(title = "사진 1개 엔트리").apply {
                     photos = createPhotoList(1)
@@ -38,15 +39,20 @@ class DevUtil {
                 add(Entry(title = "위치 정보 없는 엔트리"))
                 add(Entry(title = "타이틀 있는 엔트리", isTitleEnabled = true))
 
-                // 샘플컨텐츠 설정 및 엔트리 날짜를 1일씩 차이나도록 설정
-                for (i in result.indices) {
-                    with(result[i]) {
-                        content = sampleContent
-                        dateTime = now.minusDays(i.toLong())
-                    }
+                // sample content 설정
+                for (entry in this) {
+                    entry.content = sampleContent
                 }
 
+                // 별개의 content를 필요로 하는 샘플 엔트리
                 add(Entry(isTitleEnabled = false, content = "타이틀 없는 엔트리"))
+            }
+
+            val mutiplier = 5 // 샘플 중복 추가 개수
+
+            // 샘플 엔트리를 결과 리스트에 추가
+            for (i in 1..samples.size * mutiplier) {
+                result.add(samples[i % samples.size].copy().apply { dateTime = now.minusDays(i.toLong()) })
             }
 
             return result
