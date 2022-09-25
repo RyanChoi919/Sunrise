@@ -30,6 +30,8 @@
         <!-- Default fontFamily-->
         <item name="android:fontFamily">@font/nanum_myeongjo</item>
         <item name="fontFamily">@font/nanum_myeongjo</item>
+        <!-- Preference -->
+        <item name="preferenceTheme">@style/Theme.Sunrise.PreferenceTheme</item>
     </style>
 
     <style name="Theme.Sunrise.NoActionBar">
@@ -43,4 +45,18 @@
     </style>
 
     <style name="Theme.Sunrise.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.Sunrise.PreferenceTheme" parent="PreferenceThemeOverlay.v14.Material">
+        <item name="android:layout">@layout/fragment_settings_main</item>
+        <item name="android:listPreferredItemPaddingStart">@dimen/screen_horizontal_margin</item>
+        <item name="android:listPreferredItemPaddingEnd">@dimen/screen_horizontal_margin</item>
+    </style>
+
+    <style name="Theme.Sunrise.OssLicences" parent="Theme.Sunrise">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+
+        <item name="android:fontFamily">@font/nanum_myeongjo</item>
+        <item name="fontFamily">@font/nanum_myeongjo</item>
+    </style>
 </resources>

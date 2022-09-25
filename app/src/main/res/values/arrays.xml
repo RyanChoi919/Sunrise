@@ -9,4 +9,40 @@
         <item>@string/challenge_result_fail</item>
         <item>@string/challenge_result_postpone</item>
     </string-array>
+
+    <!-- Preferences -->
+    <string-array name="pref_theme_entries">
+        <item>@string/pref_theme_day_theme_entry</item>
+        <item>@string/pref_theme_night_theme_entry</item>
+        <item>@string/pref_theme_follow_system_entry</item>
+    </string-array>
+
+    <string-array name="pref_theme_values">
+        <item>@string/pref_theme_day_theme_value</item>
+        <item>@string/pref_theme_night_theme_value</item>
+        <item>@string/pref_theme_follow_system_value</item>
+    </string-array>
+
+    <string-array name="pref_day_of_the_week_entries">
+        <item>@string/pref_notification_dow_mon_entry</item>
+        <item>@string/pref_notification_dow_tue_entry</item>
+        <item>@string/pref_notification_dow_wed_entry</item>
+        <item>@string/pref_notification_dow_thu_entry</item>
+        <item>@string/pref_notification_dow_fri_entry</item>
+        <item>@string/pref_notification_dow_sat_entry</item>
+        <item>@string/pref_notification_dow_sun_entry</item>
+    </string-array>
+
+    <string-array name="pref_day_of_the_week_values">
+        <item>@string/pref_notification_dow_mon_value</item>
+        <item>@string/pref_notification_dow_tue_value</item>
+        <item>@string/pref_notification_dow_wed_value</item>
+        <item>@string/pref_notification_dow_thu_value</item>
+        <item>@string/pref_notification_dow_fri_value</item>
+        <item>@string/pref_notification_dow_sat_value</item>
+        <item>@string/pref_notification_dow_sun_value</item>
+    </string-array>
+
+    <string-array name="empty_array"/>
+
 </resources>

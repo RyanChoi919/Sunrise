@@ -9,9 +9,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.adapters.list.EntryListAdapter
+import com.nodes.sunrise.components.helpers.NavigationHelper
+import com.nodes.sunrise.components.helpers.NotificationHelper
 import com.nodes.sunrise.components.helpers.RecyclerViewHelper
 import com.nodes.sunrise.components.helpers.SharedPreferenceHelper
 import com.nodes.sunrise.databinding.FragmentHomeBinding
@@ -64,6 +67,15 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
 
         setOnClickListeners()
         setTextClockFormat()
+        createMenu(binding.fragHomeTB.toolbar, R.menu.frag_home_menu) {
+            when (it.itemId) {
+                R.id.frag_home_menu_settings -> {
+                    NavigationHelper(findNavController()).navigateToSettingsFragment()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onResume() {
@@ -101,10 +113,15 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        // add codes
+        when (v) {
+            binding.fragHomeTVTitle -> {
+                NotificationHelper(requireContext()).setNotificationRepeating()
+            }
+        }
     }
 
     private fun setOnClickListeners() {
+        binding.fragHomeTVTitle.setOnClickListener(this) // for test purpose
 //        binding.fragHomeIVEditChallenge.setOnClickListener(this)
     }
 

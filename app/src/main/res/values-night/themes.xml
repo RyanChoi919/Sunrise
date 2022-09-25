@@ -30,5 +30,14 @@
         <!-- Default fontFamily-->
         <item name="android:fontFamily">@font/nanum_myeongjo</item>
         <item name="fontFamily">@font/nanum_myeongjo</item>
+        <!-- Preference -->
+        <item name="preferenceTheme">@style/Theme.Sunrise.PreferenceTheme</item>
     </style>
+
+    <style name="Theme.Sunrise.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorControlNormal">@color/md_theme_dark_onBackground</item>
+        <item name="android:textColorPrimary">@color/md_theme_dark_onBackground</item>
+    </style>
+
+    <style name="Theme.Sunrise.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 </resources>

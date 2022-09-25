@@ -47,4 +47,12 @@ open class NavigationHelper(val navController: NavController) {
         val bundle = bundleOf(PhotoFragment.KEY_PHOTO to uris)
         navController.navigate(R.id.nav_photo, bundle)
     }
+
+    fun navigateToSettingsFragment() {
+        navController.navigate(R.id.nav_settings)
+    }
+
+    fun navigateToSettingsVersionInfoFragment() {
+        navController.navigate(R.id.nav_settings_version_info)
+    }
 }

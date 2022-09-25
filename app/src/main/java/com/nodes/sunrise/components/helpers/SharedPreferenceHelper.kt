@@ -1,18 +1,21 @@
 package com.nodes.sunrise.components.helpers
 
-import android.app.Activity
 import android.content.Context
+import androidx.preference.PreferenceManager
 import com.nodes.sunrise.R
 import com.nodes.sunrise.db.entity.Challenge
 import java.time.LocalDate
 
-class SharedPreferenceHelper(activity: Activity) {
+class SharedPreferenceHelper(val context: Context) {
 
-    private val sharedPref = activity.getPreferences(Context.MODE_PRIVATE)
-    private val challengeIdKey: String =
-        activity.resources.getString(R.string.pref_key_challenge_id)
-    private val challengeDateKey: String =
-        activity.resources.getString(R.string.pref_key_challenge_date)
+    private val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+    private val challengeIdKey: String = getString(R.string.pref_key_challenge_id)
+    private val challengeDateKey: String = getString(R.string.pref_key_challenge_date)
+    private val keyNotificationEnabled: String = getString(R.string.pref_notification_enabled_key)
+    private val keyNotificationDow: String = getString(R.string.pref_notification_dow_key)
+    private val keyNotificationTime: String = getString(R.string.pref_notification_time_key)
+    private val keyShouldEnableTitleByDefault: String = getString(R.string.pref_key_enable_title_by_default)
+    private val keyShouldAddLocationByDefault: String = getString(R.string.pref_key_add_location_by_default)
 
     fun getSavedChallengeId(): Int? {
         val id = sharedPref.getInt(challengeIdKey, -1)
@@ -38,5 +41,31 @@ class SharedPreferenceHelper(activity: Activity) {
             remove(challengeDateKey)
             apply()
         }
+    }
+
+    fun getSavedNotificationEnabled(): Boolean {
+        return sharedPref.getBoolean(keyNotificationEnabled, false)
+    }
+
+    fun getSavedNotificationDowValues(): Set<String>? {
+        val valueSet = sharedPref.getStringSet(keyNotificationDow, emptySet<String>())
+        return if (valueSet != null && valueSet.isNotEmpty()) valueSet else null
+    }
+
+    fun getSavedNotificationStartSecondOfDay(): Int? {
+        val value = sharedPref.getInt(keyNotificationTime, -1)
+        return if (value >= 0) value else null
+    }
+
+    fun getSavedShouldEnableTitleByDefault(): Boolean {
+        return sharedPref.getBoolean(keyShouldEnableTitleByDefault, true)
+    }
+
+    fun getSavedShouldAddLocationByDefault(): Boolean {
+        return sharedPref.getBoolean(keyShouldAddLocationByDefault, true)
+    }
+
+    private fun getString(resId: Int): String {
+        return context.resources.getString(resId)
     }
 }

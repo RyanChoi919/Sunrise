@@ -7,7 +7,6 @@ import android.location.Location
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,18 +20,14 @@ import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.adapters.list.PhotoPreviewListAdapter
 import com.nodes.sunrise.components.helpers.RecyclerViewHelper
+import com.nodes.sunrise.components.helpers.SharedPreferenceHelper
 import com.nodes.sunrise.components.utils.AlertDialogUtil
 import com.nodes.sunrise.components.utils.LocationUtil
-import com.nodes.sunrise.components.utils.WeatherUtil
 import com.nodes.sunrise.databinding.FragmentEntryWriteBinding
 import com.nodes.sunrise.db.entity.Entry
-import com.nodes.sunrise.model.weather.WeatherInfo
 import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
 import gun0912.tedimagepicker.builder.TedImagePicker
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.time.LocalDateTime
 
 class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
@@ -59,6 +54,7 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
 
     private val onSuccessListener = OnSuccessListener<Location> {
         viewModel.updateEntryLocation(it)
+        binding.fragEntryWriteMCBEntryPlace.isChecked = true
 //        updateCurrentWeather()
     }
 
@@ -85,7 +81,27 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
                 viewModel.isPrevEntrySet = true
             } else {
                 isToCreateMode = true
-                LocationUtil.getCurrentLocation(requireActivity(), onSuccessListener)
+
+                val pref = SharedPreferenceHelper(requireContext())
+                val currentEntry = viewModel.currentEntry.get()!!
+
+                // preference에서 제목 자동 활성화 여부 확인 및 적용
+                if (pref.getSavedShouldEnableTitleByDefault()) {
+                    currentEntry.isTitleEnabled = true
+                    binding.fragEntryWriteETTitle.visibility = View.VISIBLE
+                    binding.fragEntryWriteMCBTitle.isChecked = true
+                } else {
+                    currentEntry.isTitleEnabled = false
+                    binding.fragEntryWriteETTitle.visibility = View.GONE
+                    binding.fragEntryWriteMCBTitle.isChecked = false
+                }
+
+                viewModel.currentEntry.set(currentEntry) // 변경사항 적용
+
+                // preference에서 위치 자동 추가 여부 확인 및 적용
+                if (pref.getSavedShouldAddLocationByDefault()) {
+                    LocationUtil.getCurrentLocation(requireActivity(), onSuccessListener)
+                }
             }
             checkTitleEnabled()
             setToolbarTitleWithDateTime(viewModel.currentEntry.get()!!.dateTime)
@@ -194,7 +210,6 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
                         fragEntryWriteMCBEntryPlace.isChecked = false
                     } else {
                         LocationUtil.getCurrentLocation(requireActivity(), onSuccessListener)
-                        fragEntryWriteMCBEntryPlace.isChecked = true
                     }
                 }
                 fragEntryWriteMCBEntryPicture -> {
