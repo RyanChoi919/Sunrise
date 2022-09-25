@@ -20,11 +20,7 @@ class PhotoFragment : BaseFragment() {
     private var _binding: FragmentPhotoBinding? = null
     private val binding get() = _binding!!
 
-    private val uris by lazy {
-        val list = requireArguments().get(KEY_PHOTO) as List<*>
-        photoTotalCount = list.size
-        list.filterIsInstance<Uri>()
-    }
+    private lateinit var uris : List<Uri>
     private val adapter = PhotoListAdapter()
 
     private var photoTotalCount: Int = 0
@@ -41,6 +37,10 @@ class PhotoFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPhotoBinding.inflate(inflater)
+
+        val list = requireArguments().get(KEY_PHOTO) as List<*>
+        photoTotalCount = list.size
+        uris = list.filterIsInstance<Uri>()
 
         setToolbar(binding.fragPhotoTB)
         return binding.root
