@@ -8,6 +8,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.google.android.material.appbar.AppBarLayout
 import com.nodes.sunrise.components.utils.DateUtil
 import com.nodes.sunrise.databinding.ComponentToolbarBinding
 import java.time.LocalDateTime
@@ -52,5 +53,10 @@ abstract class BaseFragment : Fragment() {
     ) {
         toolbar.inflateMenu(menuRes)
         toolbar.setOnMenuItemClickListener(onMenuItemClickListener)
+    }
+
+    fun setToolbarFlags(flags: Int) {
+        val params = toolbar.layoutParams as AppBarLayout.LayoutParams
+        params.scrollFlags = flags
     }
 }

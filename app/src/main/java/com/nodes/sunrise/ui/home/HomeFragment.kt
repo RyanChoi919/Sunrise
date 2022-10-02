@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.appbar.AppBarLayout
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.adapters.list.EntryListAdapter
@@ -49,6 +50,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
         binding.lifecycleOwner = viewLifecycleOwner
 
         setToolbarBinding(binding.fragHomeTB)
+        setToolbarFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS)
 
         recyclerViewHelper.setRecyclerViewWithLiveData(
             binding.fragHomeRVRecentEntries,
