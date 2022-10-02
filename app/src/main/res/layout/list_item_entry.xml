@@ -44,6 +44,7 @@
 
         <TextView
             android:id="@+id/list_item_entry_TV_title"
+            style="@style/TextAppearance.Sunrise.TitleSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -54,6 +55,7 @@
 
         <TextView
             android:id="@+id/list_item_entry_TV_content"
+            style="@style/TextAppearance.Sunrise.BodySmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
