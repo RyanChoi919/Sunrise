@@ -6,14 +6,13 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
 import com.nodes.sunrise.db.AppRepository
 import com.nodes.sunrise.db.entity.Entry
-import com.nodes.sunrise.db.entity.EntryFactory
 import com.nodes.sunrise.ui.BaseViewModel
 import kotlinx.coroutines.launch
 
 class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(repository) {
 
     var textCount = ObservableField("0")
-    var currentEntry = ObservableField(EntryFactory.create())
+    var currentEntry = ObservableField(Entry())
     lateinit var prevEntry: Entry
     var isPrevEntrySet = false
 

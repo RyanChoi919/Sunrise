@@ -20,11 +20,3 @@ data class Entry(
     var weatherInfo: WeatherInfo? = null,
     var photos: List<Uri> = emptyList()
 ) : Serializable
-
-class EntryFactory {
-    companion object {
-        fun create(): Entry {
-            return Entry()
-        }
-    }
-}
