@@ -1,5 +1,13 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory app:title="프리미엄">
+
+        <Preference
+            app:key="@string/pref_key_premium"
+            app:title="프리미엄 기능 구매" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="보기">
 
         <ListPreference
@@ -9,6 +17,15 @@
             app:key="@string/pref_theme_key"
             app:title="@string/pref_theme_title"
             app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:key="@string/pref_key_font"
+            app:summary="나눔명조"
+            app:title="폰트" />
+
+        <Preference
+            app:key="@string/pref_key_background_color"
+            app:title="배경색" />
 
     </PreferenceCategory>
 

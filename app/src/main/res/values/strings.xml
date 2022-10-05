@@ -122,4 +122,9 @@
     <string name="frag_settings_version_info_copyright">Copyright 2022%s. Nodes.inc. All rights reserved.</string>
     <string name="frag_settings_version_info_version">현재버전: %s</string>
     <string name="frag_settings_version_info_title">버전 정보</string>
+    <string name="pref_key_premium">pref_key_premium</string>
+    <string name="frag_purchase_description">SUNRISE는 기본적으로 무료로 사용이 가능합니다.\n\n 더 나은 일기장 작성 경험을 원하신다면\n아래 프리미엄 기능을 추가해보세요.\n\n프리미엄 기능은 계속해서 추가될 예정입니다.</string>
+    <string name="frag_purchase_title">프리미엄 기능 구매</string>
+    <string name="pref_key_font">pref_key_font</string>
+    <string name="pref_key_background_color">pref_key_background_color</string>
 </resources>

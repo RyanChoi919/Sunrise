@@ -55,4 +55,8 @@ open class NavigationHelper(val navController: NavController) {
     fun navigateToSettingsVersionInfoFragment() {
         navController.navigate(R.id.nav_settings_version_info)
     }
+
+    fun navigateToPurchaseFragment() {
+        navController.navigate(R.id.nav_purchase)
+    }
 }

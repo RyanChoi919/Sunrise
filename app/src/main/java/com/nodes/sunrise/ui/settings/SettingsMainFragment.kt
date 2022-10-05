@@ -76,6 +76,7 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
         val keyList = ArrayList<String>().apply {
             add(PrefKeys.OSS_LICENSES.getKeyString(requireContext()))
             add(PrefKeys.VERSION_INFO.getKeyString(requireContext()))
+            add(PrefKeys.PREMIUM.getKeyString(requireContext()))
         }
 
         val prefList = generatePreferenceListFromPrefKeyList(keyList)
@@ -144,6 +145,10 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
             }
             PrefKeys.VERSION_INFO.getKeyString(requireContext()) -> {
                 NavigationHelper(findNavController()).navigateToSettingsVersionInfoFragment()
+                true
+            }
+            PrefKeys.PREMIUM.getKeyString(requireContext()) -> {
+                NavigationHelper(findNavController()).navigateToPurchaseFragment()
                 true
             }
             else -> {

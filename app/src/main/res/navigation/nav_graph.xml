@@ -74,4 +74,12 @@
             android:name="@string/arg_show_fab"
             android:defaultValue="false" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_purchase"
+        android:name="com.nodes.sunrise.ui.purchases.PurchaseFragment"
+        tools:layout="@layout/fragment_purchase">
+        <argument
+            android:name="@string/arg_show_fab"
+            android:defaultValue="false" />
+    </fragment>
 </navigation>
