@@ -12,6 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.nodes.sunrise.components.helpers.NavigationHelper
 import com.nodes.sunrise.components.helpers.NotificationHelper
 import com.nodes.sunrise.components.helpers.SharedPreferenceHelper
@@ -83,6 +85,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         with(notificationHelper) {
             createNotificationChannels()
         }
+
+        // Google 모바일 광고 SDK 초기화
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
     }
 
     override fun onClick(p0: View?) {

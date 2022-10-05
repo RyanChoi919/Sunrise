@@ -104,4 +104,7 @@ dependencies {
 
     // open source notices
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
+
+    // ads
+    implementation 'com.google.android.gms:play-services-ads:21.2.0'
 }
