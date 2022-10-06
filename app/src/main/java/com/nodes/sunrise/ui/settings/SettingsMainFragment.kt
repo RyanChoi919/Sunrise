@@ -73,10 +73,10 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
     }
 
     private fun setOnClickListeners() {
-        val keyList = ArrayList<String>().apply {
-            add(PrefKeys.OSS_LICENSES.getKeyString(requireContext()))
-            add(PrefKeys.VERSION_INFO.getKeyString(requireContext()))
-            add(PrefKeys.PREMIUM.getKeyString(requireContext()))
+        val keyList = ArrayList<PrefKeys>().apply {
+            add(PrefKeys.OSS_LICENSES)
+            add(PrefKeys.VERSION_INFO)
+            add(PrefKeys.PREMIUM)
         }
 
         val prefList = generatePreferenceListFromPrefKeyList(keyList)
@@ -87,8 +87,8 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
     }
 
     private fun setOnChangeListeners() {
-        val keyList = ArrayList<String>().apply {
-            add(PrefKeys.NOTIFICATION_DOW.getKeyString(requireContext()))
+        val keyList = ArrayList<PrefKeys>().apply {
+            add(PrefKeys.NOTIFICATION_DOW)
         }
 
         val prefList = generatePreferenceListFromPrefKeyList(keyList)
@@ -137,17 +137,17 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
     }
 
     override fun onPreferenceClick(preference: Preference): Boolean {
-        return when (preference.key) {
-            PrefKeys.OSS_LICENSES.getKeyString(requireContext()) -> {
+        return when (PrefKeys.getPrefKeysFromKeyString(requireContext(), preference.key)) {
+            PrefKeys.OSS_LICENSES -> {
                 startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
                 OssLicensesMenuActivity.setActivityTitle(getString(R.string.act_oss_licenses_menu_title))
                 true
             }
-            PrefKeys.VERSION_INFO.getKeyString(requireContext()) -> {
+            PrefKeys.VERSION_INFO -> {
                 NavigationHelper(findNavController()).navigateToSettingsVersionInfoFragment()
                 true
             }
-            PrefKeys.PREMIUM.getKeyString(requireContext()) -> {
+            PrefKeys.PREMIUM -> {
                 NavigationHelper(findNavController()).navigateToPurchaseFragment()
                 true
             }
@@ -158,8 +158,8 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
     }
 
     override fun onPreferenceChange(preference: Preference, newValue: Any?): Boolean {
-        return when (preference.key) {
-            PrefKeys.NOTIFICATION_DOW.getKeyString(requireContext()) -> {
+        return when (PrefKeys.getPrefKeysFromKeyString(requireContext(), preference.key)) {
+            PrefKeys.NOTIFICATION_DOW -> {
                 val values: ArrayList<String> = ArrayList()
 
                 if (newValue is Set<*>) {
@@ -179,10 +179,10 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
         }
     }
 
-    private fun generatePreferenceListFromPrefKeyList(keyList: ArrayList<String>): ArrayList<Preference> {
+    private fun generatePreferenceListFromPrefKeyList(keyList: ArrayList<PrefKeys>): ArrayList<Preference> {
         return ArrayList<Preference>().apply {
             for (key in keyList) {
-                val pref = findPreference<Preference>(key)
+                val pref = findPreference<Preference>(key.getKeyString(requireContext()))
                 if (pref != null) {
                     add(pref)
                 }

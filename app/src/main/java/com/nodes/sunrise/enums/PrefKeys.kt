@@ -3,6 +3,7 @@ package com.nodes.sunrise.enums
 import android.content.Context
 import androidx.annotation.StringRes
 import com.nodes.sunrise.R
+import java.io.IOException
 
 enum class PrefKeys(@StringRes private val keyResId: Int) {
     THEME(R.string.pref_theme_key),
@@ -15,5 +16,17 @@ enum class PrefKeys(@StringRes private val keyResId: Int) {
 
     fun getKeyString(context: Context): String {
         return context.getString(keyResId)
+    }
+
+    companion object {
+        fun getPrefKeysFromKeyString(context: Context, keyString: String): PrefKeys? {
+            return try {
+                values().asList().stream().filter { key -> key.getKeyString(context) == keyString }
+                    .findFirst().get()
+            } catch (e: IOException) {
+                e.printStackTrace()
+                null
+            }
+        }
     }
 }
