@@ -6,42 +6,32 @@
     <style name="TextAppearance.Sunrise" />
 
     <style name="TextAppearance.Sunrise.AppBarTitle" parent="TextAppearance.Material3.TitleLarge">
-        <item name="fontFamily">@font/nanum_gothic_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.Sunrise.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
-        <item name="fontFamily">@font/nanum_myeongjo_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.Sunrise.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
-        <item name="fontFamily">@font/nanum_myeongjo_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.Sunrise.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
-        <item name="fontFamily">@font/nanum_myeongjo_bold</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.Sunrise.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
-        <item name="fontFamily">@font/nanum_myeongjo_extrabold</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.Sunrise.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
-        <item name="fontFamily">@font/nanum_myeongjo</item>
-    </style>
+    <style name="TextAppearance.Sunrise.BodyLarge" parent="TextAppearance.Material3.BodyLarge" />
 
-    <style name="TextAppearance.Sunrise.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
-        <item name="fontFamily">@font/nanum_myeongjo</item>
-    </style>
+    <style name="TextAppearance.Sunrise.BodyMedium" parent="TextAppearance.Material3.BodyMedium" />
 
-    <style name="TextAppearance.Sunrise.BodySmall" parent="TextAppearance.Material3.BodySmall">
-        <item name="fontFamily">@font/nanum_myeongjo</item>
-    </style>
+    <style name="TextAppearance.Sunrise.BodySmall" parent="TextAppearance.Material3.BodySmall" />
 
-    <style name="TextAppearance.Sunrise.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
-        <item name="fontFamily">@font/nanum_myeongjo</item>
-    </style>
+    <style name="TextAppearance.Sunrise.LabelSmall" parent="TextAppearance.Material3.LabelSmall" />
 
-    <style name="TextAppearance.Sunrise.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
-        <item name="fontFamily">@font/nanum_myeongjo</item>
-    </style>
+    <style name="TextAppearance.Sunrise.LabelMedium" parent="TextAppearance.Material3.LabelMedium" />
 </resources>

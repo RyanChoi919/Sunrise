@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.settings.SettingsFontFragment">
+
+    <include
+        android:id="@+id/frag_settings_font_TB"
+        layout="@layout/component_toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingVertical="@dimen/screen_vertical_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+                        android:layout_marginTop="16dp"
+                        android:drawablePadding="4dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/sample_entry_write_challenge_name_with_title"
+                        android:textAppearance="@style/TextAppearance.Sunrise.LabelSmall"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:drawableEndCompat="@drawable/ic_round_highlight_off_16" />
+
+                    <TextView
+                        android:id="@+id/frag_entry_read_TV_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+                        android:layout_marginTop="8dp"
+                        android:text="@{viewModel.currentEntry.title}"
+                        android:textAppearance="@style/TextAppearance.Sunrise.TitleMedium"
+                        tools:text="@string/sample_title" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+                        android:layout_marginTop="8dp"
+                        android:text="@{viewModel.currentEntry.content}"
+                        android:textAppearance="@style/TextAppearance.Sunrise.BodyMedium"
+                        tools:text="@string/sample_content" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/frag_entry_read_TV_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="4dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/sample_location"
+                            android:textAppearance="@style/TextAppearance.Sunrise.LabelSmall"
+                            app:drawableStartCompat="@drawable/ic_round_location_on_24"
+                            app:drawableTint="?attr/colorOutline" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <RadioGroup
+                android:id="@+id/frag_settings_font_RG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
+                android:layout_marginTop="32dp">
+
+                <RadioButton
+                    android:id="@+id/frag_settings_font_RB_nanum_myeongjo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/frag_settings_font_nanum_myeongjo"
+                    app:fontFamily="@font/nanum_myeongjo" />
+
+                <RadioButton
+                    android:id="@+id/frag_settings_font_RB_nanum_gothic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/frag_settings_font_nanum_gothic"
+                    app:fontFamily="@font/nanum_gothic" />
+
+                <RadioButton
+                    android:id="@+id/frag_settings_font_RB_gamja_flower"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/frag_settings_font_gamja_flower"
+                    app:fontFamily="@font/gamja_flower" />
+
+                <RadioButton
+                    android:id="@+id/frag_settings_font_RB_single_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/frag_settings_font_single_day"
+                    app:fontFamily="@font/single_day" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

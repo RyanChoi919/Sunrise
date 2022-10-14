@@ -27,14 +27,10 @@
         <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
         <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
-        <!-- Default fontFamily-->
-        <item name="android:fontFamily">@font/nanum_myeongjo</item>
-        <item name="fontFamily">@font/nanum_myeongjo</item>
         <!-- Preference -->
         <item name="preferenceTheme">@style/Theme.Sunrise.PreferenceTheme</item>
-    </style>
 
-    <style name="Theme.Sunrise.NoActionBar">
+        <!-- No ActionBar-->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -52,11 +48,30 @@
         <item name="android:listPreferredItemPaddingEnd">@dimen/screen_horizontal_margin</item>
     </style>
 
-    <style name="Theme.Sunrise.OssLicences" parent="Theme.Sunrise">
-        <item name="windowActionBar">true</item>
-        <item name="windowNoTitle">false</item>
-
+    <style name="Theme.Sunrise.OssLicences">
         <item name="android:fontFamily">@font/nanum_myeongjo</item>
         <item name="fontFamily">@font/nanum_myeongjo</item>
+    </style>
+
+    <style name="Theme.Sunrise.Font"/>
+
+    <style name="Theme.Sunrise.Font.NanumMyeongjo">
+        <item name="fontFamily">@font/nanum_myeongjo</item>
+        <item name="android:fontFamily">@font/nanum_myeongjo</item>
+    </style>
+
+    <style name="Theme.Sunrise.Font.NanumGothic">
+        <item name="fontFamily">@font/nanum_gothic</item>
+        <item name="android:fontFamily">@font/nanum_gothic</item>
+    </style>
+
+    <style name="Theme.Sunrise.Font.GamjaFlower">
+        <item name="fontFamily">@font/gamja_flower</item>
+        <item name="android:fontFamily">@font/gamja_flower</item>
+    </style>
+
+    <style name="Theme.Sunrise.Font.SingleDay">
+        <item name="fontFamily">@font/single_day</item>
+        <item name="android:fontFamily">@font/single_day</item>
     </style>
 </resources>

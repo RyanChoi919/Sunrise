@@ -73,14 +73,18 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
     }
 
     private fun setOnClickListeners() {
+        // OnClickListener를 붙일 Preference의 PrefKeyList 생성
         val keyList = ArrayList<PrefKeys>().apply {
             add(PrefKeys.OSS_LICENSES)
             add(PrefKeys.VERSION_INFO)
             add(PrefKeys.PREMIUM)
+            add(PrefKeys.FONT)
         }
 
+        // keyList를 ArrayList<Preference>로 변환
         val prefList = generatePreferenceListFromPrefKeyList(keyList)
 
+        // 각 Preference에 onPreferenceClickListener를 attach
         for (pref in prefList) {
             pref.onPreferenceClickListener = this
         }
@@ -149,6 +153,10 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
             }
             PrefKeys.PREMIUM -> {
                 NavigationHelper(findNavController()).navigateToPurchaseFragment()
+                true
+            }
+            PrefKeys.FONT -> {
+                NavigationHelper(findNavController()).navigateToSettingsFontFragment()
                 true
             }
             else -> {

@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         applyCurrentThemeMode()
+        applyCurrentFontSetting()
 
         super.onCreate(savedInstanceState)
 
@@ -144,5 +145,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM)
             }
         }
+    }
+
+    private fun applyCurrentFontSetting() {
+        val prefHelper = SharedPreferenceHelper(this)
+        val currentFont = prefHelper.getSavedFont()
+        val fontStyle = when(currentFont) {
+            R.font.nanum_gothic -> R.style.Theme_Sunrise_Font_NanumGothic
+            R.font.gamja_flower -> R.style.Theme_Sunrise_Font_GamjaFlower
+            R.font.single_day -> R.style.Theme_Sunrise_Font_SingleDay
+            else -> R.style.Theme_Sunrise_Font_NanumMyeongjo
+        }
+
+        theme.applyStyle(fontStyle, true)
     }
 }

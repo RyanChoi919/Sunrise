@@ -127,4 +127,9 @@
     <string name="frag_purchase_title">프리미엄 기능 구매</string>
     <string name="pref_key_font">pref_key_font</string>
     <string name="pref_key_background_color">pref_key_background_color</string>
+    <string name="frag_settings_font_title">서체</string>
+    <string name="frag_settings_font_nanum_myeongjo">나눔명조</string>
+    <string name="frag_settings_font_nanum_gothic">나눔고딕</string>
+    <string name="frag_settings_font_gamja_flower">감자꽃</string>
+    <string name="frag_settings_font_single_day">싱글 데이</string>
 </resources>

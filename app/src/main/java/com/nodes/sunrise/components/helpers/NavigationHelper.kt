@@ -59,4 +59,8 @@ open class NavigationHelper(val navController: NavController) {
     fun navigateToPurchaseFragment() {
         navController.navigate(R.id.nav_purchase)
     }
+
+    fun navigateToSettingsFontFragment() {
+        navController.navigate(R.id.nav_settings_font)
+    }
 }

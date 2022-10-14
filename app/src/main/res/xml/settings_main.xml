@@ -21,7 +21,7 @@
         <Preference
             app:key="@string/pref_key_font"
             app:summary="나눔명조"
-            app:title="폰트" />
+            app:title="서체" />
 
         <Preference
             app:key="@string/pref_key_background_color"

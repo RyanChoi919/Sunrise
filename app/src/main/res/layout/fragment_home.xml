@@ -20,8 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            app:elevation="0dp"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            app:elevation="0dp">
 
             <include
                 android:id="@+id/frag_home_TB"

@@ -13,6 +13,7 @@ import com.nodes.sunrise.components.utils.DateUtil
 import com.nodes.sunrise.databinding.ComponentToolbarBinding
 import java.time.LocalDateTime
 
+
 abstract class BaseFragment : Fragment() {
     val TAG = "LOG_TAG:" + this::class.java.simpleName
 
@@ -48,10 +49,12 @@ abstract class BaseFragment : Fragment() {
 
     fun createMenu(
         toolbar: Toolbar,
-        menuRes: Int,
+        menuRes: Int?,
         onMenuItemClickListener: Toolbar.OnMenuItemClickListener
     ) {
-        toolbar.inflateMenu(menuRes)
+        if (menuRes != null) {
+            toolbar.inflateMenu(menuRes)
+        }
         toolbar.setOnMenuItemClickListener(onMenuItemClickListener)
     }
 

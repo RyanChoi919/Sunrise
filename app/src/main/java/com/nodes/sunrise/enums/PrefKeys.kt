@@ -7,6 +7,7 @@ import java.io.IOException
 
 enum class PrefKeys(@StringRes private val keyResId: Int) {
     THEME(R.string.pref_theme_key),
+    FONT(R.string.pref_key_font),
     NOTIFICATION_ENABLED(R.string.pref_notification_enabled_key),
     NOTIFICATION_DOW(R.string.pref_notification_dow_key),
     NOTIFICATION_TIME(R.string.pref_notification_time_key),

@@ -14,8 +14,11 @@ class SharedPreferenceHelper(val context: Context) {
     private val keyNotificationEnabled: String = getString(R.string.pref_notification_enabled_key)
     private val keyNotificationDow: String = getString(R.string.pref_notification_dow_key)
     private val keyNotificationTime: String = getString(R.string.pref_notification_time_key)
-    private val keyShouldEnableTitleByDefault: String = getString(R.string.pref_key_enable_title_by_default)
-    private val keyShouldAddLocationByDefault: String = getString(R.string.pref_key_add_location_by_default)
+    private val keyShouldEnableTitleByDefault: String =
+        getString(R.string.pref_key_enable_title_by_default)
+    private val keyShouldAddLocationByDefault: String =
+        getString(R.string.pref_key_add_location_by_default)
+    private val keyFont: String = getString(R.string.pref_key_font)
 
     fun getSavedChallengeId(): Int? {
         val id = sharedPref.getInt(challengeIdKey, -1)
@@ -31,6 +34,13 @@ class SharedPreferenceHelper(val context: Context) {
         with(sharedPref.edit()) {
             putInt(challengeIdKey, challenge.challengeId)
             putLong(challengeDateKey, LocalDate.now().toEpochDay())
+            apply()
+        }
+    }
+
+    fun saveFont(fontResId: Int) {
+        with(sharedPref.edit()) {
+            putInt(keyFont, fontResId)
             apply()
         }
     }
@@ -63,6 +73,10 @@ class SharedPreferenceHelper(val context: Context) {
 
     fun getSavedShouldAddLocationByDefault(): Boolean {
         return sharedPref.getBoolean(keyShouldAddLocationByDefault, true)
+    }
+
+    fun getSavedFont(): Int {
+        return sharedPref.getInt(keyFont, R.font.nanum_myeongjo)
     }
 
     private fun getString(resId: Int): String {
