@@ -9,14 +9,14 @@
 
     <TextView
         android:id="@+id/list_item_entry_group_TV_month"
-        style="@style/TextAppearance.Sunrise.TitleSmall"
+        android:textAppearance="@style/TextAppearance.Sunrise.TitleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="7월" />
 
     <TextView
         android:id="@+id/list_item_entry_group_TV_year"
-        style="@style/TextAppearance.Sunrise.LabelSmall"
+        android:textAppearance="@style/TextAppearance.Sunrise.LabelSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

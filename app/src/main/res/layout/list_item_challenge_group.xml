@@ -22,14 +22,14 @@
 
     <TextView
         android:id="@+id/list_item_challenge_category_TV_name"
-        style="@style/TextAppearance.Sunrise.LabelMedium"
+        android:textAppearance="@style/TextAppearance.Sunrise.LabelMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="용기를 찾는 도전과제들" />
 
     <TextView
         android:id="@+id/list_item_challenge_category_TV_count"
-        style="@style/TextAppearance.Sunrise.LabelSmall"
+        android:textAppearance="@style/TextAppearance.Sunrise.LabelSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

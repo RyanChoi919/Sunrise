@@ -30,7 +30,7 @@
 
         <TextView
             android:id="@+id/frag_challenge_check_TV_title"
-            style="@style/TextAppearance.Sunrise.HeadlineSmall"
+            android:textAppearance="@style/TextAppearance.Sunrise.HeadlineSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="128dp"
@@ -54,7 +54,7 @@
 
         <TextView
             android:id="@+id/frag_challenge_check_TV_today_challenge_subtitle"
-            style="@style/TextAppearance.Sunrise.LabelMedium"
+            android:textAppearance="@style/TextAppearance.Sunrise.LabelMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -66,7 +66,7 @@
 
         <TextView
             android:id="@+id/frag_challenge_check_TV_today_challenge"
-            style="@style/TextAppearance.Sunrise.TitleMedium"
+            android:textAppearance="@style/TextAppearance.Sunrise.TitleMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -95,7 +95,7 @@
 
         <TextView
             android:id="@+id/frag_challenge_check_TV_success_button_label"
-            style="@style/TextAppearance.Sunrise.LabelMedium"
+            android:textAppearance="@style/TextAppearance.Sunrise.LabelMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -122,7 +122,7 @@
 
         <TextView
             android:id="@+id/frag_challenge_check_TV_fail_button_label"
-            style="@style/TextAppearance.Sunrise.LabelMedium"
+            android:textAppearance="@style/TextAppearance.Sunrise.LabelMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -149,7 +149,7 @@
 
         <TextView
             android:id="@+id/frag_challenge_check_TV_postpone_button_label"
-            style="@style/TextAppearance.Sunrise.LabelMedium"
+            android:textAppearance="@style/TextAppearance.Sunrise.LabelMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

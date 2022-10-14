@@ -14,7 +14,7 @@
 
         <TextView
             android:id="@+id/list_item_purchase_item_TV_name"
-            style="@style/TextAppearance.Sunrise.TitleMedium"
+            android:textAppearance="@style/TextAppearance.Sunrise.TitleMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -23,7 +23,7 @@
 
         <TextView
             android:id="@+id/list_item_purchase_item_TV_description"
-            style="@style/TextAppearance.Sunrise.BodyMedium"
+            android:textAppearance="@style/TextAppearance.Sunrise.BodyMedium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

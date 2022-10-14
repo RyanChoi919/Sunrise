@@ -17,14 +17,14 @@
 
         <TextView
             android:id="@+id/list_item_entry_TV_date"
-            style="@style/TextAppearance.Sunrise.BodyLarge"
+            android:textAppearance="@style/TextAppearance.Sunrise.BodyLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="25" />
 
         <TextView
             android:id="@+id/list_item_entry_TV_day_of_week"
-            style="@style/TextAppearance.Sunrise.BodySmall"
+            android:textAppearance="@style/TextAppearance.Sunrise.BodySmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="?attr/colorOutline"
@@ -44,18 +44,17 @@
 
         <TextView
             android:id="@+id/list_item_entry_TV_title"
-            style="@style/TextAppearance.Sunrise.TitleSmall"
+            android:textAppearance="@style/TextAppearance.Sunrise.TitleSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:ellipsize="end"
-            android:fontFamily="@font/nanum_myeongjo_bold"
             android:maxLines="1"
             tools:text="@string/sample_title" />
 
         <TextView
             android:id="@+id/list_item_entry_TV_content"
-            style="@style/TextAppearance.Sunrise.BodySmall"
+            android:textAppearance="@style/TextAppearance.Sunrise.BodySmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"

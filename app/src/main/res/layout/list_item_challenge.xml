@@ -37,14 +37,14 @@
 
             <TextView
                 android:id="@+id/list_item_challenge_TV_challenge_name"
-                style="@style/TextAppearance.Sunrise.TitleSmall"
+                android:textAppearance="@style/TextAppearance.Sunrise.TitleSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="힘들 때 힘들다고 말하기" />
 
             <TextView
                 android:id="@+id/list_item_challenge_TV_recent_success_date"
-                style="@style/TextAppearance.Sunrise.BodySmall"
+                android:textAppearance="@style/TextAppearance.Sunrise.BodySmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"

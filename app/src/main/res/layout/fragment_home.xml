@@ -43,12 +43,12 @@
 
                 <TextView
                     android:id="@+id/frag_home_TV_title"
-                    style="@style/TextAppearance.Sunrise.HeadlineSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/screen_horizontal_margin"
                     android:layout_marginTop="@dimen/screen_vertical_margin"
                     android:text="@string/sample_home_title"
+                    android:textAppearance="@style/TextAppearance.Sunrise.HeadlineSmall"
                     android:textColor="?attr/colorOnBackground" />
 
                 <TextClock
@@ -58,6 +58,7 @@
                     android:layout_marginStart="@dimen/screen_horizontal_margin"
                     android:layout_marginTop="8dp"
                     android:format12Hour=""
+                    android:textAppearance="@style/TextAppearance.Sunrise.BodyMedium"
                     android:textColor="?attr/colorOnBackground"
                     tools:text="2022년 7월 27일 일요일 22:29" />
 

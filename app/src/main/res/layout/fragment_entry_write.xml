@@ -39,7 +39,7 @@
 
                 <EditText
                     android:id="@+id/frag_entry_write_ET_title"
-                    style="@style/TextAppearance.Sunrise.TitleMedium"
+                    android:textAppearance="@style/TextAppearance.Sunrise.TitleMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
@@ -52,7 +52,7 @@
 
                 <EditText
                     android:id="@+id/frag_entry_write_ET_content"
-                    style="@style/TextAppearance.Sunrise.BodyMedium"
+                    android:textAppearance="@style/TextAppearance.Sunrise.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
@@ -131,7 +131,7 @@
 
         <TextView
             android:id="@+id/frag_entry_write_TV_text_count"
-            style="@style/TextAppearance.Sunrise.BodySmall"
+            android:textAppearance="@style/TextAppearance.Sunrise.BodySmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/screen_horizontal_margin"

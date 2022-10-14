@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/toolbar_title_large"
-            style="@style/TextAppearance.Sunrise.AppBarTitle"
+            android:textAppearance="@style/TextAppearance.Sunrise.AppBarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -26,7 +26,7 @@
 
         <TextView
             android:id="@+id/toolbar_title_small"
-            style="@style/TextAppearance.Sunrise.TitleMedium"
+            android:textAppearance="@style/TextAppearance.Sunrise.TitleMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -35,7 +35,7 @@
 
         <TextView
             android:id="@+id/toolbar_subtitle"
-            style="@style/TextAppearance.Sunrise.LabelMedium"
+            android:textAppearance="@style/TextAppearance.Sunrise.LabelMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

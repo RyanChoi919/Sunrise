@@ -18,7 +18,7 @@
 
         <TextView
             android:id="@+id/frag_challenge_select_TV_title"
-            style="@style/TextAppearance.Sunrise.HeadlineSmall"
+            android:textAppearance="@style/TextAppearance.Sunrise.HeadlineSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -37,14 +37,14 @@
 
             <TextView
                 android:id="@+id/frag_challenge_select_TV_note_1"
-                style="@style/TextAppearance.Sunrise.BodySmall"
+                android:textAppearance="@style/TextAppearance.Sunrise.BodySmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/frag_challenge_select_note_1" />
 
             <TextView
                 android:id="@+id/frag_challenge_select_TV_note_2"
-                style="@style/TextAppearance.Sunrise.BodySmall"
+                android:textAppearance="@style/TextAppearance.Sunrise.BodySmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="4dp"

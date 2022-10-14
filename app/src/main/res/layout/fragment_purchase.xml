@@ -22,7 +22,7 @@
 
             <TextView
                 android:id="@+id/frag_purchase_TV_title"
-                style="@style/TextAppearance.Sunrise.TitleLarge"
+                android:textAppearance="@style/TextAppearance.Sunrise.TitleLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="64dp"
@@ -33,7 +33,7 @@
 
             <TextView
                 android:id="@+id/frag_purchase_TV_description"
-                style="@style/TextAppearance.Sunrise.BodyMedium"
+                android:textAppearance="@style/TextAppearance.Sunrise.BodyMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/screen_horizontal_margin"

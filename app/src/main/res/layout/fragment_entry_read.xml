@@ -55,7 +55,7 @@
                 </FrameLayout>
 
                 <TextView
-                    style="@style/TextAppearance.Sunrise.LabelSmall"
+                    android:textAppearance="@style/TextAppearance.Sunrise.LabelSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
@@ -69,7 +69,7 @@
 
                 <TextView
                     android:id="@+id/frag_entry_read_TV_title"
-                    style="@style/TextAppearance.Sunrise.TitleMedium"
+                    android:textAppearance="@style/TextAppearance.Sunrise.TitleMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
@@ -78,7 +78,7 @@
                     tools:text="@string/sample_title" />
 
                 <TextView
-                    style="@style/TextAppearance.Sunrise.BodyMedium"
+                    android:textAppearance="@style/TextAppearance.Sunrise.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/screen_horizontal_margin"
@@ -95,7 +95,7 @@
 
                     <TextView
                         android:id="@+id/frag_entry_read_TV_location"
-                        style="@style/TextAppearance.Sunrise.LabelSmall"
+                        android:textAppearance="@style/TextAppearance.Sunrise.LabelSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawablePadding="4dp"
