@@ -1,8 +1,6 @@
 package com.nodes.sunrise.ui.entry.read
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,21 +9,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.nodes.sunrise.BaseApplication
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.helpers.NavigationHelper
 import com.nodes.sunrise.components.utils.LocationUtil
-import com.nodes.sunrise.components.utils.WeatherUtil
 import com.nodes.sunrise.databinding.FragmentEntryReadBinding
 import com.nodes.sunrise.db.entity.Entry
-import com.nodes.sunrise.enums.Unit
 import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
 import kotlinx.coroutines.launch
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class EntryReadFragment : BaseFragment(), View.OnClickListener {
@@ -123,7 +115,8 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
         with(binding) {
             if (viewModel!!.currentEntry.photos.isNotEmpty()) {
                 fragEntryReadFLPicture.visibility = View.VISIBLE
-                fragEntryReadIVPicture.setImageURI(viewModel!!.currentEntry.photos[0])
+                Glide.with(requireContext()).load(viewModel!!.currentEntry.photos[0])
+                    .into(fragEntryReadIVPicture)
                 fragEntryReadIVMultiplePhotosIcon.visibility =
                     if (viewModel!!.currentEntry.photos.size > 1) {
                         View.VISIBLE
