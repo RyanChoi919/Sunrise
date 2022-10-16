@@ -16,6 +16,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.helpers.NavigationHelper
+import com.nodes.sunrise.components.helpers.SharedPreferenceHelper
 import com.nodes.sunrise.components.preferences.TimePickerPreference
 import com.nodes.sunrise.components.preferences.TimePickerPreferenceDialogFragmentCompat
 import com.nodes.sunrise.databinding.FragmentSettingsMainBinding
@@ -34,7 +35,7 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        setDefaultValues()
+        setCustomSummary()
 
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -198,10 +199,25 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
         }
     }
 
-    private fun setDefaultValues() {
-        val pref = findPreference<MultiSelectListPreference>(
+    private fun setCustomSummary() {
+        val dowPreference = findPreference<MultiSelectListPreference>(
             PrefKeys.NOTIFICATION_DOW.getKeyString(requireContext())
-        )!!
-        pref.setSummaryFromValues(pref.values)
+        )
+
+        dowPreference?.setSummaryFromValues(dowPreference.values)
+
+        findPreference<Preference>(
+            PrefKeys.FONT.getKeyString(requireContext())
+        )!!.summaryProvider = Preference.SummaryProvider<Preference> {
+            val savedFont = SharedPreferenceHelper(requireContext()).getSavedFont()
+            getString(
+                when (savedFont) {
+                    R.font.nanum_gothic -> R.string.frag_settings_font_nanum_gothic
+                    R.font.gamja_flower -> R.string.frag_settings_font_gamja_flower
+                    R.font.single_day -> R.string.frag_settings_font_single_day
+                    else -> R.string.frag_settings_font_nanum_myeongjo
+                }
+            )
+        }
     }
 }
