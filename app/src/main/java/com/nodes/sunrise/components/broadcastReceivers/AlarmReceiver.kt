@@ -22,6 +22,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
         if (dowBooleanArray != null) {
             val shouldNotify = dowBooleanArray[LocalDate.now().dayOfWeek.ordinal]
+            Log.d(TAG, "onReceive: shouldNotify = $shouldNotify")
             if (shouldNotify) {
                 NotificationHelper(context!!).notifyToWriteEntry()
             }

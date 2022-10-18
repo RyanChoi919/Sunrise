@@ -14,10 +14,10 @@ import com.nodes.sunrise.MainActivity
 import com.nodes.sunrise.R
 import com.nodes.sunrise.components.broadcastReceivers.AlarmReceiver
 import com.nodes.sunrise.enums.NotiChannel
-import java.io.Serializable
 import java.time.DayOfWeek
-import java.time.LocalTime
-import java.util.*
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class NotificationHelper(val context: Context) {
 
@@ -67,17 +67,35 @@ class NotificationHelper(val context: Context) {
 
         with(sharedPreferenceHelper) {
             val isNotificationEnabled = getSavedNotificationEnabled()
+            Log.d(TAG, "setNotificationRepeating: isNotificationEnabled = $isNotificationEnabled")
+
             if (isNotificationEnabled) {
-                val secondsOfSelectedTime = getSavedNotificationStartSecondOfDay()
-                if (secondsOfSelectedTime != null) {
+                val selectedSecondsOfDay = getSavedNotificationStartSecondOfDay()
+                if (selectedSecondsOfDay != null) {
+                    val selectedHour = selectedSecondsOfDay / 3600
+                    val selectedMinute = selectedSecondsOfDay % 3600 / 60
+                    Log.d(
+                        TAG,
+                        "setNotificationRepeating: selectedHourAndMinute = $selectedHour : $selectedMinute"
+                    )
+
                     // 요일 및 시간 값 변형
-                    var millisOfSelectedTime = secondsOfSelectedTime * 1000L
+                    var selectedDateTime =
+                        LocalDateTime.now().withHour(selectedHour).withMinute(selectedMinute)
+                            .withSecond(0).withNano(0)
 
                     // 알림 설정 시간이 현재 시간보다 이전인 경우, 다음날 알림이 울리도록 설정
-                    val millisOfCurrentTime = LocalTime.now().toSecondOfDay() * 1000L
-                    if (millisOfCurrentTime > millisOfSelectedTime) {
-                        millisOfSelectedTime += AlarmManager.INTERVAL_DAY
+                    val isBeforeCurrent = selectedDateTime.isBefore(LocalDateTime.now())
+                    Log.d(TAG, "setNotificationRepeating: isBeforeCurrent? = $isBeforeCurrent")
+                    if (isBeforeCurrent) {
+                        selectedDateTime = selectedDateTime.plusDays(1)
+                        Log.d(TAG, "setNotificationRepeating: selectedDateTime = $selectedDateTime")
                     }
+
+                    val millis =
+                        ZonedDateTime.of(selectedDateTime, ZoneId.systemDefault()).toInstant()
+                            .toEpochMilli()
+                    Log.d(TAG, "setNotificationRepeating: millis = $millis")
 
                     // 알람 매니저 인스턴스 생성
                     val alarmManager =
@@ -89,7 +107,7 @@ class NotificationHelper(val context: Context) {
                     // 알람 매니저에 Repeating 정보 등록
                     alarmManager.setRepeating(
                         AlarmManager.RTC_WAKEUP,
-                        millisOfSelectedTime,
+                        millis,
                         AlarmManager.INTERVAL_DAY,
                         pendingIntent
                     )
@@ -99,6 +117,7 @@ class NotificationHelper(val context: Context) {
     }
 
     fun updateNotificationRepeating() {
+        Log.d(TAG, "updateNotificationRepeating: called")
         cancelNotificationRepeating()
         setNotificationRepeating()
     }
@@ -108,12 +127,14 @@ class NotificationHelper(val context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         alarmManager.cancel(pendingIntent)
+        Log.d(TAG, "cancelNotificationRepeating: $pendingIntent has been canceled")
     }
 
     private fun createPendingIntentToFragment(
         destinationId: Int,
         args: Bundle? = null
     ): PendingIntent {
+        Log.d(TAG, "createPendingIntentToFragment: called")
         // using Navigation Component, can open a specific destination using NavDeepLinkBuilder
         return NavDeepLinkBuilder(context)
             .setComponentName(MainActivity::class.java)
@@ -125,6 +146,7 @@ class NotificationHelper(val context: Context) {
 
     private fun getDowBooleanArray(): BooleanArray {
         val selectedDowValue = SharedPreferenceHelper(context).getSavedNotificationDowValues()
+        Log.d(TAG, "getDowBooleanArray: selectedDowValue = $selectedDowValue")
         return convertDowValueSetToBooleanArray(selectedDowValue!!)
     }
 
