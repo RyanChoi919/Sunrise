@@ -138,30 +138,28 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener,
                 viewModel.currentEntry.set(entry.copy())
                 viewModel.prevEntry = entry.copy()
                 viewModel.isPrevEntrySet = true
+
+                // 제목 활성화 여부 확인 및 적용
+                binding.fragEntryWriteCBTitle.isChecked = entry.isTitleEnabled
+                // 위치 활성화 여부 확인 및 적용
+                binding.fragEntryWriteCBEntryPlace.isChecked =
+                    entry.latitude != null && entry.longitude != null
             } else {
                 isToCreateMode = true
 
+                /* Preference 기본값 설정 확인 */
                 val pref = SharedPreferenceHelper(requireContext())
-                val currentEntry = viewModel.currentEntry.get()!!
-
-                viewModel.currentEntry.set(currentEntry) // 변경사항 적용
-                Log.d(
-                    TAG,
-                    "onCreateView: viewModel.currentEntry = ${viewModel.currentEntry.get()!!}"
-                )
-
-                /* Preference 설정 확인 */
                 // 제목 자동 활성화 여부 확인 및 적용
                 binding.fragEntryWriteCBTitle.isChecked = pref.getSavedShouldEnableTitleByDefault()
                 // 위치 자동 추가 여부 확인 및 적용
                 binding.fragEntryWriteCBEntryPlace.isChecked =
                     pref.getSavedShouldAddLocationByDefault()
-
             }
-            setToolbarTitleWithDateTime(viewModel.currentEntry.get()!!.dateTime)
         }
 
-        /* 메뉴 설정 */
+        /* 툴바 및 메뉴 설정 */
+        setToolbarTitleWithDateTime(viewModel.currentEntry.get()!!.dateTime)
+
         val menuRes = if (isToCreateMode) {
             R.menu.frag_entry_write_menu_create
         } else {
@@ -260,7 +258,20 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener,
                 }
                 fragEntryWriteCBEntryPlace -> {
                     if (isChecked) {
-                        LocationUtil.getCurrentLocation(requireActivity(), onSuccessListener)
+                        val currentEntry = viewModel!!.currentEntry.get()!!
+                        val doesEntryHaveLocation = currentEntry.run {
+                            latitude != null && longitude != null
+                        }
+
+                        /* entry에 이미 입력된 location 정보가 없는 경우에만 location을 업데이트함.
+                        (기존 존재하는 entry를 수정하기 위해 EntryWriteFragment를 실행하는 경우,
+                        이미 기존 location이 있는데 CB가 checked 됨에 따라 새로운 Location을 받아오는 것을
+                        방지하기 위함.) */
+                        if (doesEntryHaveLocation) {
+                            // do nothing
+                        } else {
+                            LocationUtil.getCurrentLocation(requireActivity(), onSuccessListener)
+                        }
                     } else {
                         viewModel!!.removeEntryLocation()
                     }
