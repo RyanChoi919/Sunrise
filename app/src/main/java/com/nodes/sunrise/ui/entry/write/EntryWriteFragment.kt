@@ -7,10 +7,12 @@ import android.location.Location
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.CheckBox
+import android.widget.CompoundButton
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -28,9 +30,11 @@ import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
 import gun0912.tedimagepicker.builder.TedImagePicker
-import java.time.LocalDateTime
+import java.time.LocalDate
+import java.time.LocalTime
 
-class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
+class EntryWriteFragment() : BaseFragment(), View.OnClickListener,
+    CompoundButton.OnCheckedChangeListener {
 
     companion object {
         val KEY_ENTRY = this::class.java.simpleName + ".ENTRY"
@@ -39,23 +43,40 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
     private var _binding: FragmentEntryWriteBinding? = null
     private val binding get() = _binding!!
 
-    private var isToCreateMode = true
-
     private val viewModel: EntryWriteViewModel by viewModels {
         val repository = (requireActivity().application as BaseApplication).repository
         ViewModelFactory(repository)
     }
-
-    private val adapter = PhotoPreviewListAdapter()
-
+    private val photoPreviewListAdapter =
+        PhotoPreviewListAdapter(object : PhotoPreviewListAdapter.OnPhotoPreviewListEmptyListener {
+            override fun onListEmpty() {
+                binding.fragEntryWriteRVPictures.visibility = View.GONE
+                binding.fragEntryWriteCBEntryPicture.isChecked = false
+            }
+        })
     private val recyclerViewHelper: RecyclerViewHelper<EntryWriteViewModel> by lazy {
         RecyclerViewHelper(this, viewModel)
     }
-
     private val onSuccessListener = OnSuccessListener<Location> {
         viewModel.updateEntryLocation(it)
-        binding.fragEntryWriteMCBEntryPlace.isChecked = true
+        binding.fragEntryWriteCBEntryPlace.isChecked = true
 //        updateCurrentWeather()
+    }
+    private var isToCreateMode = true
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        /* handle on back pressed */
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (viewModel.isEntryModified()) {
+                    AlertDialogUtil.showEntryNotSavedAlertDialog(this@EntryWriteFragment)
+                } else {
+                    findNavController().popBackStack()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onCreateView(
@@ -64,48 +85,23 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
     ): View {
         _binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_entry_write, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
 
+        /* data binding 설정 */
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
+
+        /* Toolbar binding 설정 */
         setToolbarBinding(binding.fragEntryWriteTB)
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        /* Listeners 설정 */
         setOnClickListeners()
-
-        /* arguments 확인 및 viewModel 데이터 초기화 */
-        if (savedInstanceState == null && arguments != null) {
-            val entry = requireArguments().getSerializable(KEY_ENTRY) as Entry?
-
-            if (entry != null) {
-                isToCreateMode = false
-                viewModel.currentEntry.set(entry.copy())
-                viewModel.prevEntry = entry.copy()
-                viewModel.isPrevEntrySet = true
-            } else {
-                isToCreateMode = true
-
-                val pref = SharedPreferenceHelper(requireContext())
-                val currentEntry = viewModel.currentEntry.get()!!
-
-                // preference에서 제목 자동 활성화 여부 확인 및 적용
-                if (pref.getSavedShouldEnableTitleByDefault()) {
-                    currentEntry.isTitleEnabled = true
-                    binding.fragEntryWriteETTitle.visibility = View.VISIBLE
-                    binding.fragEntryWriteMCBTitle.isChecked = true
-                } else {
-                    currentEntry.isTitleEnabled = false
-                    binding.fragEntryWriteETTitle.visibility = View.GONE
-                    binding.fragEntryWriteMCBTitle.isChecked = false
-                }
-
-                viewModel.currentEntry.set(currentEntry) // 변경사항 적용
-
-                // preference에서 위치 자동 추가 여부 확인 및 적용
-                if (pref.getSavedShouldAddLocationByDefault()) {
-                    LocationUtil.getCurrentLocation(requireActivity(), onSuccessListener)
-                }
-            }
-            checkTitleEnabled()
-            setToolbarTitleWithDateTime(viewModel.currentEntry.get()!!.dateTime)
-        }
+        setOnCheckedChangedListeners()
 
         /* 콘텐츠 EditText의 글자 수를 카운트&표시하기 위한 TextWatcher 설정 */
         binding.fragEntryWriteETContent.addTextChangedListener(object : TextWatcher {
@@ -127,113 +123,45 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
             }
         })
 
+        /* 선택된 사진의 thumbnail을 보여주는 recycler view 초기화 */
         recyclerViewHelper.setRecyclerViewWithPictureUri(
-            binding.fragEntryWriteRVPictures, adapter, emptyList()
+            binding.fragEntryWriteRVPictures, photoPreviewListAdapter, emptyList()
         )
+        photoPreviewListAdapter.submitList(viewModel.currentEntry.get()!!.photos)
 
-        adapter.submitList(viewModel.currentEntry.get()!!.photos)
+        /* argument 확인 및 viewModel 데이터 초기화 */
+        if (savedInstanceState == null && arguments != null) {
+            val entry = requireArguments().getSerializable(KEY_ENTRY) as Entry?
 
-        /* data binding 변수 설정 */
-        binding.viewModel = viewModel
+            if (entry != null) {
+                isToCreateMode = false
+                viewModel.currentEntry.set(entry.copy())
+                viewModel.prevEntry = entry.copy()
+                viewModel.isPrevEntrySet = true
+            } else {
+                isToCreateMode = true
 
-        return binding.root
-    }
+                val pref = SharedPreferenceHelper(requireContext())
+                val currentEntry = viewModel.currentEntry.get()!!
 
-    private fun setOnClickListeners() {
-        val views = ArrayList<View>().apply {
-            with(binding) {
-                add(fragEntryWriteMCBEntryDate)
-                add(fragEntryWriteMCBEntryTime)
-                add(fragEntryWriteMCBTitle)
-                add(fragEntryWriteMCBEntryPlace)
-                add(fragEntryWriteMCBEntryPicture)
+                viewModel.currentEntry.set(currentEntry) // 변경사항 적용
+                Log.d(
+                    TAG,
+                    "onCreateView: viewModel.currentEntry = ${viewModel.currentEntry.get()!!}"
+                )
+
+                /* Preference 설정 확인 */
+                // 제목 자동 활성화 여부 확인 및 적용
+                binding.fragEntryWriteCBTitle.isChecked = pref.getSavedShouldEnableTitleByDefault()
+                // 위치 자동 추가 여부 확인 및 적용
+                binding.fragEntryWriteCBEntryPlace.isChecked =
+                    pref.getSavedShouldAddLocationByDefault()
+
             }
+            setToolbarTitleWithDateTime(viewModel.currentEntry.get()!!.dateTime)
         }
 
-        for (v in views) {
-            v.setOnClickListener(this@EntryWriteFragment)
-        }
-    }
-
-    override fun onClick(v: View?) {
-        with(binding) {
-            when (v) {
-                fragEntryWriteMCBEntryDate -> {
-                    val currentEntry = viewModel!!.currentEntry.get()!!
-                    DatePickerDialog(
-                        requireContext(), { _, y, m, d ->
-                            val newDateTime =
-                                LocalDateTime.from(currentEntry.dateTime).withYear(y)
-                                    .withMonth(m + 1)
-                                    .withDayOfMonth(d)
-                            currentEntry.dateTime = newDateTime
-                            setToolbarTitleWithDateTime(newDateTime)
-                            viewModel!!.currentEntry.set(currentEntry)
-                        },
-                        currentEntry.dateTime.year,
-                        currentEntry.dateTime.monthValue - 1, // DatePicker index는 0부터 시작
-                        currentEntry.dateTime.dayOfMonth
-                    ).show()
-                    fragEntryWriteMCBEntryDate.isChecked = true
-                }
-                fragEntryWriteMCBEntryTime -> {
-                    val currentEntry = viewModel!!.currentEntry.get()!!
-                    TimePickerDialog(context, { _, h, m ->
-                        val newDateTime =
-                            LocalDateTime.from(currentEntry.dateTime).withHour(h).withMinute(m)
-                        currentEntry.dateTime = newDateTime
-                        setToolbarTitleWithDateTime(newDateTime)
-                        viewModel!!.currentEntry.set(currentEntry)
-                    }, currentEntry.dateTime.hour, currentEntry.dateTime.minute, false).show()
-                    fragEntryWriteMCBEntryTime.isChecked = true
-                    setToolbarTitleWithDateTime(currentEntry.dateTime)
-                }
-                fragEntryWriteMCBTitle -> {
-                    val toastMessage: String
-                    val currentEntry = viewModel!!.currentEntry.get()!!
-                    currentEntry.isTitleEnabled = !currentEntry.isTitleEnabled
-
-                    if (currentEntry.isTitleEnabled) {
-                        fragEntryWriteETTitle.visibility = View.GONE
-                        toastMessage = getString(R.string.toast_message_title_disabled)
-                    } else {
-                        fragEntryWriteETTitle.visibility = View.VISIBLE
-                        toastMessage = getString(R.string.toast_message_title_enabled)
-                    }
-                    Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
-
-                    viewModel!!.currentEntry.set(currentEntry)
-                }
-                fragEntryWriteMCBEntryPlace -> {
-                    if (!fragEntryWriteMCBEntryPlace.isChecked) {
-                        viewModel!!.removeEntryLocation()
-                        fragEntryWriteMCBEntryPlace.isChecked = false
-                    } else {
-                        LocationUtil.getCurrentLocation(requireActivity(), onSuccessListener)
-                    }
-                }
-                fragEntryWriteMCBEntryPicture -> {
-                    TedImagePicker.with(requireContext())
-                        .selectedUri(adapter.currentList)
-                        .startMultiImage { uriList ->
-                            if (uriList.isEmpty()) {
-                                fragEntryWriteRVPictures.visibility = View.GONE
-                            } else {
-                                fragEntryWriteRVPictures.visibility = View.VISIBLE
-                            }
-                            adapter.submitList(uriList)
-                            val currentEntry = viewModel!!.currentEntry.get()!!
-                            currentEntry.photos = uriList
-                            viewModel!!.currentEntry.set(currentEntry)
-                        }
-                }
-            }
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+        /* 메뉴 설정 */
         val menuRes = if (isToCreateMode) {
             R.menu.frag_entry_write_menu_create
         } else {
@@ -263,36 +191,113 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        /* handle on back pressed */
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (viewModel.isEntryModified()) {
-                    AlertDialogUtil.showEntryNotSavedAlertDialog(this@EntryWriteFragment)
-                } else {
-                    findNavController().popBackStack()
-                }
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    private fun checkTitleEnabled() {
+    override fun onClick(v: View?) {
+        Log.d(TAG, "onClick: $v")
         with(binding) {
-            val entry = this@EntryWriteFragment.viewModel.currentEntry.get()!!
-            if (entry.isTitleEnabled) {
-                fragEntryWriteETTitle.visibility = View.VISIBLE
-                fragEntryWriteMCBTitle.isChecked = true
-            } else {
-                fragEntryWriteETTitle.visibility = View.GONE
-                fragEntryWriteMCBTitle.isChecked = false
+            when (v) {
+                fragEntryWriteCBEntryDate -> {
+                    val prevDateTime = viewModel!!.currentEntry.get()!!.dateTime
+                    DatePickerDialog(
+                        requireContext(), { _, y, m, d ->
+                            val newDate = LocalDate.of(y, m + 1, d)
+
+                            /* date가 새로운 값으로 업데이트 된 경우 */
+                            if (newDate != prevDateTime.toLocalDate()) {
+                                viewModel!!.setEntryDate(newDate)
+                                setToolbarTitleWithDateTime(viewModel!!.currentEntry.get()!!.dateTime)
+                            }
+                        },
+                        prevDateTime.year,
+                        prevDateTime.monthValue - 1, // DatePicker index는 0부터 시작
+                        prevDateTime.dayOfMonth
+                    ).show()
+
+                    fragEntryWriteCBEntryDate.isChecked = true // always checked
+                }
+                fragEntryWriteCBEntryTime -> {
+                    val prevDateTime = viewModel!!.currentEntry.get()!!.dateTime
+                    TimePickerDialog(context, { _, h, m ->
+                        val newTime = LocalTime.of(h, m)
+
+                        /* time이 새로운 값으로 업데이트 된 경우 */
+                        if (newTime != prevDateTime.toLocalTime()) {
+                            viewModel!!.setEntryTime(newTime)
+                            setToolbarTitleWithDateTime(viewModel!!.currentEntry.get()!!.dateTime)
+                        }
+                    }, prevDateTime.hour, prevDateTime.minute, false).show()
+
+                    fragEntryWriteCBEntryTime.isChecked = true  // always checked
+                }
+                fragEntryWriteCBEntryPicture -> {
+                    TedImagePicker.with(requireContext())
+                        .selectedUri(photoPreviewListAdapter.currentList)
+                        .startMultiImage { uriList ->
+                            fragEntryWriteCBEntryPicture.isChecked = uriList.isNotEmpty()
+                            fragEntryWriteRVPictures.visibility =
+                                if (uriList.isNotEmpty()) View.VISIBLE else View.GONE
+                            photoPreviewListAdapter.submitList(uriList)
+                            viewModel!!.setPhotoUriList(uriList)
+                        }
+
+                    fragEntryWriteCBEntryPicture.isChecked =
+                        viewModel!!.currentEntry.get()!!.photos.isNotEmpty()
+                }
             }
+        }
+    }
+
+    override fun onCheckedChanged(v: CompoundButton?, isChecked: Boolean) {
+        with(binding) {
+            when (v) {
+                fragEntryWriteCBTitle -> {
+                    viewModel!!.setEntryTitleEnabled(isChecked)
+                    fragEntryWriteETTitle.visibility = if (isChecked) View.VISIBLE else View.GONE
+                }
+                fragEntryWriteCBEntryPlace -> {
+                    if (isChecked) {
+                        LocationUtil.getCurrentLocation(requireActivity(), onSuccessListener)
+                    } else {
+                        viewModel!!.removeEntryLocation()
+                    }
+                }
+                else -> {
+                    // do nothing
+                }
+            }
+        }
+
+        Log.d(TAG, "onCheckedChanged: currentEntry = ${viewModel.currentEntry.get()!!}")
+    }
+
+    private fun setOnClickListeners() {
+        val views = ArrayList<View>().apply {
+            with(binding) {
+                add(fragEntryWriteCBEntryDate)
+                add(fragEntryWriteCBEntryTime)
+                add(fragEntryWriteCBEntryPicture)
+            }
+        }
+
+        for (v in views) {
+            v.setOnClickListener(this@EntryWriteFragment)
+        }
+    }
+
+    private fun setOnCheckedChangedListeners() {
+        val views = ArrayList<CheckBox>().apply {
+            with(binding) {
+                add(fragEntryWriteCBTitle)
+                add(fragEntryWriteCBEntryPlace)
+            }
+        }
+
+        for (v in views) {
+            v.setOnCheckedChangeListener(this)
         }
     }
 

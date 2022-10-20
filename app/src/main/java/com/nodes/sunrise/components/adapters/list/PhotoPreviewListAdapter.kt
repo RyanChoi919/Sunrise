@@ -1,6 +1,7 @@
 package com.nodes.sunrise.components.adapters.list
 
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +11,10 @@ import com.nodes.sunrise.R
 import com.nodes.sunrise.components.comparators.UriComparator
 import com.nodes.sunrise.databinding.ListItemPhotoPreviewBinding
 
-class PhotoPreviewListAdapter() :
+class PhotoPreviewListAdapter(private val onPhotoPreviewListEmptyListener: OnPhotoPreviewListEmptyListener) :
     ListAdapter<Uri, PhotoPreviewListAdapter.PhotoPreviewViewHolder>(UriComparator()) {
+
+    private val TAG = "LOG_TAG:" + this::class.java.simpleName
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoPreviewViewHolder {
         return PhotoPreviewViewHolder.create(parent)
@@ -24,6 +27,8 @@ class PhotoPreviewListAdapter() :
             listItemPhotoPreviewIVClear.setOnClickListener {
                 val currentList = currentList.toMutableList()
                 currentList.removeAt(holder.absoluteAdapterPosition)
+                Log.d(TAG, "onBindViewHolder: isCurrentListEmpty? = ${currentList.isEmpty()}")
+                if (currentList.isEmpty()) onPhotoPreviewListEmptyListener.onListEmpty()
                 submitList(currentList)
             }
         }
@@ -41,5 +46,9 @@ class PhotoPreviewListAdapter() :
                 return PhotoPreviewViewHolder(itemView)
             }
         }
+    }
+
+    interface OnPhotoPreviewListEmptyListener {
+        fun onListEmpty()
     }
 }

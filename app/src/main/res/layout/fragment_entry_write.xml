@@ -89,39 +89,39 @@
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/frag_entry_write_MCB_title"
+            <CheckBox
+                android:id="@+id/frag_entry_write_CB_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/ic_round_title_24"
                 android:buttonTint="@color/entry_write_tab_icon"
-                android:checked="@={viewModel.currentEntry.titleEnabled}" />
+                android:checked="true"/>
 
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/frag_entry_write_MCB_entry_date"
+            <CheckBox
+                android:id="@+id/frag_entry_write_CB_entry_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/ic_round_calendar_today_24"
                 android:buttonTint="@color/entry_write_tab_icon"
                 android:checked="true" />
 
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/frag_entry_write_MCB_entry_time"
+            <CheckBox
+                android:id="@+id/frag_entry_write_CB_entry_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/ic_round_access_time_24"
                 android:buttonTint="@color/entry_write_tab_icon"
                 android:checked="true" />
 
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/frag_entry_write_MCB_entry_place"
+            <CheckBox
+                android:id="@+id/frag_entry_write_CB_entry_place"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/ic_round_location_on_24"
                 android:buttonTint="@color/entry_write_tab_icon" />
 
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/frag_entry_write_MCB_entry_picture"
+            <CheckBox
+                android:id="@+id/frag_entry_write_CB_entry_picture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:button="@drawable/ic_round_photo_24"
