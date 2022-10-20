@@ -22,20 +22,14 @@ class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(reposit
 
     fun saveEntry() {
         viewModelScope.launch {
-            if (!currentEntry.get()!!.isTitleEnabled) {
-                currentEntry.get()!!.title = ""
-            }
-
-            if (currentEntry.get()!!.title == "") {
-                currentEntry.get()!!.isTitleEnabled = false
-            }
-
+            syncTitleAndTitleEnabled()
             insert(currentEntry.get()!!)
         }
     }
 
     fun modifyEntry() {
         viewModelScope.launch {
+            syncTitleAndTitleEnabled()
             update(currentEntry.get()!!)
         }
     }
@@ -104,5 +98,19 @@ class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(reposit
             photos = uriList
         }
         currentEntry.set(updatedEntry)
+    }
+
+    private fun syncTitleAndTitleEnabled() {
+        val entry = currentEntry.get()!!
+
+        if (entry.isTitleEnabled) {
+            /* 타이틀이 활성화되어 있더라도, 타이틀 내용이 비어있는 경우 타이틀 비활성화 */
+            entry.isTitleEnabled = entry.title != ""
+        } else {
+            /* 타이틀이 비활성화된 경우, 타이틀 내용을 삭제 */
+            entry.title = ""
+        }
+
+        currentEntry.set(entry)
     }
 }
