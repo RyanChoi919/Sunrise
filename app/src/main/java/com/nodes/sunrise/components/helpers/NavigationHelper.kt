@@ -15,8 +15,8 @@ import com.nodes.sunrise.ui.photo.PhotoFragment
 
 open class NavigationHelper(val navController: NavController) {
 
-    fun navigateToEntryReadFragment(entry: Entry) {
-        val bundle: Bundle = bundleOf(EntryReadFragment.KEY_ENTRY to entry)
+    fun navigateToEntryReadFragment(entryId: Int) {
+        val bundle: Bundle = bundleOf(EntryReadFragment.KEY_ENTRY_ID to entryId)
         navController.navigate(R.id.nav_entry_read, bundle)
     }
 

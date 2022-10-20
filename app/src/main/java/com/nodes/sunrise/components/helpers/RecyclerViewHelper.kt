@@ -111,7 +111,7 @@ class RecyclerViewHelper<T : BaseViewModel>(val fragment: Fragment, val viewMode
             setRecyclerViewAttributes(rv, ListOrientation.VERTICAL)
             adapter.onClickListener = object : OnEntityClickListener<Entry> {
                 override fun onClick(view: View, pos: Int, entity: Entry) {
-                    navigationHelper.navigateToEntryReadFragment(entity)
+                    navigationHelper.navigateToEntryReadFragment(entity.id)
                 }
             }
             adapter.onLongClickListener = object : OnEntityLongClickListener<Entry> {

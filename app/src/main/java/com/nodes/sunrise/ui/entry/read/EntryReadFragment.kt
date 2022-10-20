@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 class EntryReadFragment : BaseFragment(), View.OnClickListener {
 
     companion object {
-        val KEY_ENTRY = this::class.java.simpleName + ".ENTRY"
+        val KEY_ENTRY_ID = this::class.java.simpleName + ".ENTRY_ID"
     }
 
     private var _binding: FragmentEntryReadBinding? = null
@@ -66,8 +66,8 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
         }
 
         /* bundle 에서 Entry 받아와서 viewModel 내 Entry 초기화 */
-        val bundleEntry = requireArguments().getSerializable(KEY_ENTRY) as Entry
-        viewModel.currentEntry = viewModel.getEntryById(bundleEntry.id)!!.also {
+        val bundleEntryId = requireArguments().getInt(KEY_ENTRY_ID)
+        viewModel.currentEntry = viewModel.getEntryById(bundleEntryId)!!.also {
             it.observe(viewLifecycleOwner) { entry ->
                 setToolbarTitleWithDateTime(entry.dateTime)
                 setLocationText(entry)
