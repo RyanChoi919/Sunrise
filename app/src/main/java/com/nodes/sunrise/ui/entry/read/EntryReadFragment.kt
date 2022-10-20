@@ -44,12 +44,6 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
 
         setToolbarBinding(binding.fragEntryReadTB)
 
-        /* bundle 에서 Entry 받아와서 viewModel 내 Entry 초기화 */
-        viewModel.currentEntry =
-            requireArguments().getSerializable(KEY_ENTRY) as Entry
-        setLocationText()
-        setToolbarTitleWithDateTime(viewModel.currentEntry.dateTime)
-
         /* data binding 변수 설정 */
         binding.viewModel = viewModel
 
@@ -63,22 +57,33 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
             when (menuItem.itemId) {
                 R.id.frag_entry_write_menu_edit -> {
                     NavigationHelper(findNavController()).navigateToEntryWriteFragmentToModify(
-                        viewModel.currentEntry
+                        viewModel.currentEntry.value!!
                     )
                     true
                 }
                 else -> false
             }
         }
+
+        /* bundle 에서 Entry 받아와서 viewModel 내 Entry 초기화 */
+        val bundleEntry = requireArguments().getSerializable(KEY_ENTRY) as Entry
+        viewModel.currentEntry = viewModel.getEntryById(bundleEntry.id)!!.also {
+            it.observe(viewLifecycleOwner) { entry ->
+                setToolbarTitleWithDateTime(entry.dateTime)
+                setLocationText(entry)
+                setPictureView(entry)
+                setTitleEnabled(entry.isTitleEnabled)
+            }
+        }
+
         setOnClickListeners()
-        setPictureView()
 //        setWeatherInfo()
     }
 
     override fun onClick(p0: View?) {
         when (p0!!.id) {
             R.id.frag_entry_read_FL_picture -> {
-                NavigationHelper(findNavController()).navigateToPhotoFragment(viewModel.currentEntry.photos)
+                NavigationHelper(findNavController()).navigateToPhotoFragment(viewModel.currentEntry.value!!.photos)
             }
         }
     }
@@ -95,10 +100,10 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
         }
     }
 
-    private fun setLocationText() {
+    private fun setLocationText(entry: Entry) {
         with(binding.fragEntryReadTVLocation) {
-            val latitude = viewModel.currentEntry.latitude
-            val longitude = viewModel.currentEntry.longitude
+            val latitude = entry.latitude
+            val longitude = entry.longitude
 
             if (latitude != null && longitude != null) {
                 lifecycleScope.launch {
@@ -111,14 +116,14 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
         }
     }
 
-    private fun setPictureView() {
+    private fun setPictureView(entry: Entry) {
         with(binding) {
-            if (viewModel!!.currentEntry.photos.isNotEmpty()) {
+            if (entry.photos.isNotEmpty()) {
                 fragEntryReadFLPicture.visibility = View.VISIBLE
-                Glide.with(requireContext()).load(viewModel!!.currentEntry.photos[0])
+                Glide.with(requireContext()).load(entry.photos[0])
                     .into(fragEntryReadIVPicture)
                 fragEntryReadIVMultiplePhotosIcon.visibility =
-                    if (viewModel!!.currentEntry.photos.size > 1) {
+                    if (entry.photos.size > 1) {
                         View.VISIBLE
                     } else {
                         View.GONE
@@ -127,6 +132,10 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
                 fragEntryReadFLPicture.visibility = View.GONE
             }
         }
+    }
+
+    private fun setTitleEnabled(titleEnabled: Boolean) {
+        binding.fragEntryReadTVTitle.visibility = if (titleEnabled) View.VISIBLE else View.GONE
     }
 
 //    private fun setWeatherInfo() {
