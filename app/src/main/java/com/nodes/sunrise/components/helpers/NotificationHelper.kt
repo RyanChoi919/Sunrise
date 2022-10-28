@@ -52,8 +52,8 @@ class NotificationHelper(val context: Context) {
         val notificationToWriteEntryId = 1
         val notificationToWriteEntry =
             NotificationCompat.Builder(context, NotiChannel.WRITE_ENTRY.getId(context))
-                .setSmallIcon(R.drawable.ic_round_edit_24)
-                .setContentTitle("일기 쓰기 알림")
+                .setSmallIcon(R.drawable.ic_stat_sun_icon)
+                .setContentTitle("Sunrise")
                 .setContentText("일기를 작성할 시간입니다.")
                 .setContentIntent(writeEntryPendingIntent)
                 .setAutoCancel(true)
