@@ -12,12 +12,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.PreferenceManager
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.Purchase
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import com.nodes.sunrise.components.helpers.BillingHelper
 import com.nodes.sunrise.components.helpers.NavigationHelper
 import com.nodes.sunrise.components.helpers.NotificationHelper
 import com.nodes.sunrise.components.helpers.SharedPreferenceHelper
 import com.nodes.sunrise.databinding.ActivityMainBinding
+import com.nodes.sunrise.enums.InAppProduct
 import com.nodes.sunrise.ui.ViewModelFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -33,6 +37,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private val TAG = this::class.java.simpleName + ".TAG"
+
+    lateinit var billingHelper: BillingHelper
 
     private val onPrefChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { pref, key ->
@@ -54,7 +60,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     NotificationHelper(this).updateNotificationRepeating()
                     Log.d(TAG, "onPrefChangeListener : Notification Repeating updated")
                 }
-
+                InAppProduct.REMOVE_AD.productId -> {
+                    updateRemoveAdsView(pref.getBoolean(key, false))
+                }
                 else -> { // do nothing }
                 }
             }
@@ -91,6 +99,46 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
+
+        val prefHelper = SharedPreferenceHelper(this)
+
+        // billing helper 초기화
+        billingHelper = BillingHelper(this, lifecycleScope, object : BillingHelper.BillingCallback {
+            override fun onBillingClientIsReady() {
+                Log.d(TAG, "onBillingClientIsReady: called")
+                billingHelper.assertPurchases(BillingClient.ProductType.INAPP)
+
+                /* check purchased */
+                for (product in InAppProduct.values()) {
+                    when(product) {
+                        InAppProduct.REMOVE_AD -> {
+                            billingHelper.checkPurchased(product.productId) {
+                                updateRemoveAdsView(it)
+                                prefHelper.saveProductPurchaseResult(product.productId, it)
+                            }
+                        }
+                        InAppProduct.THEMING -> {
+                            billingHelper.checkPurchased(product.productId) {
+                                prefHelper.saveProductPurchaseResult(product.productId, it)
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onSuccess(purchase: Purchase) {
+                for (product in purchase.products) {
+                    billingHelper.checkPurchased(product) {
+                        prefHelper.saveProductPurchaseResult(product, it)
+                    }
+                    Log.d(TAG, "onSuccess: product = $product")
+                }
+            }
+
+            override fun onFailure(errorCode: Int) {
+                Log.d(TAG, "onFailure: errorCode = $errorCode")
+            }
+        })
     }
 
     override fun onClick(p0: View?) {
@@ -119,6 +167,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
+        /* check purchased */
+        val prefHelper = SharedPreferenceHelper(this)
+
+        for (product in InAppProduct.values()) {
+            when(product) {
+                InAppProduct.REMOVE_AD -> {
+                    billingHelper.checkPurchased(product.productId) {
+                        updateRemoveAdsView(it)
+                        prefHelper.saveProductPurchaseResult(product.productId, it)
+                    }
+                }
+                InAppProduct.THEMING -> {
+                    billingHelper.checkPurchased(product.productId) {
+                        prefHelper.saveProductPurchaseResult(product.productId, it)
+                    }
+                }
+            }
+        }
         PreferenceManager.getDefaultSharedPreferences(this)
             .registerOnSharedPreferenceChangeListener(onPrefChangeListener)
     }
@@ -150,7 +216,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun applyCurrentFontSetting() {
         val prefHelper = SharedPreferenceHelper(this)
         val currentFont = prefHelper.getSavedFont()
-        val fontStyle = when(currentFont) {
+        val fontStyle = when (currentFont) {
             R.font.nanum_gothic -> R.style.Theme_Sunrise_Font_NanumGothic
             R.font.gamja_flower -> R.style.Theme_Sunrise_Font_GamjaFlower
             R.font.single_day -> R.style.Theme_Sunrise_Font_SingleDay
@@ -158,5 +224,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         theme.applyStyle(fontStyle, true)
+    }
+
+    private fun updateRemoveAdsView(isPurchased : Boolean) {
+        Log.d(TAG, "updateRemoveAdsView: called, isRemoveAdsPurchased = $isPurchased")
+        binding.adView.visibility = if (isPurchased) View.GONE else View.VISIBLE
     }
 }

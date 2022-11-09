@@ -1,12 +1,17 @@
 package com.nodes.sunrise.components.helpers
 
 import android.content.Context
+import android.util.Log
 import androidx.preference.PreferenceManager
 import com.nodes.sunrise.R
 import com.nodes.sunrise.db.entity.Challenge
 import java.time.LocalDate
 
 class SharedPreferenceHelper(val context: Context) {
+
+    companion object {
+        const val TAG = "SharedPreferenceHelper.TAG"
+    }
 
     private val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
     private val challengeIdKey: String = getString(R.string.pref_key_challenge_id)
@@ -77,6 +82,18 @@ class SharedPreferenceHelper(val context: Context) {
 
     fun getSavedFont(): Int {
         return sharedPref.getInt(keyFont, R.font.nanum_myeongjo)
+    }
+
+    fun saveProductPurchaseResult(productId: String, isPurchased: Boolean) {
+        with(sharedPref.edit()) {
+            putBoolean(productId, isPurchased)
+            Log.d(TAG, "saveProductPurchaseResult: productId = $productId, isPurchased = $isPurchased ")
+            apply()
+        }
+    }
+
+    fun getProductPurchaseResult(productId: String): Boolean {
+        return sharedPref.getBoolean(productId, false)
     }
 
     private fun getString(resId: Int): String {

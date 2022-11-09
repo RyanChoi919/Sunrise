@@ -2,6 +2,7 @@ package com.nodes.sunrise.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.nodes.sunrise.components.helpers.SharedPreferenceHelper
 import com.nodes.sunrise.components.preferences.TimePickerPreference
 import com.nodes.sunrise.components.preferences.TimePickerPreferenceDialogFragmentCompat
 import com.nodes.sunrise.databinding.FragmentSettingsMainBinding
+import com.nodes.sunrise.enums.InAppProduct
 import com.nodes.sunrise.enums.PrefKeys
 
 class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickListener,
@@ -29,6 +31,8 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
     private val binding get() = _binding!!
 
     private val TAG = this::class.java.simpleName + ".TAG"
+
+    private lateinit var prefHelper: SharedPreferenceHelper
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +50,8 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
         _binding = FragmentSettingsMainBinding.bind(view)
 
         setToolbar()
+
+        prefHelper = SharedPreferenceHelper(requireContext())
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -76,6 +82,7 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
     private fun setOnClickListeners() {
         // OnClickListener를 붙일 Preference의 PrefKeyList 생성
         val keyList = ArrayList<PrefKeys>().apply {
+            add(PrefKeys.THEME)
             add(PrefKeys.OSS_LICENSES)
             add(PrefKeys.VERSION_INFO)
             add(PrefKeys.PREMIUM)
@@ -143,6 +150,15 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
 
     override fun onPreferenceClick(preference: Preference): Boolean {
         return when (PrefKeys.getPrefKeysFromKeyString(requireContext(), preference.key)) {
+            PrefKeys.THEME -> {
+                Log.d(TAG, "onPreferenceClick: ${preference.key}")
+                if (!prefHelper.getProductPurchaseResult(InAppProduct.THEMING.productId)) {
+                    NavigationHelper(findNavController()).navigateToPurchaseFragment()
+                    true
+                } else {
+                    false
+                }
+            }
             PrefKeys.OSS_LICENSES -> {
                 startActivity(Intent(requireContext(), OssLicensesMenuActivity::class.java))
                 OssLicensesMenuActivity.setActivityTitle(getString(R.string.act_oss_licenses_menu_title))
@@ -157,7 +173,11 @@ class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreference
                 true
             }
             PrefKeys.FONT -> {
-                NavigationHelper(findNavController()).navigateToSettingsFontFragment()
+                if (prefHelper.getProductPurchaseResult(InAppProduct.THEMING.productId)) {
+                    NavigationHelper(findNavController()).navigateToSettingsFontFragment()
+                } else {
+                    NavigationHelper(findNavController()).navigateToPurchaseFragment()
+                }
                 true
             }
             else -> {
