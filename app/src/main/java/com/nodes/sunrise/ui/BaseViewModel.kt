@@ -9,8 +9,6 @@ import java.io.IOException
 
 open class BaseViewModel(private val repository: AppRepository) : ViewModel() {
 
-    val TAG = this::class.java.simpleName
-
     val allEntries = repository.allEntries.asLiveData()
     val allChallenges = repository.allChallenges.asLiveData()
     val allChallengeGroupsWithChallenges = repository.allChallengeGroupsWithChallenges.asLiveData()

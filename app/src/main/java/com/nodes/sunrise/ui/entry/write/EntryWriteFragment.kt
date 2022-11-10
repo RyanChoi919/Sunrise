@@ -38,6 +38,7 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener,
 
     companion object {
         val KEY_ENTRY = this::class.java.simpleName + ".ENTRY"
+        private const val TAG = "EntryWriteFragment.TAG"
     }
 
     private var _binding: FragmentEntryWriteBinding? = null

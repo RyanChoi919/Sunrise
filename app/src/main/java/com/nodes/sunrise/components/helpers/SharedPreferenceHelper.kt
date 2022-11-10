@@ -10,7 +10,7 @@ import java.time.LocalDate
 class SharedPreferenceHelper(val context: Context) {
 
     companion object {
-        const val TAG = "SharedPreferenceHelper.TAG"
+        private const val TAG = "SharedPreferenceHelper.TAG"
     }
 
     private val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)

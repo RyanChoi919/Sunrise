@@ -14,7 +14,9 @@ import com.nodes.sunrise.databinding.ListItemPhotoPreviewBinding
 class PhotoPreviewListAdapter(private val onPhotoPreviewListEmptyListener: OnPhotoPreviewListEmptyListener) :
     ListAdapter<Uri, PhotoPreviewListAdapter.PhotoPreviewViewHolder>(UriComparator()) {
 
-    private val TAG = "LOG_TAG:" + this::class.java.simpleName
+    companion object {
+        private const val TAG : String = "PhotoPreviewListAdapter.TAG"
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoPreviewViewHolder {
         return PhotoPreviewViewHolder.create(parent)

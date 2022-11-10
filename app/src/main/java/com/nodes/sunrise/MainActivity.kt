@@ -28,6 +28,10 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
+    companion object {
+        private const val TAG = "MainActivity.TAG"
+    }
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
@@ -35,8 +39,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val repository = (this.application as BaseApplication).repository
         ViewModelFactory(repository)
     }
-
-    private val TAG = this::class.java.simpleName + ".TAG"
 
     lateinit var billingHelper: BillingHelper
 

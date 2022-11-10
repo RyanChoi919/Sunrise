@@ -11,7 +11,7 @@ import com.nodes.sunrise.enums.Permission
 class PermissionUtil {
     companion object {
 
-        const val TAG = "PermissionUTil.TAG"
+        private const val TAG = "PermissionUTil.TAG"
 
         fun hasPermission(context: Context, androidPermission: String): Boolean {
             val result = ActivityCompat.checkSelfPermission(

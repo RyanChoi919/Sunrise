@@ -10,10 +10,9 @@ import java.time.LocalDate
 class AlarmReceiver : BroadcastReceiver() {
 
     companion object {
-        const val EXTRA_NOTIFICATION_DOW: String = "AlertReceiver.EXTRA_NOTIFICATION_DOW"
+        const val EXTRA_NOTIFICATION_DOW: String = "AlarmReceiver.EXTRA_NOTIFICATION_DOW"
+        private const val TAG = "AlarmReceiver.TAG"
     }
-
-    private val TAG = this::class.java.simpleName + ".TAG"
 
     override fun onReceive(context: Context?, p1: Intent?) {
         Log.d(TAG, "onReceive: called")

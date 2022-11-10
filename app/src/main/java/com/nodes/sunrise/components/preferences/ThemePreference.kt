@@ -10,7 +10,7 @@ import com.nodes.sunrise.enums.InAppProduct
 class ThemePreference(context: Context, attr: AttributeSet) : ListPreference(context, attr) {
 
     companion object {
-        const val TAG = "ThemePreference.TAG"
+        private const val TAG = "ThemePreference.TAG"
     }
 
     override fun onClick() {

@@ -15,6 +15,10 @@ import java.time.LocalTime
 
 class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(repository) {
 
+    companion object {
+        private const val TAG = "EntryWriteViewModel.TAG"
+    }
+
     var textCount = ObservableField("0")
     var currentEntry = ObservableField(Entry())
     lateinit var prevEntry: Entry

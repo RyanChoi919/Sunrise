@@ -21,7 +21,9 @@ import java.time.ZonedDateTime
 
 class NotificationHelper(val context: Context) {
 
-    private val TAG = this::class.java.simpleName + ".TAG"
+    companion object {
+        private const val TAG = "NotificationHelper.TAG"
+    }
 
     private val manager by lazy {
         NotificationManagerCompat.from(context)

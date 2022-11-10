@@ -15,7 +15,6 @@ import java.time.LocalDateTime
 
 
 abstract class BaseFragment : Fragment() {
-    val TAG = "LOG_TAG:" + this::class.java.simpleName
 
     private lateinit var toolbarBinding: ComponentToolbarBinding
     private lateinit var toolbar: Toolbar

@@ -27,10 +27,12 @@ import com.nodes.sunrise.enums.PrefKeys
 class SettingsMainFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickListener,
     Preference.OnPreferenceChangeListener {
 
+    companion object {
+        private const val TAG = "SettingsMainFragment.TAG"
+    }
+
     private var _binding: FragmentSettingsMainBinding? = null
     private val binding get() = _binding!!
-
-    private val TAG = this::class.java.simpleName + ".TAG"
 
     private lateinit var prefHelper: SharedPreferenceHelper
 

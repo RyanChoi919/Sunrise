@@ -16,7 +16,7 @@ class BillingHelper(
 ) {
 
     companion object {
-        const val TAG = "BillingHelper.TAG"
+        private const val TAG = "BillingHelper.TAG"
     }
 
     /* 구매 관련 업데이트를 수신하는 리스너 */
