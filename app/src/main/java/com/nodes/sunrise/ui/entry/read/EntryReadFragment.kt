@@ -24,6 +24,7 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
 
     companion object {
         val KEY_ENTRY_ID = this::class.java.simpleName + ".ENTRY_ID"
+        private const val TAG = "EntryReadFragment.TAG"
     }
 
     private var _binding: FragmentEntryReadBinding? = null
