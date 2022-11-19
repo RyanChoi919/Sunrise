@@ -81,6 +81,11 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
 //        setWeatherInfo()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onClick(p0: View?) {
         when (p0!!.id) {
             R.id.frag_entry_read_FL_picture -> {

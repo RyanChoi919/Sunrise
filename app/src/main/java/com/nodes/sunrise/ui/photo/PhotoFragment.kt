@@ -20,7 +20,7 @@ class PhotoFragment : BaseFragment() {
     private var _binding: FragmentPhotoBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var uris : List<Uri>
+    private lateinit var uris: List<Uri>
     private val adapter = PhotoListAdapter()
 
     private var photoTotalCount: Int = 0
@@ -69,5 +69,6 @@ class PhotoFragment : BaseFragment() {
     override fun onDestroy() {
         binding.fragPhotoVP2.unregisterOnPageChangeCallback(onPageChangeCallback)
         super.onDestroy()
+        _binding = null
     }
 }

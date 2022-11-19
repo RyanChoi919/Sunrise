@@ -133,5 +133,6 @@ class PurchaseFragment : BaseFragment() {
         super.onDestroy()
         PreferenceManager.getDefaultSharedPreferences(requireContext())
             .unregisterOnSharedPreferenceChangeListener(onPreferenceChangeListener)
+        _binding = null
     }
 }
