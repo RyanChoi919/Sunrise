@@ -75,7 +75,7 @@ class PurchaseFragment : BaseFragment() {
     ): View {
         _binding = FragmentPurchaseBinding.inflate(inflater)
 
-        setToolbarBinding(binding.fragPurchaseTB)
+        setToolbar(binding.fragPurchaseTB)
 
         return binding.root
     }

@@ -43,7 +43,7 @@ class EntryReadFragment : BaseFragment(), View.OnClickListener {
             DataBindingUtil.inflate(inflater, R.layout.fragment_entry_read, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        setToolbarBinding(binding.fragEntryReadTB)
+        setToolbar(binding.fragEntryReadTB)
 
         /* data binding 변수 설정 */
         binding.viewModel = viewModel

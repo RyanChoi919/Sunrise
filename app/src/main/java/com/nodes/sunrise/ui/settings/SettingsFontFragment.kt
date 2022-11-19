@@ -30,7 +30,7 @@ class SettingsFontFragment : BaseFragment(), RadioGroup.OnCheckedChangeListener 
         savedFont = prefHelper.getSavedFont()
         newFont = prefHelper.getSavedFont()
 
-        setToolbarBinding(binding.fragSettingsFontTB)
+        setToolbar(binding.fragSettingsFontTB)
         with(binding.fragSettingsFontTB) {
             toolbarTitleSmall.text = getString(R.string.frag_settings_font_title)
             toolbarSubtitle.visibility = View.GONE

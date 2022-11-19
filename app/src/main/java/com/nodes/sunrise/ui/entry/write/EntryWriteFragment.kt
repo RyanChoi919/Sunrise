@@ -92,7 +92,7 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener,
         binding.viewModel = viewModel
 
         /* Toolbar binding 설정 */
-        setToolbarBinding(binding.fragEntryWriteTB)
+        setToolbar(binding.fragEntryWriteTB)
 
         return binding.root
     }

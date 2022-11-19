@@ -22,7 +22,7 @@ class SettingsVersionInfoFragment : BaseFragment() {
 
         _binding = FragmentSettingsVersionInfoBinding.inflate(inflater)
 
-        setToolbarBinding(binding.fragSettingsVersionInfoTB)
+        setToolbar(binding.fragSettingsVersionInfoTB)
         binding.fragSettingsVersionInfoTB.toolbarTitleSmall.text =
             getString(R.string.frag_settings_version_info_title)
         binding.fragSettingsVersionInfoTB.toolbarSubtitle.visibility = View.GONE

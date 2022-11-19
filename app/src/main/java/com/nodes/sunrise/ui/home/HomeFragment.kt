@@ -49,7 +49,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener {
             DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        setToolbarBinding(binding.fragHomeTB)
+        setToolbar(binding.fragHomeTB)
         setToolbarFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP or AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS)
 
         recyclerViewHelper.setRecyclerViewWithLiveData(
