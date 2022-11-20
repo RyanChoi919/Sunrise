@@ -39,7 +39,7 @@ class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(reposit
         }
     }
 
-    fun updateEntryLocation(location: Location, address: Address) {
+    fun updateEntryLocation(location: Location, address: String) {
         val entry = currentEntry.get()!!.apply {
             latitude = location.latitude
             longitude = location.longitude

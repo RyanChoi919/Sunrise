@@ -18,7 +18,7 @@ data class Entry(
     var content: String = "",
     var latitude: Double? = null,
     var longitude: Double? = null,
-    var address: Address? = null,
+    var address: String? = null,
     var weatherInfo: WeatherInfo? = null,
     var photos: List<Uri> = emptyList()
 ) : Serializable

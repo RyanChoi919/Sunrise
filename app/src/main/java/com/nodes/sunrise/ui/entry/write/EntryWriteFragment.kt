@@ -16,6 +16,7 @@ import android.widget.CompoundButton
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.OnSuccessListener
 import com.nodes.sunrise.BaseApplication
@@ -30,6 +31,7 @@ import com.nodes.sunrise.db.entity.Entry
 import com.nodes.sunrise.ui.BaseFragment
 import com.nodes.sunrise.ui.ViewModelFactory
 import gun0912.tedimagepicker.builder.TedImagePicker
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -59,8 +61,11 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener,
         RecyclerViewHelper(this, viewModel)
     }
     private val onSuccessListener = OnSuccessListener<Location> {
-        viewModel.updateEntryLocation(it, LocationUtil.getAddressFromLocation(requireContext(), it))
-        binding.fragEntryWriteCBEntryPlace.isChecked = true
+        lifecycleScope.launch {
+            val address = LocationUtil.getAddressFromLocation(requireContext(), it).getAddressLine(0)
+            viewModel.updateEntryLocation(it, address)
+            binding.fragEntryWriteCBEntryPlace.isChecked = true
+        }
 //        updateCurrentWeather()
     }
     private var isToCreateMode = true
