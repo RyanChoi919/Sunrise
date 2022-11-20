@@ -98,7 +98,7 @@ internal abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java.simpleName
                 )
                     .addCallback(AppDatabaseCallback(scope, context))
-                    .addCallback(AppDatabaseTestCallback(scope))
+//                    .addCallback(AppDatabaseTestCallback(scope))
                     .build()
                 INSTANCE = instance
                 instance

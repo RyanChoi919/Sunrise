@@ -59,7 +59,7 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener,
         RecyclerViewHelper(this, viewModel)
     }
     private val onSuccessListener = OnSuccessListener<Location> {
-        viewModel.updateEntryLocation(it)
+        viewModel.updateEntryLocation(it, LocationUtil.getAddressFromLocation(requireContext(), it))
         binding.fragEntryWriteCBEntryPlace.isChecked = true
 //        updateCurrentWeather()
     }
@@ -147,6 +147,7 @@ class EntryWriteFragment() : BaseFragment(), View.OnClickListener,
                     entry.latitude != null && entry.longitude != null
             } else {
                 isToCreateMode = true
+                viewModel.prevEntry = Entry()
 
                 /* Preference 기본값 설정 확인 */
                 val pref = SharedPreferenceHelper(requireContext())

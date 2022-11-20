@@ -1,5 +1,6 @@
 package com.nodes.sunrise.ui.entry.write
 
+import android.location.Address
 import android.location.Location
 import android.net.Uri
 import android.util.Log
@@ -38,10 +39,11 @@ class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(reposit
         }
     }
 
-    fun updateEntryLocation(location: Location) {
+    fun updateEntryLocation(location: Location, address: Address) {
         val entry = currentEntry.get()!!.apply {
             latitude = location.latitude
             longitude = location.longitude
+            this.address = address
         }
 
         currentEntry.set(entry)
@@ -53,7 +55,7 @@ class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(reposit
 
         Log.d(
             TAG,
-            "updateEntryLocation: latitude = ${entry.latitude}, longitude = ${entry.longitude}"
+            "updateEntryLocation: latitude = ${entry.latitude}, longitude = ${entry.longitude}, address = ${entry.address}"
         )
     }
 
@@ -61,13 +63,14 @@ class EntryWriteViewModel(val repository: AppRepository) : BaseViewModel(reposit
         val entry = currentEntry.get()!!.apply {
             latitude = null
             longitude = null
+            this.address = null
         }
 
         currentEntry.set(entry)
 
         Log.d(
             TAG,
-            "removeEntryLocation: latitude = ${entry.latitude}, longitude = ${entry.longitude}"
+            "removeEntryLocation: latitude = ${entry.latitude}, longitude = ${entry.longitude}, address = ${entry.address}"
         )
     }
 

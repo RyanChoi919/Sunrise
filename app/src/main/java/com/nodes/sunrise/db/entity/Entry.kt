@@ -1,5 +1,6 @@
 package com.nodes.sunrise.db.entity
 
+import android.location.Address
 import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -17,6 +18,7 @@ data class Entry(
     var content: String = "",
     var latitude: Double? = null,
     var longitude: Double? = null,
+    var address: Address? = null,
     var weatherInfo: WeatherInfo? = null,
     var photos: List<Uri> = emptyList()
 ) : Serializable
