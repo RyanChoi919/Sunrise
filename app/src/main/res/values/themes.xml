@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.Sunrise" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/md_theme_light_primary</item>
@@ -33,6 +33,13 @@
         <!-- No ActionBar-->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
+        <item name="android:enforceStatusBarContrast" tools:targetApi="q">false</item>
     </style>
 
     <style name="Theme.Sunrise.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -53,7 +60,7 @@
         <item name="fontFamily">@font/nanum_myeongjo</item>
     </style>
 
-    <style name="Theme.Sunrise.Font"/>
+    <style name="Theme.Sunrise.Font" />
 
     <style name="Theme.Sunrise.Font.NanumMyeongjo">
         <item name="fontFamily">@font/nanum_myeongjo</item>
